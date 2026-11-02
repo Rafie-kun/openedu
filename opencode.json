@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "permission": {
+    "*": "ask",
+    "edit": "allow",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "webfetch": "ask",
+    "bash": {
+      "*": "ask",
+      "git status": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "pnpm *": "allow",
+      "python -m pytest*": "allow",
+      "rm *": "deny",
+      "git push*": "ask",
+      "git reset --hard*": "deny",
+      "git clean*": "deny"
+    }
+  }
+}
