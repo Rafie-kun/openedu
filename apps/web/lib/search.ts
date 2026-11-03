@@ -10,10 +10,10 @@ async function matchingUniversityIds(query: string): Promise<string[]> {
             'simple',
             coalesce(u.name, '') || ' ' ||
             coalesce(u."officialName", '') || ' ' ||
-            coalesce(u.city, '') || ' ' ||
-            coalesce(c.name, '')
+            coalesce(u.city, '')
           ) @@ websearch_to_tsquery('simple', ${query})
        OR u.name ILIKE '%' || ${query} || '%'
+       OR c.name ILIKE '%' || ${query} || '%'
     LIMIT 200
   `;
   return rows.map((row) => row.id);
@@ -37,9 +37,7 @@ export async function searchUniversities(filters: UniversityFilters) {
     ...(q ? { id: { in: ids } } : {}),
     ...(filters.country ? { country: { iso2: filters.country } } : {}),
     ...(filters.type ? { type: filters.type as "PUBLIC" | "PRIVATE" | "OTHER" } : {}),
-    ...(filters.level
-      ? { programmes: { some: { degreeLevel: filters.level as never } } }
-      : {}),
+    ...(filters.level ? { programmes: { some: { degreeLevel: filters.level as never } } } : {}),
   };
 
   const [total, rows] = await Promise.all([

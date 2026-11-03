@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
   pull_request:
 
 permissions:
@@ -104,3 +104,20 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
+
+  workers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install worker
+        working-directory: workers/data-ingestion
+        run: python -m pip install -e ".[dev]"
+
+      - name: Worker tests
+        working-directory: workers/data-ingestion
+        run: python -m pytest

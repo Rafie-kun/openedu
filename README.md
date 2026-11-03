@@ -36,11 +36,12 @@ Working today:
 - deterministic eligibility checks per programme and scholarship, including missing-data states
 - saved opportunities, application tracker with status history and private notes, in-app notifications
 - qualification reference data for several international systems, plus a small set of real institutions
+- a Python ingestion worker with one working source adapter (ROR lookups), change detection and a review queue
 
 Not built yet:
 
-- the admin application
-- the Python ingestion workers and their scheduling (the schema and source registry exist)
+- the admin application (review items are written to the database but nothing reads them yet)
+- the Redis queue and the scheduler for the ingestion worker
 - document upload and storage
 - email delivery
 - the AI assistant UI (the provider abstraction and consent model exist, but nothing is enabled)
@@ -52,15 +53,15 @@ the actual state of the data.
 
 ## Stack
 
-| Layer | Choice |
-| --- | --- |
-| Web | Next.js App Router, React, TypeScript |
-| Styling | Tailwind CSS v4 plus custom CSS tokens |
-| Data | PostgreSQL, Prisma |
-| Matching | TypeScript, pure functions, unit tested |
-| Workers | Python, Redis (planned) |
-| Tests | Vitest, Playwright, pytest |
-| Monorepo | pnpm workspaces, Turborepo |
+| Layer    | Choice                                                 |
+| -------- | ------------------------------------------------------ |
+| Web      | Next.js App Router, React, TypeScript                  |
+| Styling  | Tailwind CSS v4 plus custom CSS tokens                 |
+| Data     | PostgreSQL, Prisma                                     |
+| Matching | TypeScript, pure functions, unit tested                |
+| Workers  | Python (`workers/data-ingestion`), Redis queue planned |
+| Tests    | Vitest, Playwright, pytest                             |
+| Monorepo | pnpm workspaces, Turborepo                             |
 
 ## Local setup
 
@@ -91,6 +92,7 @@ fake requirements.
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm worker:test
 ```
 
 The web app is designed to boot without a reachable database so that a build does not require one, but
