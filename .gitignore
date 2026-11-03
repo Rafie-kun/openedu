@@ -1,0 +1,46 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# environment / secrets
+.env
+.env.*
+!.env.example
+!.env.test.example
+secrets/
+*.pem
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# tooling / os
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+coverage/
+playwright-report/
+test-results/
+
+# generated prisma client (created by `pnpm db:generate`)
+packages/database/src/generated/
+
+# local data
+*.sqlite
+*.sqlite3
+/tmp/
+.firecrawl/

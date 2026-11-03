@@ -773,6 +773,24 @@ Work in small, testable increments. For each feature: identify its purpose → c
 
 Do not rewrite unrelated parts of the application. Do not replace working code simply because you prefer another approach. Do not build several incomplete versions of the same feature.
 
+### Code comment policy (applies to this repo: EduBuf, `F:\Open code\EduBuf`)
+
+This is an open-source project other humans will read and contribute to. Comments must read like a developer wrote them while working on real code, not like an AI explaining itself.
+
+**Banned:**
+- No comments that describe what the code obviously does (`// loop through users`, `// set the variable to true`).
+- No AI-narrator phrasing: "Note:", "Important:", "This function is responsible for...", "As requested...", "This handles the case where...", "Added to fix...", references to this task, this prompt, a ticket number, or "the user asked for".
+- No comment blocks above every function restating its signature in English. No restating the obvious.
+- No leftover scaffolding comments (`// TODO: implement later` left in finished code, commented-out dead code, `// end of function`).
+- No multi-paragraph or multi-line comment essays. One line, max, and only when it earns its place.
+
+**Allowed, when genuinely useful:**
+- Short, plain, human-sounding notes on non-obvious behaviour, a workaround, a known rough edge, or a hidden constraint — written the way a developer actually talks, e.g. `// this is flaky, revisit later`, `// works for now, might break on edge case X`, `// hacky fix, come back to this`.
+- A one-liner flagging something unfinished or uncertain in plain terms, not corporate-speak: `// not fully tested yet`, `// seems fine so far, watch this`.
+- Keep it casual and human — short lowercase fragments are fine, this is not documentation prose.
+
+If a comment's content wouldn't survive being read aloud to a teammate without sounding like a disclaimer, cut it. When in doubt, write no comment at all and let the code speak for itself.
+
 ### Token and context efficiency (OpenCode-specific)
 
 OpenCode does not have a magic "compaction" feature beyond standard context handling — the real levers are **delegation, scoping, and discipline**:

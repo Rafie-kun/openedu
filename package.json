@@ -1,0 +1,41 @@
+{
+  "name": "edubuf",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A global, source-traceable university, scholarship and student application workspace.",
+  "license": "MIT",
+  "author": "Rafie-kun (https://github.com/Rafie-kun)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rafie-kun/edubuf.git"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:web": "pnpm --filter @edubuf/web dev",
+    "dev:admin": "pnpm --filter @edubuf/admin dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @edubuf/web test:e2e",
+    "db:generate": "pnpm --filter @edubuf/database db:generate",
+    "db:migrate": "pnpm --filter @edubuf/database db:migrate",
+    "db:deploy": "pnpm --filter @edubuf/database db:deploy",
+    "db:seed": "pnpm --filter @edubuf/database db:seed",
+    "db:studio": "pnpm --filter @edubuf/database db:studio",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "worker:test": "cd workers/data-ingestion && python -m pytest -q"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0",
+    "prettier": "^3.6.2",
+    "prisma": "6.19.3",
+    "turbo": "2.11.10",
+    "typescript": "5.9.3"
+  }
+}
