@@ -1,0 +1,35 @@
+{
+  "name": "@edubuf/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/with-env.mjs dev --port 3000",
+    "build": "node scripts/with-env.mjs build",
+    "start": "node scripts/with-env.mjs start --port 3000",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@edubuf/database": "workspace:*",
+    "@edubuf/matching": "workspace:*",
+    "@edubuf/shared": "workspace:*",
+    "@edubuf/ui": "workspace:*",
+    "@edubuf/validation": "workspace:*",
+    "next": "16.4.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "dotenv": "^17.2.3",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vitest": "3.2.7"
+  }
+}
