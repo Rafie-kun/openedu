@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Badge, Card, EmptyState, LinkButton, SectionHeading } from "@edubuf/ui";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, LinkButton, SectionHeading } from "@openedu/ui";
+import { db } from "@openedu/database";
 import { requireUser } from "@/lib/session";
 import { getOrCreateProfile } from "@/lib/student";
 import { SaveForm } from "@/components/save-form";

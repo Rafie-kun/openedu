@@ -1,4 +1,4 @@
-// EduBuf schema. Private student data lives only behind User/StudentProfile;
+// OpenEdu schema. Private student data lives only behind User/StudentProfile;
 // public catalogue rows carry provenance columns.
 
 generator client {

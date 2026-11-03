@@ -1,17 +1,19 @@
+name: openedu
+
 services:
   db:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: edubuf
-      POSTGRES_PASSWORD: edubuf
-      POSTGRES_DB: edubuf
+      POSTGRES_USER: openedu
+      POSTGRES_PASSWORD: openedu
+      POSTGRES_DB: openedu
     ports:
       - "5432:5432"
     volumes:
-      - edubuf-db:/var/lib/postgresql/data
+      - openedu-db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U edubuf -d edubuf"]
+      test: ["CMD-SHELL", "pg_isready -U openedu -d openedu"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -22,7 +24,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - edubuf-redis:/data
+      - openedu-redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -40,7 +42,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://edubuf:edubuf@db:5432/edubuf?schema=public
+      DATABASE_URL: postgresql://openedu:openedu@db:5432/openedu?schema=public
       AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in the shell or a .env file next to this compose file}
       APP_URL: ${APP_URL:-http://localhost:3000}
       REDIS_URL: redis://redis:6379/0
@@ -51,5 +53,5 @@ services:
       - "3000:3000"
 
 volumes:
-  edubuf-db:
-  edubuf-redis:
+  openedu-db:
+  openedu-redis:

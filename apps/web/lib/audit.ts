@@ -1,4 +1,4 @@
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 
 interface AuditInput {
   actorId?: string | null;

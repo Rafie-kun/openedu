@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Callout, Card, SectionHeading } from "@edubuf/ui";
-import { formatDate } from "@edubuf/shared";
+import { Callout, Card, SectionHeading } from "@openedu/ui";
+import { formatDate } from "@openedu/shared";
 import { getLegalDocument, LEGAL_DOCUMENTS } from "@/lib/legal";
 
 export const dynamic = "force-static";

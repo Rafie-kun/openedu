@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Window } from "@edubuf/ui";
+import { Window } from "@openedu/ui";
 import { updateProfileAction } from "@/app/actions/profile";
 import { ProfileForm } from "@/components/profile-form";
 import { requireUser } from "@/lib/session";

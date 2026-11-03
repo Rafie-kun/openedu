@@ -773,7 +773,7 @@ Work in small, testable increments. For each feature: identify its purpose → c
 
 Do not rewrite unrelated parts of the application. Do not replace working code simply because you prefer another approach. Do not build several incomplete versions of the same feature.
 
-### Code comment policy (applies to this repo: EduBuf, `F:\Open code\EduBuf`)
+### Code comment policy (applies to this repo: OpenEdu, `F:\Open code\EduBuf`)
 
 This is an open-source project other humans will read and contribute to. Comments must read like a developer wrote them while working on real code, not like an AI explaining itself.
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Callout, Window } from "@edubuf/ui";
-import { db } from "@edubuf/database";
+import { Callout, Window } from "@openedu/ui";
+import { db } from "@openedu/database";
 import { createApplicationAction } from "@/app/actions/workspace";
 import { NewApplicationForm } from "@/components/application-forms";
 import { requireUser } from "@/lib/session";

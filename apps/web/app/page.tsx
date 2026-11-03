@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Callout, Card, LinkButton, Stat, Window } from "@edubuf/ui";
+import { Callout, Card, LinkButton, Stat, Window } from "@openedu/ui";
 
 const PILLARS = [
   {
@@ -51,7 +51,7 @@ export default function HomePage() {
             Know what you <em className="not-italic text-plum">actually</em> qualify for.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft">
-            EduBuf is a study-planning workspace for students everywhere. Bring your real
+            OpenEdu is a study-planning workspace for students everywhere. Bring your real
             qualifications — however uneven — and compare them with programmes and scholarships that
             document what they ask for.
           </p>
@@ -140,7 +140,7 @@ export default function HomePage() {
               excluded from confident eligibility statements.
             </p>
           </Callout>
-          <Callout tone="warning" title="What EduBuf will never do">
+          <Callout tone="warning" title="What OpenEdu will never do">
             <p>
               It will not submit an application, sign a declaration, pay a fee, invent a deadline, or
               tell you that you are certain to be admitted. Those decisions stay with you and the

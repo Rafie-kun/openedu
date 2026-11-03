@@ -1,4 +1,4 @@
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { getCurrentUser } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
@@ -102,7 +102,7 @@ export async function GET() {
   ]);
 
   const payload = {
-    exportFormat: "edubuf.account-export.v1",
+    exportFormat: "openedu.account-export.v1",
     exportedAt: new Date().toISOString(),
     account,
     profile,
@@ -124,7 +124,7 @@ export async function GET() {
     status: 200,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "content-disposition": `attachment; filename="edubuf-export-${stamp}.json"`,
+      "content-disposition": `attachment; filename="openedu-export-${stamp}.json"`,
       "cache-control": "no-store",
     },
   });

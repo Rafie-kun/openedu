@@ -36,7 +36,7 @@ export function SiteFooter() {
     <footer className="border-t border-line/70 py-8 text-sm text-ink-soft">
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-lg text-ink">EduBuf</p>
+          <p className="font-display text-lg text-ink">OpenEdu</p>
           <p className="mt-2 max-w-xs text-xs leading-relaxed">
             Requirements, deadlines and funding change constantly. Every important claim on this site
             links back to the source it came from — check that source before you act.
@@ -61,7 +61,7 @@ export function SiteFooter() {
         ))}
       </div>
       <p className="mt-8 text-xs">
-        EduBuf is not a university, an admissions service, a funding body, or an immigration adviser.
+        OpenEdu is not a university, an admissions service, a funding body, or an immigration adviser.
         It does not submit applications or make decisions on your behalf.
       </p>
     </footer>

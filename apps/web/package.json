@@ -1,5 +1,5 @@
 {
-  "name": "@edubuf/web",
+  "name": "@openedu/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,11 +11,11 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@edubuf/database": "workspace:*",
-    "@edubuf/matching": "workspace:*",
-    "@edubuf/shared": "workspace:*",
-    "@edubuf/ui": "workspace:*",
-    "@edubuf/validation": "workspace:*",
+    "@openedu/database": "workspace:*",
+    "@openedu/matching": "workspace:*",
+    "@openedu/shared": "workspace:*",
+    "@openedu/ui": "workspace:*",
+    "@openedu/validation": "workspace:*",
     "next": "16.4.4",
     "react": "19.3.1",
     "react-dom": "19.3.1",

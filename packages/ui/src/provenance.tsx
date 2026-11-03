@@ -79,7 +79,7 @@ export function DisclaimerCard({ children }: { children?: ReactNode }) {
     <Callout tone="warning" title="What this result means">
       {children ?? (
         <p>
-          EduBuf compares your recorded profile with requirements the platform has collected. It
+          OpenEdu compares your recorded profile with requirements the platform has collected. It
           cannot see your full application, cannot make an admissions or funding decision, and does
           not replace the official provider. Always confirm on the official page before you rely on
           a deadline, fee, requirement or visa rule.

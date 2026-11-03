@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Callout, Card, EmptyState, Provenance, SectionHeading } from "@edubuf/ui";
-import { formatDate } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+import { Badge, Callout, Card, EmptyState, Provenance, SectionHeading } from "@openedu/ui";
+import { formatDate } from "@openedu/shared";
+import { db } from "@openedu/database";
 import { toVerificationStatus } from "@/lib/display";
 
 export const metadata: Metadata = { title: "Student visas" };
@@ -34,7 +34,7 @@ export default async function VisasPage() {
     <div className="space-y-6">
       <SectionHeading eyebrow="destinations" title="Student visa centre">
         Student visa rules are written by governments, change without notice and differ by nationality.
-        EduBuf records them only from official immigration sources, with the date each requirement was
+        OpenEdu records them only from official immigration sources, with the date each requirement was
         checked.
       </SectionHeading>
 

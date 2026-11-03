@@ -1,4 +1,4 @@
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 
 export async function getOrCreateProfile(userId: string) {
   return db.studentProfile.upsert({

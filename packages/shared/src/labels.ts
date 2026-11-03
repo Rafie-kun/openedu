@@ -1,4 +1,4 @@
-export const APP_NAME = "EduBuf";
+export const APP_NAME = "OpenEdu";
 export const APP_TAGLINE = "A quiet workspace for a very big decision.";
 
 export type VerificationStatusValue =

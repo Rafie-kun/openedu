@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@edubuf/ui";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@openedu/ui";
+import { db } from "@openedu/database";
 import { getCurrentUser } from "@/lib/session";
 import { SaveForm } from "@/components/save-form";
-import { formatDate } from "@edubuf/shared";
+import { formatDate } from "@openedu/shared";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +40,7 @@ export async function generateMetadata({
   if (!university) return { title: "University not found" };
   return {
     title: university.name,
-    description: `${university.name} in ${university.city}, ${university.country.name}. Programmes, requirements and provenance in the EduBuf catalogue.`,
+    description: `${university.name} in ${university.city}, ${university.country.name}. Programmes, requirements and provenance in the OpenEdu catalogue.`,
   };
 }
 
@@ -209,7 +209,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
           <Window title="recognition" meta="evidence only">
             {university.recognitions.length === 0 ? (
               <p className="text-sm text-ink-soft">
-                No recognition or accreditation evidence is recorded. EduBuf does not infer recognition
+                No recognition or accreditation evidence is recorded. OpenEdu does not infer recognition
                 from a university&apos;s presence in a research database.
               </p>
             ) : (

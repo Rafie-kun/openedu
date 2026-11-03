@@ -8,9 +8,9 @@ import {
   Provenance,
   SectionHeading,
   Window,
-} from "@edubuf/ui";
-import { COST_BASIS_LABELS, COST_CATEGORY_LABELS, formatMoney } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+} from "@openedu/ui";
+import { COST_BASIS_LABELS, COST_CATEGORY_LABELS, formatMoney } from "@openedu/shared";
+import { db } from "@openedu/database";
 import {
   addBudgetItemAction,
   copyCostEstimateAction,
@@ -89,7 +89,7 @@ export default async function BudgetPage() {
           </LinkButton>
         }
       >
-        Your own numbers, kept separate from published ones. EduBuf does not convert currencies here
+        Your own numbers, kept separate from published ones. OpenEdu does not convert currencies here
         because no exchange rate source is configured yet, so totals stay grouped by currency.
       </SectionHeading>
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Badge, Callout, Card, SectionHeading, Window } from "@edubuf/ui";
+import { Badge, Callout, Card, SectionHeading, Window } from "@openedu/ui";
 
 export const metadata: Metadata = { title: "Application guidance" };
 
@@ -156,7 +156,7 @@ export default function GuidancePage() {
 
           <Window title="what the platform will not do" meta="boundaries">
             <p className="text-sm text-ink-soft">
-              EduBuf does not prepare your personal statement, does not submit forms, does not pay fees and
+              OpenEdu does not prepare your personal statement, does not submit forms, does not pay fees and
               does not contact institutions for you. It helps you compare recorded requirements and keep
               your own notes in one place.
             </p>

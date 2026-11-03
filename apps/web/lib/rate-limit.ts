@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { env } from "./env";
 import { hashIdentifier } from "./crypto";
 

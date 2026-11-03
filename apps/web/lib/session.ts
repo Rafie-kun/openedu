@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { env } from "./env";
 import { randomToken, sha256 } from "./crypto";
 
-export const SESSION_COOKIE = "edubuf_session";
+export const SESSION_COOKIE = "openedu_session";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const TOUCH_INTERVAL_MS = 1000 * 60 * 60;
 

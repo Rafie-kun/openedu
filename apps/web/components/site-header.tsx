@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LinkButton } from "@edubuf/ui";
+import { LinkButton } from "@openedu/ui";
 import { logoutAction } from "@/app/actions/auth";
 import type { CurrentUser } from "@/lib/session";
 import { LogoutButton } from "./auth-forms";
@@ -24,7 +24,7 @@ export function SiteHeader({ user }: { user: CurrentUser | null }) {
             EB
           </span>
           <span>
-            <span className="block font-display text-xl leading-none text-ink">EduBuf</span>
+            <span className="block font-display text-xl leading-none text-ink">OpenEdu</span>
             <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.16em] text-ink-soft">
               study planning workspace
             </span>

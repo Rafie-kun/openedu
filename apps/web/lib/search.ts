@@ -1,4 +1,4 @@
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 
 async function matchingUniversityIds(query: string): Promise<string[]> {
   if (!query) return [];

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Badge, EmptyState, SectionHeading, Select } from "@edubuf/ui";
+import { Badge, EmptyState, SectionHeading, Select } from "@openedu/ui";
 import { FilterForm, Pagination, UniversityCard } from "@/components/catalogue";
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { searchUniversities } from "@/lib/search";
 
 export const metadata: Metadata = { title: "Universities" };

@@ -11,7 +11,7 @@ body:
     id: record
     attributes:
       label: Which record
-      description: Paste the EduBuf URL or the record name and slug.
+      description: Paste the OpenEdu URL or the record name and slug.
     validations:
       required: true
   - type: input

@@ -26,19 +26,19 @@ importers:
 
   apps/web:
     dependencies:
-      '@edubuf/database':
+      '@openedu/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@edubuf/matching':
+      '@openedu/matching':
         specifier: workspace:*
         version: link:../../packages/matching
-      '@edubuf/shared':
+      '@openedu/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@edubuf/ui':
+      '@openedu/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@edubuf/validation':
+      '@openedu/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       next:

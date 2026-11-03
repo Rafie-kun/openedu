@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card, LinkButton, SectionHeading, Window } from "@edubuf/ui";
-import { db } from "@edubuf/database";
+import { Badge, Card, LinkButton, SectionHeading, Window } from "@openedu/ui";
+import { db } from "@openedu/database";
 import {
   changePasswordAction,
   deleteAccountAction,
@@ -14,7 +14,7 @@ import {
 } from "@/components/application-forms";
 import { requireUser } from "@/lib/session";
 import { env, isAiConfigured, isEmailConfigured } from "@/lib/env";
-import { formatDateTime } from "@edubuf/shared";
+import { formatDateTime } from "@openedu/shared";
 
 export const metadata: Metadata = { title: "Account" };
 export const dynamic = "force-dynamic";

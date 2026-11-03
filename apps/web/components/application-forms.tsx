@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { Button, Callout, Field, Input, Select, Textarea, Checkbox } from "@edubuf/ui";
-import { APPLICATION_STATUS_LABELS, APPLICATION_STATUS_ORDER } from "@edubuf/shared";
+import { Button, Callout, Field, Input, Select, Textarea, Checkbox } from "@openedu/ui";
+import { APPLICATION_STATUS_LABELS, APPLICATION_STATUS_ORDER } from "@openedu/shared";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
 type StateAction = (state: FormState, formData: FormData) => Promise<FormState>;
@@ -54,7 +54,7 @@ export function NewApplicationForm({
           </Select>
         </Field>
 
-        <Field label="Deadline" htmlFor="deadline" hint="Only as you understand it. EduBuf does not invent one.">
+        <Field label="Deadline" htmlFor="deadline" hint="Only as you understand it. OpenEdu does not invent one.">
           <Input id="deadline" name="deadline" type="date" />
         </Field>
 

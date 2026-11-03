@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@edubuf/database";
-import { budgetItemSchema, budgetPlanSchema } from "@edubuf/validation";
+import { db } from "@openedu/database";
+import { budgetItemSchema, budgetPlanSchema } from "@openedu/validation";
 import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";
 import { requireUser } from "@/lib/session";

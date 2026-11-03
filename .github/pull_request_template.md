@@ -23,7 +23,7 @@ If you ticked the first box, list the sources:
 
 - [ ] `pnpm typecheck`
 - [ ] `pnpm test`
-- [ ] `pnpm --filter @edubuf/web build`
+- [ ] `pnpm --filter @openedu/web build`
 - [ ] `pnpm db:seed` run twice with no duplicates (if schema or seed changed)
 - [ ] New private records are ownership-checked on the server
 - [ ] Empty states still make sense with zero records

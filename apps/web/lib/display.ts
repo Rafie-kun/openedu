@@ -1,4 +1,4 @@
-import type { VerificationStatusValue } from "@edubuf/shared";
+import type { VerificationStatusValue } from "@openedu/shared";
 
 const KNOWN: VerificationStatusValue[] = [
   "UNVERIFIED",

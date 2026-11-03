@@ -1,6 +1,6 @@
-# EduBuf
+# OpenEdu
 
-EduBuf is a planning workspace for students who are trying to study somewhere other than where they
+OpenEdu is a planning workspace for students who are trying to study somewhere other than where they
 finished school.
 
 You record your qualifications the way they were actually awarded: the exam board, the subject, the
@@ -128,5 +128,5 @@ Security issues should go through `SECURITY.md`, not the public issue tracker.
 
 MIT. See `LICENSE`.
 
-Built by [Rafie-kun](https://github.com/Rafie-kun). EduBuf is not a university, an admissions service,
+Built by [Rafie-kun](https://github.com/Rafie-kun). OpenEdu is not a university, an admissions service,
 a funding body or an immigration adviser, and it is not affiliated with any of them.

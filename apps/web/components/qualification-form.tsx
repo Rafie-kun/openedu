@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useMemo, useState } from "react";
-import { Button, Callout, Field, Input, Select, Textarea } from "@edubuf/ui";
+import { Button, Callout, Field, Input, Select, Textarea } from "@openedu/ui";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
 export interface GradeBandOption {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card, EmptyState, LinkButton, SectionHeading } from "@edubuf/ui";
-import { APPLICATION_STATUS_LABELS, daysUntil, formatDate, formatMoney } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, LinkButton, SectionHeading } from "@openedu/ui";
+import { APPLICATION_STATUS_LABELS, daysUntil, formatDate, formatMoney } from "@openedu/shared";
+import { db } from "@openedu/database";
 import { requireUser } from "@/lib/session";
 import { getOrCreateProfile } from "@/lib/student";
 
@@ -40,7 +40,7 @@ export default async function ApplicationsPage() {
       >
         {applications.length === 0
           ? "Track what you are preparing, what you submitted and what came back."
-          : `${openCount} open of ${applications.length} tracked. EduBuf never submits, pays or signs anything for you.`}
+          : `${openCount} open of ${applications.length} tracked. OpenEdu never submits, pays or signs anything for you.`}
       </SectionHeading>
 
       {applications.length === 0 ? (

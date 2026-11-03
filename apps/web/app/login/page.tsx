@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Window } from "@edubuf/ui";
+import { Window } from "@openedu/ui";
 import { loginAction } from "@/app/actions/auth";
 import { LoginForm } from "@/components/auth-forms";
 

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@edubuf/ui";
-import { DEGREE_LEVEL_LABELS, formatDate, formatMoney } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@openedu/ui";
+import { DEGREE_LEVEL_LABELS, formatDate, formatMoney } from "@openedu/shared";
+import { db } from "@openedu/database";
 import { getCurrentUser } from "@/lib/session";
 import { evaluateProgrammeForProfile } from "@/lib/eligibility";
 import { EligibilityPanel } from "@/components/eligibility-panel";
@@ -261,7 +261,7 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
             ) : null}
             {programme.tuitionFees.length === 0 ? (
               <p className="mt-2 text-sm text-ink-soft">
-                No tuition figure recorded. EduBuf does not estimate a fee on the provider&apos;s behalf.
+                No tuition figure recorded. OpenEdu does not estimate a fee on the provider&apos;s behalf.
               </p>
             ) : (
               <ul className="mt-2 space-y-3 text-sm">

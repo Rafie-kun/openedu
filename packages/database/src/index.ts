@@ -1,7 +1,7 @@
 import { PrismaClient } from "./generated/prisma";
 
 const globalForPrisma = globalThis as unknown as {
-  __edubufPrisma?: PrismaClient;
+  __openeduPrisma?: PrismaClient;
 };
 
 function createClient(): PrismaClient {
@@ -11,10 +11,10 @@ function createClient(): PrismaClient {
 }
 
 // cached on globalThis so next dev hot-reload doesn't open a new pool every time
-export const db: PrismaClient = globalForPrisma.__edubufPrisma ?? createClient();
+export const db: PrismaClient = globalForPrisma.__openeduPrisma ?? createClient();
 
 if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.__edubufPrisma = db;
+  globalForPrisma.__openeduPrisma = db;
 }
 
 export type { PrismaClient } from "./generated/prisma";

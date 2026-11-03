@@ -1,5 +1,5 @@
 {
-  "name": "edubuf",
+  "name": "openedu",
   "private": true,
   "version": "0.1.0",
   "description": "A global, source-traceable university, scholarship and student application workspace.",
@@ -7,7 +7,7 @@
   "author": "Rafie-kun (https://github.com/Rafie-kun)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rafie-kun/edubuf.git"
+    "url": "git+https://github.com/Rafie-kun/openedu.git"
   },
   "packageManager": "pnpm@11.22.0",
   "engines": {
@@ -16,17 +16,17 @@
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "dev:web": "pnpm --filter @edubuf/web dev",
-    "dev:admin": "pnpm --filter @edubuf/admin dev",
+    "dev:web": "pnpm --filter @openedu/web dev",
+    "dev:admin": "pnpm --filter @openedu/admin dev",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "test:e2e": "pnpm --filter @edubuf/web test:e2e",
-    "db:generate": "pnpm --filter @edubuf/database db:generate",
-    "db:migrate": "pnpm --filter @edubuf/database db:migrate",
-    "db:deploy": "pnpm --filter @edubuf/database db:deploy",
-    "db:seed": "pnpm --filter @edubuf/database db:seed",
-    "db:studio": "pnpm --filter @edubuf/database db:studio",
+    "test:e2e": "pnpm --filter @openedu/web test:e2e",
+    "db:generate": "pnpm --filter @openedu/database db:generate",
+    "db:migrate": "pnpm --filter @openedu/database db:migrate",
+    "db:deploy": "pnpm --filter @openedu/database db:deploy",
+    "db:seed": "pnpm --filter @openedu/database db:seed",
+    "db:studio": "pnpm --filter @openedu/database db:studio",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "worker:test": "cd workers/data-ingestion && python -m pytest -q"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Badge, Callout, EmptyState, SectionHeading, Select } from "@edubuf/ui";
+import { Badge, Callout, EmptyState, SectionHeading, Select } from "@openedu/ui";
 import { FilterForm, Pagination, ScholarshipCard } from "@/components/catalogue";
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { searchScholarships } from "@/lib/search";
 
 export const metadata: Metadata = { title: "Scholarships" };

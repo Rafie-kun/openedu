@@ -6,8 +6,8 @@ import { getCurrentUser } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: {
-    default: "EduBuf — find study options you can actually use",
-    template: "%s · EduBuf",
+    default: "OpenEdu — find study options you can actually use",
+    template: "%s · OpenEdu",
   },
   description:
     "A source-traceable workspace for comparing universities, programmes and scholarships worldwide, understanding eligibility, and planning your next step.",

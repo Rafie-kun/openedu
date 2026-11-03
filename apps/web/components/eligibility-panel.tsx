@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Badge, Callout, Card } from "@edubuf/ui";
+import { Badge, Callout, Card } from "@openedu/ui";
 import {
   MATCH_OUTCOME_EXPLANATIONS,
   MATCH_OUTCOME_LABELS,
@@ -9,8 +9,8 @@ import {
   type MatchOutcomeValue,
   type RequirementStatusValue,
   type RequirementKindValue,
-} from "@edubuf/shared";
-import type { MatchEvaluation, RequirementEvaluation } from "@edubuf/matching";
+} from "@openedu/shared";
+import type { MatchEvaluation, RequirementEvaluation } from "@openedu/matching";
 
 const STATUS_TONE: Record<RequirementStatusValue, "success" | "warning" | "neutral" | "info"> = {
   MET: "success",

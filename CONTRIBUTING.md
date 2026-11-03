@@ -1,4 +1,4 @@
-# Contributing to EduBuf
+# Contributing to OpenEdu
 
 Thanks for looking. This project has an unusual constraint for an open-source app: the data matters
 more than the code, and a plausible-looking wrong record is worse than an empty page.

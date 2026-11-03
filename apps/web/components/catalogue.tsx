@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Badge, Card, Input, LinkButton } from "@edubuf/ui";
-import { VerificationBadge } from "@edubuf/ui";
-import { formatDate, formatMoney } from "@edubuf/shared";
+import { Badge, Card, Input, LinkButton } from "@openedu/ui";
+import { VerificationBadge } from "@openedu/ui";
+import { formatDate, formatMoney } from "@openedu/shared";
 
 export function FilterForm({
   action,

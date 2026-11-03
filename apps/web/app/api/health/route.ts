@@ -1,4 +1,4 @@
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import { isAiConfigured, isEmailConfigured } from "@/lib/env";
 
 export const dynamic = "force-dynamic";

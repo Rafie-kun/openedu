@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { Button, Field, Input, Checkbox, Callout } from "@edubuf/ui";
+import { Button, Field, Input, Checkbox, Callout } from "@openedu/ui";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
 type Action = (state: FormState, formData: FormData) => Promise<FormState>;

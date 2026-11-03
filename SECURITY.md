@@ -1,6 +1,6 @@
 # Security policy
 
-EduBuf handles student personal data: names, contact details, academic records, financial plans and
+OpenEdu handles student personal data: names, contact details, academic records, financial plans and
 private application notes. Please treat security reports seriously and report them privately.
 
 ## Reporting a vulnerability

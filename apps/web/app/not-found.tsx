@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LinkButton, Card } from "@edubuf/ui";
+import { LinkButton, Card } from "@openedu/ui";
 
 export default function NotFound() {
   return (
@@ -20,7 +20,7 @@ export default function NotFound() {
       </Card>
 
       <p className="text-sm text-ink-soft">
-        If you followed a link from within EduBuf, that is a bug.{" "}
+        If you followed a link from within OpenEdu, that is a bug.{" "}
         <Link href="/dashboard" className="quiet-link">
           Return to your workspace
         </Link>{" "}

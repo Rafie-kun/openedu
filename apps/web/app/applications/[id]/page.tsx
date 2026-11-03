@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, EmptyState, SectionHeading, Window } from "@edubuf/ui";
-import { APPLICATION_STATUS_LABELS, formatDate, formatDateTime, formatMoney } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, SectionHeading, Window } from "@openedu/ui";
+import { APPLICATION_STATUS_LABELS, formatDate, formatDateTime, formatMoney } from "@openedu/shared";
+import { db } from "@openedu/database";
 import {
   addApplicationNoteAction,
   deleteApplicationAction,
@@ -193,7 +193,7 @@ export default async function ApplicationDetailPage({
           </Card>
 
           <EmptyState title="A reminder" action={<Link href="/applications" className="quiet-link text-sm">Back to tracker</Link>}>
-            EduBuf does not submit applications, pay fees or accept offers. Those steps stay with you.
+            OpenEdu does not submit applications, pay fees or accept offers. Those steps stay with you.
           </EmptyState>
         </aside>
       </div>

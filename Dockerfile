@@ -16,10 +16,10 @@ FROM deps AS build
 COPY . .
 ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
 ENV AUTH_SECRET="build-only-secret-that-is-not-used-at-runtime"
-RUN pnpm db:generate && pnpm --filter @edubuf/web build
+RUN pnpm db:generate && pnpm --filter @openedu/web build
 
 FROM base AS runner
 ENV NODE_ENV=production
 COPY --from=build /app /app
 EXPOSE 3000
-CMD ["pnpm", "--filter", "@edubuf/web", "start"]
+CMD ["pnpm", "--filter", "@openedu/web", "start"]

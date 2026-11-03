@@ -1,9 +1,9 @@
 "use server";
 
-import { Prisma, db } from "@edubuf/database";
-import { loginSchema, registerSchema } from "@edubuf/validation";
+import { Prisma, db } from "@openedu/database";
+import { loginSchema, registerSchema } from "@openedu/validation";
 import { redirect } from "next/navigation";
-import { safeInternalPath } from "@edubuf/shared";
+import { safeInternalPath } from "@openedu/shared";
 import { audit } from "@/lib/audit";
 import { hashIdentifier, hashPassword, verifyPassword } from "@/lib/crypto";
 import { clientFingerprint, rateLimit } from "@/lib/rate-limit";

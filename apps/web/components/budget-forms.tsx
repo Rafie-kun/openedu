@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { Button, Callout, Field, Input, Select } from "@edubuf/ui";
-import { COST_CATEGORY_LABELS } from "@edubuf/shared";
+import { Button, Callout, Field, Input, Select } from "@openedu/ui";
+import { COST_CATEGORY_LABELS } from "@openedu/shared";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
 type StateAction = (state: FormState, formData: FormData) => Promise<FormState>;

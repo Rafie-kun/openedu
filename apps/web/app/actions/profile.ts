@@ -1,13 +1,13 @@
 "use server";
 
-import { db } from "@edubuf/database";
+import { db } from "@openedu/database";
 import {
   deleteAccountSchema,
   languageTestSchema,
   passwordChangeSchema,
   profileSchema,
   qualificationSchema,
-} from "@edubuf/validation";
+} from "@openedu/validation";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";

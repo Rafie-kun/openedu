@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card, EmptyState, SectionHeading } from "@edubuf/ui";
-import { formatDateTime } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+import { Badge, Card, EmptyState, SectionHeading } from "@openedu/ui";
+import { formatDateTime } from "@openedu/shared";
+import { db } from "@openedu/database";
 import { markNotificationsReadAction } from "@/app/actions/workspace";
 import { requireUser } from "@/lib/session";
 
@@ -43,7 +43,7 @@ export default async function NotificationsPage() {
 
       {notifications.length === 0 ? (
         <EmptyState title="No notifications yet">
-          EduBuf only writes here for events tied to your own records. An empty list is normal for a new
+          OpenEdu only writes here for events tied to your own records. An empty list is normal for a new
           account.
         </EmptyState>
       ) : (

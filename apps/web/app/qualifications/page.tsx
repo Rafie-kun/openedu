@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Badge, Callout, Card, EmptyState, Window } from "@edubuf/ui";
+import { Badge, Callout, Card, EmptyState, Window } from "@openedu/ui";
 import {
   addLanguageTestAction,
   addQualificationAction,
@@ -15,7 +15,7 @@ import {
   loadQualificationOptions,
   loadQualifications,
 } from "@/lib/student";
-import { QUALIFICATION_LEVEL_LABELS, formatDate } from "@edubuf/shared";
+import { QUALIFICATION_LEVEL_LABELS, formatDate } from "@openedu/shared";
 
 export const metadata: Metadata = { title: "Qualifications" };
 export const dynamic = "force-dynamic";
@@ -44,7 +44,7 @@ export default async function QualificationsPage() {
 
       <Callout tone="info" title="Why the platform keeps scales separate">
         <p>
-          Two examination systems cannot be compared reliably without a documented equivalency. EduBuf
+          Two examination systems cannot be compared reliably without a documented equivalency. OpenEdu
           only compares a grade with a requirement recorded on the same scale, and shows “not supplied”
           when it cannot. The university&apos;s own entry requirements remain the authority.
         </p>

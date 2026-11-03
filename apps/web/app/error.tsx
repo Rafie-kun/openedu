@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { Button, Callout, Card } from "@edubuf/ui";
+import { Button, Callout, Card } from "@openedu/ui";
 
 export default function GlobalError({
   error,

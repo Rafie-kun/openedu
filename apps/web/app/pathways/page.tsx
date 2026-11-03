@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Callout, Card, EmptyState, SectionHeading } from "@edubuf/ui";
-import { db } from "@edubuf/database";
-import { Provenance } from "@edubuf/ui";
+import { Badge, Callout, Card, EmptyState, SectionHeading } from "@openedu/ui";
+import { db } from "@openedu/database";
+import { Provenance } from "@openedu/ui";
 import { toVerificationStatus } from "@/lib/display";
 
 export const metadata: Metadata = { title: "Alternative pathways" };

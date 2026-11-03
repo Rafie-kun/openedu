@@ -44,7 +44,7 @@ jobs:
         run: pnpm test
 
       - name: Build web app
-        run: pnpm --filter @edubuf/web build
+        run: pnpm --filter @openedu/web build
 
   migrations:
     runs-on: ubuntu-latest

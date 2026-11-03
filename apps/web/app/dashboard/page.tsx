@@ -9,10 +9,10 @@ import {
   ProgressBar,
   Stat,
   Window,
-} from "@edubuf/ui";
-import { VerificationBadge } from "@edubuf/ui";
-import { APPLICATION_STATUS_LABELS, daysUntil, formatDate, profileCompleteness } from "@edubuf/shared";
-import { db } from "@edubuf/database";
+} from "@openedu/ui";
+import { VerificationBadge } from "@openedu/ui";
+import { APPLICATION_STATUS_LABELS, daysUntil, formatDate, profileCompleteness } from "@openedu/shared";
+import { db } from "@openedu/database";
 import { requireUser } from "@/lib/session";
 import { getOrCreateProfile } from "@/lib/student";
 
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
           </p>
           {notifications.length === 0 ? (
             <p className="mt-2 text-sm text-ink-soft">
-              Nothing new. EduBuf only notifies you about saved items, deadlines and profile gaps you
+              Nothing new. OpenEdu only notifies you about saved items, deadlines and profile gaps you
               opted into.
             </p>
           ) : (
@@ -158,7 +158,7 @@ export default async function DashboardPage() {
         {applications.length === 0 ? (
           <div className="mt-3">
             <EmptyState title="No applications tracked yet" action={<LinkButton href="/scholarships" size="sm">Find a scholarship</LinkButton>}>
-              Track a programme or scholarship yourself — EduBuf never submits anything on your behalf.
+              Track a programme or scholarship yourself — OpenEdu never submits anything on your behalf.
             </EmptyState>
           </div>
         ) : (

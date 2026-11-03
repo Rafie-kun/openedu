@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@edubuf/ui";
+import { Badge, Card, EmptyState, LinkButton, Provenance, Window } from "@openedu/ui";
 import {
   DEGREE_LEVEL_LABELS,
   FUNDING_COMPONENT_LABELS,
   formatDate,
   formatMoney,
-} from "@edubuf/shared";
-import { db } from "@edubuf/database";
+} from "@openedu/shared";
+import { db } from "@openedu/database";
 import { getCurrentUser } from "@/lib/session";
 import { evaluateScholarshipForProfile } from "@/lib/eligibility";
 import { EligibilityPanel } from "@/components/eligibility-panel";

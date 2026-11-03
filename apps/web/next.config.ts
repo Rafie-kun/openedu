@@ -17,11 +17,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   transpilePackages: [
-    "@edubuf/database",
-    "@edubuf/matching",
-    "@edubuf/shared",
-    "@edubuf/ui",
-    "@edubuf/validation",
+    "@openedu/database",
+    "@openedu/matching",
+    "@openedu/shared",
+    "@openedu/ui",
+    "@openedu/validation",
   ],
   serverExternalPackages: ["@prisma/client", ".prisma/client"],
   experimental: {

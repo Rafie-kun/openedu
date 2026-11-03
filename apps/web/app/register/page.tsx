@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Window } from "@edubuf/ui";
+import { Window } from "@openedu/ui";
 import { registerAction } from "@/app/actions/auth";
 import { RegisterForm } from "@/components/auth-forms";
 

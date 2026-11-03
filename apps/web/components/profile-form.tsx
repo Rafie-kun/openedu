@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Button, Callout, Field, Input, Select } from "@edubuf/ui";
-import { DEGREE_LEVEL_LABELS } from "@edubuf/shared";
+import { Button, Callout, Field, Input, Select } from "@openedu/ui";
+import { DEGREE_LEVEL_LABELS } from "@openedu/shared";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
 interface Option {

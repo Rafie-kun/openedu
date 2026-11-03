@@ -1,11 +1,11 @@
-import { db } from "@edubuf/database";
-import { evaluateOpportunity } from "@edubuf/matching";
+import { db } from "@openedu/database";
+import { evaluateOpportunity } from "@openedu/matching";
 import type {
   MatchEvaluation,
   OpportunityRequirement,
   OpportunitySnapshot,
   StudentSnapshot,
-} from "@edubuf/matching";
+} from "@openedu/matching";
 
 export async function loadStudentSnapshot(profileId: string): Promise<StudentSnapshot | null> {
   const profile = await db.studentProfile.findUnique({

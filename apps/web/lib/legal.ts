@@ -19,13 +19,13 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
   {
     slug: "terms",
     title: "Terms of service",
-    summary: "The agreement between you and whoever operates this installation of EduBuf.",
+    summary: "The agreement between you and whoever operates this installation of OpenEdu.",
     updated: UPDATED,
     sections: [
       {
         heading: "What this service is",
         body: [
-          "EduBuf is an information and planning tool. It stores an academic profile you enter, compares it against recorded requirements, and keeps track of opportunities you save.",
+          "OpenEdu is an information and planning tool. It stores an academic profile you enter, compares it against recorded requirements, and keeps track of opportunities you save.",
           "It is not a university, an admissions service, a scholarship provider, a recruitment agent or an immigration adviser. Nothing on the platform is an offer, a decision or professional advice.",
         ],
       },
@@ -167,7 +167,7 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
       {
         heading: "The only cookie",
         body: [
-          "edubuf_session is a strictly necessary cookie. It holds a random session token so the server can tell that you are signed in. It is httpOnly, SameSite=Lax, expires after 30 days of inactivity, and is marked Secure in production.",
+          "openedu_session is a strictly necessary cookie. It holds a random session token so the server can tell that you are signed in. It is httpOnly, SameSite=Lax, expires after 30 days of inactivity, and is marked Secure in production.",
         ],
       },
       {
@@ -236,7 +236,7 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
         heading: "Eligibility is not admission",
         body: [
           "An eligibility result compares the requirements the platform has recorded against what you entered. It is not an application, an assessment, an offer or a prediction. Only the institution or funder can decide.",
-          "A student who meets every recorded requirement can still be rejected in a competitive process. EduBuf does not calculate admission or funding probabilities and any number that looks like one is not from this platform.",
+          "A student who meets every recorded requirement can still be rejected in a competitive process. OpenEdu does not calculate admission or funding probabilities and any number that looks like one is not from this platform.",
         ],
       },
       {
@@ -260,7 +260,7 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
       {
         heading: "Visas and immigration",
         body: [
-          "Visa records are a summary of official sources at a point in time. Immigration rules change, and the decision always belongs to the relevant authority. EduBuf is not a legal or immigration adviser and does not guarantee any visa outcome.",
+          "Visa records are a summary of official sources at a point in time. Immigration rules change, and the decision always belongs to the relevant authority. OpenEdu is not a legal or immigration adviser and does not guarantee any visa outcome.",
           "Never rely on this platform for a travel or payment decision without checking the government source linked on the record.",
         ],
       },
