@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest something the platform should do.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve
+      description: Describe the student's situation, not the UI you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you think would help
+  - type: dropdown
+    id: foundation
+    attributes:
+      label: Does this depend on data we do not have yet?
+      options:
+        - "No, it uses existing records"
+        - "Yes, it needs new catalogue fields"
+        - "Yes, it needs a new source integration"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Including doing nothing, or a simpler version.

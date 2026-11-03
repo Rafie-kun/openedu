@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: edubuf
+      POSTGRES_PASSWORD: edubuf
+      POSTGRES_DB: edubuf
+    ports:
+      - "5432:5432"
+    volumes:
+      - edubuf-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edubuf -d edubuf"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - edubuf-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles: ["full"]
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://edubuf:edubuf@db:5432/edubuf?schema=public
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in the shell or a .env file next to this compose file}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      REDIS_URL: redis://redis:6379/0
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+    ports:
+      - "3000:3000"
+
+volumes:
+  edubuf-db:
+  edubuf-redis:

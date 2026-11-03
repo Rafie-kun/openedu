@@ -1,0 +1,53 @@
+name: Bug report
+description: Something is broken, missing, or behaving in a way the docs do not explain.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include passwords, session cookies, .env contents, or another person's data.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Sign in as a student
+        2. Open /qualifications
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or branch
+      placeholder: main @ abc1234
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Authentication or sessions
+        - Profile or qualifications
+        - University catalogue
+        - Scholarship catalogue
+        - Matching or eligibility result
+        - Application tracker
+        - Budget planner
+        - Visa records
+        - Build, install or CI
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Redact personal data, tokens and connection strings.
+      render: shell

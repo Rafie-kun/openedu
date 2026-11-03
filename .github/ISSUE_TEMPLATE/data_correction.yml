@@ -1,0 +1,54 @@
+name: Data correction
+description: A university, programme, scholarship or visa record is wrong or out of date.
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A correction without an official source cannot be applied. If two official sources disagree,
+        give both.
+  - type: input
+    id: record
+    attributes:
+      label: Which record
+      description: Paste the EduBuf URL or the record name and slug.
+    validations:
+      required: true
+  - type: input
+    id: field
+    attributes:
+      label: Which field
+      placeholder: e.g. application deadline, tuition amount, eligibility nationality list
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: What it says now
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official source URL
+      description: Government, university, awarding body or funder page. Not an agency or a blog.
+    validations:
+      required: true
+  - type: input
+    id: checked
+    attributes:
+      label: Date you checked the source
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Publication dates, effective dates, conflicting sources, archived copies.
