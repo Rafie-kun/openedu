@@ -93,7 +93,12 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
             Official website ↗
           </a>
           {user ? (
-            <SaveForm kind="UNIVERSITY" targetId={university.id} saved={saved} returnTo={`/universities/${slug}`} />
+            <SaveForm
+              kind="UNIVERSITY"
+              targetId={university.id}
+              saved={saved}
+              returnTo={`/universities/${slug}`}
+            />
           ) : null}
         </div>
       </div>
@@ -131,12 +136,17 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
                         </Link>
                       </h3>
                       <p className="text-xs text-ink-soft">
-                        {programme.degreeType?.name ?? programme.degreeLevel.replaceAll("_", " ").toLowerCase()}
+                        {programme.degreeType?.name ??
+                          programme.degreeLevel.replaceAll("_", " ").toLowerCase()}
                         {programme.durationMonths ? ` · ${programme.durationMonths} months` : ""}
-                        {programme.languageOfInstruction ? ` · ${programme.languageOfInstruction}` : ""}
+                        {programme.languageOfInstruction
+                          ? ` · ${programme.languageOfInstruction}`
+                          : ""}
                       </p>
                     </div>
-                    <Badge tone={programme.verificationStatus === "VERIFIED" ? "success" : "neutral"}>
+                    <Badge
+                      tone={programme.verificationStatus === "VERIFIED" ? "success" : "neutral"}
+                    >
                       {programme.verificationStatus.replaceAll("_", " ").toLowerCase()}
                     </Badge>
                   </div>
@@ -170,7 +180,9 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
                 </dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-ink-soft">International office</dt>
+                <dt className="text-xs uppercase tracking-wide text-ink-soft">
+                  International office
+                </dt>
                 <dd>
                   {university.internationalOfficeUrl ? (
                     <a
@@ -209,8 +221,8 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
           <Window title="recognition" meta="evidence only">
             {university.recognitions.length === 0 ? (
               <p className="text-sm text-ink-soft">
-                No recognition or accreditation evidence is recorded. OpenEdu does not infer recognition
-                from a university&apos;s presence in a research database.
+                No recognition or accreditation evidence is recorded. OpenEdu does not infer
+                recognition from a university&apos;s presence in a research database.
               </p>
             ) : (
               <ul className="space-y-3 text-sm">
@@ -236,7 +248,9 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
 
           <Window title="scholarships" meta="at this institution">
             {university.scholarships.length === 0 ? (
-              <p className="text-sm text-ink-soft">No scholarships recorded for this institution.</p>
+              <p className="text-sm text-ink-soft">
+                No scholarships recorded for this institution.
+              </p>
             ) : (
               <ul className="space-y-2 text-sm">
                 {university.scholarships.map((scholarship) => (

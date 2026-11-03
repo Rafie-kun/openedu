@@ -25,7 +25,10 @@ export function formatMoney(
   }
 }
 
-export function formatDate(value: Date | string | null | undefined, locale = DEFAULT_LOCALE): string {
+export function formatDate(
+  value: Date | string | null | undefined,
+  locale = DEFAULT_LOCALE,
+): string {
   if (!value) return "Not specified";
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return "Not specified";
@@ -55,7 +58,10 @@ export function formatDateTime(
   }).format(date);
 }
 
-export function daysUntil(value: Date | string | null | undefined, now = new Date()): number | null {
+export function daysUntil(
+  value: Date | string | null | undefined,
+  now = new Date(),
+): number | null {
   if (!value) return null;
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return null;
@@ -63,7 +69,10 @@ export function daysUntil(value: Date | string | null | undefined, now = new Dat
 }
 
 // blocks protocol-relative and backslash tricks on ?next=
-export function safeInternalPath(candidate: string | null | undefined, fallback = "/dashboard"): string {
+export function safeInternalPath(
+  candidate: string | null | undefined,
+  fallback = "/dashboard",
+): string {
   if (!candidate) return fallback;
   if (!candidate.startsWith("/")) return fallback;
   if (candidate.startsWith("//")) return fallback;

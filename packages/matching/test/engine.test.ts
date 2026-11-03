@@ -137,7 +137,12 @@ describe("evaluateOpportunity", () => {
     const evaluation = evaluateOpportunity(
       opportunity([
         aLevelRequirement,
-        requirement({ key: "chem", label: "Chemistry at A Level", kind: "SUBJECT", subjectCodes: ["CHEM"] }),
+        requirement({
+          key: "chem",
+          label: "Chemistry at A Level",
+          kind: "SUBJECT",
+          subjectCodes: ["CHEM"],
+        }),
       ]),
       student(),
       { asOf: AS_OF },
@@ -190,7 +195,9 @@ describe("evaluateOpportunity", () => {
 
   it("marks stale source checks for confirmation", () => {
     const evaluation = evaluateOpportunity(
-      opportunity([requirement({ ...aLevelRequirement, lastCheckedAt: "2023-01-01T00:00:00.000Z" })]),
+      opportunity([
+        requirement({ ...aLevelRequirement, lastCheckedAt: "2023-01-01T00:00:00.000Z" }),
+      ]),
       student(),
       { asOf: AS_OF },
     );
@@ -243,7 +250,12 @@ describe("evaluateOpportunity", () => {
   it("does not guess nationality when it is not supplied", () => {
     const evaluation = evaluateOpportunity(
       opportunity([
-        requirement({ key: "nat", label: "Nationality", kind: "NATIONALITY", nationalityCodes: ["BD"] }),
+        requirement({
+          key: "nat",
+          label: "Nationality",
+          kind: "NATIONALITY",
+          nationalityCodes: ["BD"],
+        }),
       ]),
       student({ nationalityCountryCode: null }),
       { asOf: AS_OF },
@@ -255,9 +267,7 @@ describe("evaluateOpportunity", () => {
 
   it("flags conflicting sources instead of picking a winner", () => {
     const evaluation = evaluateOpportunity(
-      opportunity([
-        requirement({ ...ieltsRequirement, verificationStatus: "CONFLICTING" }),
-      ]),
+      opportunity([requirement({ ...ieltsRequirement, verificationStatus: "CONFLICTING" })]),
       student(),
       { asOf: AS_OF },
     );

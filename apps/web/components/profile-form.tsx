@@ -52,8 +52,17 @@ export function ProfileForm({
       {next ? <input type="hidden" name="next" value={next} /> : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name in your workspace" htmlFor="displayName" hint="Optional. Used only for greetings.">
-          <Input id="displayName" name="displayName" defaultValue={initial.displayName} maxLength={80} />
+        <Field
+          label="Name in your workspace"
+          htmlFor="displayName"
+          hint="Optional. Used only for greetings."
+        >
+          <Input
+            id="displayName"
+            name="displayName"
+            defaultValue={initial.displayName}
+            maxLength={80}
+          />
         </Field>
 
         <Field
@@ -61,11 +70,20 @@ export function ProfileForm({
           htmlFor="dateOfBirth"
           hint="Only needed for opportunities with age conditions."
         >
-          <Input id="dateOfBirth" name="dateOfBirth" type="date" defaultValue={initial.dateOfBirth} />
+          <Input
+            id="dateOfBirth"
+            name="dateOfBirth"
+            type="date"
+            defaultValue={initial.dateOfBirth}
+          />
         </Field>
 
         <Field label="Nationality" htmlFor="nationalityCountryId">
-          <Select id="nationalityCountryId" name="nationalityCountryId" defaultValue={initial.nationalityCountryId}>
+          <Select
+            id="nationalityCountryId"
+            name="nationalityCountryId"
+            defaultValue={initial.nationalityCountryId}
+          >
             <option value="">Prefer not to say</option>
             {countries.map((country) => (
               <option key={country.id} value={country.id}>
@@ -76,7 +94,11 @@ export function ProfileForm({
         </Field>
 
         <Field label="Country of residence" htmlFor="countryOfResidenceId">
-          <Select id="countryOfResidenceId" name="countryOfResidenceId" defaultValue={initial.countryOfResidenceId}>
+          <Select
+            id="countryOfResidenceId"
+            name="countryOfResidenceId"
+            defaultValue={initial.countryOfResidenceId}
+          >
             <option value="">Prefer not to say</option>
             {countries.map((country) => (
               <option key={country.id} value={country.id}>
@@ -87,7 +109,11 @@ export function ProfileForm({
         </Field>
 
         <Field label="Intended degree level" htmlFor="intendedDegreeLevel">
-          <Select id="intendedDegreeLevel" name="intendedDegreeLevel" defaultValue={initial.intendedDegreeLevel}>
+          <Select
+            id="intendedDegreeLevel"
+            name="intendedDegreeLevel"
+            defaultValue={initial.intendedDegreeLevel}
+          >
             <option value="">Not decided</option>
             {Object.entries(DEGREE_LEVEL_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
@@ -98,7 +124,11 @@ export function ProfileForm({
         </Field>
 
         <Field label="Intended subject" htmlFor="intendedSubjectId">
-          <Select id="intendedSubjectId" name="intendedSubjectId" defaultValue={initial.intendedSubjectId}>
+          <Select
+            id="intendedSubjectId"
+            name="intendedSubjectId"
+            defaultValue={initial.intendedSubjectId}
+          >
             <option value="">Not decided</option>
             {subjects.map((subject) => (
               <option key={subject.id} value={subject.id}>
@@ -113,7 +143,11 @@ export function ProfileForm({
           htmlFor="financialNeedLevel"
           hint="Only used for need-based funding checks. Nothing here is shared publicly."
         >
-          <Select id="financialNeedLevel" name="financialNeedLevel" defaultValue={initial.financialNeedLevel}>
+          <Select
+            id="financialNeedLevel"
+            name="financialNeedLevel"
+            defaultValue={initial.financialNeedLevel}
+          >
             <option value="">Prefer not to say</option>
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
@@ -124,7 +158,9 @@ export function ProfileForm({
 
       <fieldset>
         <legend className="text-sm font-medium text-ink">Preferred study destinations</legend>
-        <p className="text-xs text-ink-soft">Up to five. These only shape recommendations; they do not hide anything.</p>
+        <p className="text-xs text-ink-soft">
+          Up to five. These only shape recommendations; they do not hide anything.
+        </p>
         <div className="mt-2 grid max-h-56 gap-1 overflow-y-auto rounded-md border border-line bg-paper/60 p-3 sm:grid-cols-2">
           {countries.map((country) => {
             const checked = preferred.includes(country.id);

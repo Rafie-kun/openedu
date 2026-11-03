@@ -71,7 +71,10 @@ export async function createBudgetPlanAction(
   return { success: "Plan created." };
 }
 
-export async function addBudgetItemAction(_prev: FormState, formData: FormData): Promise<FormState> {
+export async function addBudgetItemAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const user = await requireUser("/budget");
   const planId = readString(formData, "budgetPlanId");
   const parsed = budgetItemSchema.safeParse({

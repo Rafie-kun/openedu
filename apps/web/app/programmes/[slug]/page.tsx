@@ -146,8 +146,8 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
             programme.languageRequirements.length === 0 ? (
               <div className="mt-3">
                 <EmptyState title="No requirement rows recorded">
-                  The platform has the programme but not its entry conditions. This does not mean there
-                  are none — read the official page.
+                  The platform has the programme but not its entry conditions. This does not mean
+                  there are none — read the official page.
                 </EmptyState>
               </div>
             ) : (
@@ -261,7 +261,8 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
             ) : null}
             {programme.tuitionFees.length === 0 ? (
               <p className="mt-2 text-sm text-ink-soft">
-                No tuition figure recorded. OpenEdu does not estimate a fee on the provider&apos;s behalf.
+                No tuition figure recorded. OpenEdu does not estimate a fee on the provider&apos;s
+                behalf.
               </p>
             ) : (
               <ul className="mt-2 space-y-3 text-sm">
@@ -288,7 +289,8 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
           <Window title="deadlines" meta="intake dates">
             {programme.deadlines.length === 0 ? (
               <p className="text-sm text-ink-soft">
-                No deadline recorded. Check the official page — a missing row is not an open deadline.
+                No deadline recorded. Check the official page — a missing row is not an open
+                deadline.
               </p>
             ) : (
               <ul className="space-y-3 text-sm">
@@ -297,7 +299,9 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
                     <p className="font-medium text-ink">{deadline.label}</p>
                     <p className="text-xs text-ink-soft">
                       {deadline.intake ? `${deadline.intake} · ` : ""}
-                      {deadline.closesAt ? `closes ${formatDate(deadline.closesAt)}` : "closing date not recorded"}
+                      {deadline.closesAt
+                        ? `closes ${formatDate(deadline.closesAt)}`
+                        : "closing date not recorded"}
                       {` (${deadline.timezone})`}
                     </p>
                     <Provenance
@@ -338,7 +342,11 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
                 Institution application page ↗
               </LinkButton>
             ) : null}
-            <LinkButton href={`/universities/${programme.university.slug}`} variant="ghost" size="sm">
+            <LinkButton
+              href={`/universities/${programme.university.slug}`}
+              variant="ghost"
+              size="sm"
+            >
               ← About the institution
             </LinkButton>
           </div>

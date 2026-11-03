@@ -27,8 +27,19 @@ export function NewApplicationForm({
       {state.error ? <Callout tone="error">{state.error}</Callout> : null}
       {state.success ? <Callout tone="success">{state.success}</Callout> : null}
 
-      <Field label="What are you tracking?" htmlFor="title" required hint="Your own label. It stays private.">
-        <Input id="title" name="title" required maxLength={160} placeholder="e.g. BSc CS at ETH — main round" />
+      <Field
+        label="What are you tracking?"
+        htmlFor="title"
+        required
+        hint="Your own label. It stays private."
+      >
+        <Input
+          id="title"
+          name="title"
+          required
+          maxLength={160}
+          placeholder="e.g. BSc CS at ETH — main round"
+        />
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -54,7 +65,11 @@ export function NewApplicationForm({
           </Select>
         </Field>
 
-        <Field label="Deadline" htmlFor="deadline" hint="Only as you understand it. OpenEdu does not invent one.">
+        <Field
+          label="Deadline"
+          htmlFor="deadline"
+          hint="Only as you understand it. OpenEdu does not invent one."
+        >
           <Input id="deadline" name="deadline" type="date" />
         </Field>
 
@@ -69,11 +84,24 @@ export function NewApplicationForm({
         </Field>
 
         <Field label="Application fee" htmlFor="feeAmount">
-          <Input id="feeAmount" name="feeAmount" type="number" min={0} step="0.01" inputMode="decimal" />
+          <Input
+            id="feeAmount"
+            name="feeAmount"
+            type="number"
+            min={0}
+            step="0.01"
+            inputMode="decimal"
+          />
         </Field>
 
         <Field label="Fee currency" htmlFor="feeCurrency">
-          <Input id="feeCurrency" name="feeCurrency" maxLength={3} placeholder="e.g. EUR" defaultValue="" />
+          <Input
+            id="feeCurrency"
+            name="feeCurrency"
+            maxLength={3}
+            placeholder="e.g. EUR"
+            defaultValue=""
+          />
         </Field>
       </div>
 
@@ -174,9 +202,7 @@ export function PasswordChangeForm({ action }: { action: StateAction }) {
       <Button type="submit" disabled={pending}>
         {pending ? "Changing…" : "Change password"}
       </Button>
-      <p className="text-xs text-ink-soft">
-        Changing your password signs out every other session.
-      </p>
+      <p className="text-xs text-ink-soft">Changing your password signs out every other session.</p>
     </form>
   );
 }
@@ -187,7 +213,13 @@ export function DeleteAccountForm({ action }: { action: StateAction }) {
     <form action={formAction} className="space-y-4">
       {state.error ? <Callout tone="error">{state.error}</Callout> : null}
       <Field label="Password" htmlFor="password" required>
-        <Input id="password" name="password" type="password" autoComplete="current-password" required />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+        />
       </Field>
       <Field label="Type DELETE to confirm" htmlFor="confirmation" required>
         <Input id="confirmation" name="confirmation" required pattern="DELETE" autoComplete="off" />
@@ -196,8 +228,8 @@ export function DeleteAccountForm({ action }: { action: StateAction }) {
         {pending ? "Deleting…" : "Delete my account"}
       </Button>
       <p className="text-xs text-ink-soft">
-        This removes your profile, qualifications, saved items, applications and notes. Audit entries keep
-        the action but no longer point at your account.
+        This removes your profile, qualifications, saved items, applications and notes. Audit
+        entries keep the action but no longer point at your account.
       </p>
     </form>
   );

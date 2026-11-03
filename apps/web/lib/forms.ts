@@ -20,7 +20,9 @@ export function readAll(data: FormData, key: string): string[] {
     .filter(Boolean);
 }
 
-export function fieldErrorsFrom(issues: Array<{ path: PropertyKey[]; message: string }>): Record<string, string> {
+export function fieldErrorsFrom(
+  issues: Array<{ path: PropertyKey[]; message: string }>,
+): Record<string, string> {
   const errors: Record<string, string> = {};
   for (const issue of issues) {
     const key = issue.path.join(".") || "form";

@@ -99,8 +99,7 @@ export function Window({
 }
 
 const BUTTON_VARIANTS = {
-  primary:
-    "border-plum-strong bg-plum-strong text-paper hover:bg-plum focus-visible:outline-plum",
+  primary: "border-plum-strong bg-plum-strong text-paper hover:bg-plum focus-visible:outline-plum",
   secondary:
     "border-ink/25 bg-panel text-ink hover:border-ink/50 hover:bg-paper focus-visible:outline-plum",
   ghost: "border-transparent bg-transparent text-ink-soft hover:bg-paper hover:text-ink",
@@ -232,7 +231,9 @@ export function Checkbox({
       />
       <label htmlFor={id} className="text-sm text-ink">
         {label}
-        {description ? <span className="mt-0.5 block text-xs text-ink-soft">{description}</span> : null}
+        {description ? (
+          <span className="mt-0.5 block text-xs text-ink-soft">{description}</span>
+        ) : null}
       </label>
     </div>
   );
@@ -272,7 +273,9 @@ export function EmptyState({
   return (
     <div className="rounded-[var(--radius-window)] border border-dashed border-line bg-paper/60 px-6 py-10 text-center">
       <p className="font-display text-lg text-ink">{title}</p>
-      {children ? <div className="mx-auto mt-2 max-w-prose text-sm text-ink-soft">{children}</div> : null}
+      {children ? (
+        <div className="mx-auto mt-2 max-w-prose text-sm text-ink-soft">{children}</div>
+      ) : null}
       {action ? <div className="mt-4 flex justify-center gap-2">{action}</div> : null}
     </div>
   );
@@ -334,15 +337,7 @@ export function SectionHeading({
   );
 }
 
-export function Stat({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: ReactNode;
-  hint?: string;
-}) {
+export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
   return (
     <div className="rounded-md border border-line bg-paper/70 px-3 py-2">
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-soft">{label}</p>

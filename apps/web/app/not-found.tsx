@@ -8,8 +8,8 @@ export default function NotFound() {
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">404</p>
         <h1 className="mt-1 font-display text-3xl text-ink">Nothing is filed here</h1>
         <p className="mt-2 text-sm text-ink-soft">
-          The link may be old, or the record may have been archived. Archived records are removed from
-          public listings; they are not quietly replaced with something similar.
+          The link may be old, or the record may have been archived. Archived records are removed
+          from public listings; they are not quietly replaced with something similar.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <LinkButton href="/universities">Browse universities</LinkButton>

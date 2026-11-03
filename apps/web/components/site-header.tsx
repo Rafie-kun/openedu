@@ -35,7 +35,10 @@ export function SiteHeader({ user }: { user: CurrentUser | null }) {
           <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-soft">
             {NAV.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="hover:text-ink hover:underline hover:underline-offset-4">
+                <Link
+                  href={item.href}
+                  className="hover:text-ink hover:underline hover:underline-offset-4"
+                >
                   {item.label}
                 </Link>
               </li>

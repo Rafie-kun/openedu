@@ -34,19 +34,22 @@ export default async function QualificationsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">academic record</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+          academic record
+        </p>
         <h1 className="mt-1 font-display text-3xl text-ink">Qualifications and grades</h1>
         <p className="mt-2 max-w-2xl text-sm text-ink-soft">
-          Add each qualification separately. Your grades stay on their original scale and session, so a
-          Cambridge A* and an IB 7 are never blended into a made-up GPA.
+          Add each qualification separately. Your grades stay on their original scale and session,
+          so a Cambridge A* and an IB 7 are never blended into a made-up GPA.
         </p>
       </div>
 
       <Callout tone="info" title="Why the platform keeps scales separate">
         <p>
-          Two examination systems cannot be compared reliably without a documented equivalency. OpenEdu
-          only compares a grade with a requirement recorded on the same scale, and shows “not supplied”
-          when it cannot. The university&apos;s own entry requirements remain the authority.
+          Two examination systems cannot be compared reliably without a documented equivalency.
+          OpenEdu only compares a grade with a requirement recorded on the same scale, and shows
+          “not supplied” when it cannot. The university&apos;s own entry requirements remain the
+          authority.
         </p>
       </Callout>
 
@@ -57,8 +60,8 @@ export default async function QualificationsPage() {
 
         {qualifications.length === 0 ? (
           <EmptyState title="No qualifications yet">
-            Add the qualification you are studying or have finished. Even an in-progress record makes
-            checks more useful, because predicted results are shown separately.
+            Add the qualification you are studying or have finished. Even an in-progress record
+            makes checks more useful, because predicted results are shown separately.
           </EmptyState>
         ) : (
           <div className="space-y-4">
@@ -184,19 +187,24 @@ export default async function QualificationsPage() {
           <Card>
             {languageTests.length === 0 ? (
               <p className="text-sm text-ink-soft">
-                No language test recorded. Programmes with a language requirement will show it as not
-                supplied rather than assuming you meet it.
+                No language test recorded. Programmes with a language requirement will show it as
+                not supplied rather than assuming you meet it.
               </p>
             ) : (
               <ul className="space-y-3">
                 {languageTests.map((test) => (
-                  <li key={test.id} className="flex items-start justify-between gap-3 border-b border-line/60 pb-3 last:border-0 last:pb-0">
+                  <li
+                    key={test.id}
+                    className="flex items-start justify-between gap-3 border-b border-line/60 pb-3 last:border-0 last:pb-0"
+                  >
                     <div>
                       <p className="text-sm font-medium text-ink">
                         {test.testCode} · <span className="font-mono">{test.score}</span>
                       </p>
                       <p className="text-xs text-ink-soft">
-                        {test.testDate ? `Taken ${formatDate(test.testDate)}` : "Test date not recorded"}
+                        {test.testDate
+                          ? `Taken ${formatDate(test.testDate)}`
+                          : "Test date not recorded"}
                         {test.expiresAt ? ` · expires ${formatDate(test.expiresAt)}` : ""}
                       </p>
                     </div>

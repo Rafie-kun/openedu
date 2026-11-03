@@ -18,11 +18,13 @@ export default function GlobalError({
   return (
     <div className="mx-auto max-w-2xl space-y-4 py-10">
       <Card>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">something broke</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+          something broke
+        </p>
         <h1 className="mt-1 font-display text-3xl text-ink">This page could not be loaded</h1>
         <p className="mt-2 text-sm text-ink-soft">
-          The failure was logged without your personal content. If the database is unreachable, every page
-          that needs it will fail the same way until it is back.
+          The failure was logged without your personal content. If the database is unreachable,
+          every page that needs it will fail the same way until it is back.
         </p>
         {error.digest ? (
           <p className="mt-2 font-mono text-xs text-ink-soft">reference: {error.digest}</p>
@@ -41,8 +43,9 @@ export default function GlobalError({
       </Card>
 
       <Callout tone="info" title="If this keeps happening">
-        Check that the deployment has a reachable PostgreSQL database and a valid DATABASE_URL. The health
-        endpoint at /api/health reports which dependencies are configured, without exposing any values.
+        Check that the deployment has a reachable PostgreSQL database and a valid DATABASE_URL. The
+        health endpoint at /api/health reports which dependencies are configured, without exposing
+        any values.
       </Callout>
     </div>
   );

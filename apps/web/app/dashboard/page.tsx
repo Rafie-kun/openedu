@@ -11,7 +11,12 @@ import {
   Window,
 } from "@openedu/ui";
 import { VerificationBadge } from "@openedu/ui";
-import { APPLICATION_STATUS_LABELS, daysUntil, formatDate, profileCompleteness } from "@openedu/shared";
+import {
+  APPLICATION_STATUS_LABELS,
+  daysUntil,
+  formatDate,
+  profileCompleteness,
+} from "@openedu/shared";
 import { db } from "@openedu/database";
 import { requireUser } from "@/lib/session";
 import { getOrCreateProfile } from "@/lib/student";
@@ -64,8 +69,12 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">workspace</p>
-          <h1 className="mt-1 font-display text-3xl text-ink">Good to see you, {user.displayName}</h1>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+            workspace
+          </p>
+          <h1 className="mt-1 font-display text-3xl text-ink">
+            Good to see you, {user.displayName}
+          </h1>
           <p className="mt-1 text-sm text-ink-soft">
             One honest snapshot of where your planning stands. Nothing here is a prediction.
           </p>
@@ -99,8 +108,8 @@ export default async function DashboardPage() {
           </p>
           {notifications.length === 0 ? (
             <p className="mt-2 text-sm text-ink-soft">
-              Nothing new. OpenEdu only notifies you about saved items, deadlines and profile gaps you
-              opted into.
+              Nothing new. OpenEdu only notifies you about saved items, deadlines and profile gaps
+              you opted into.
             </p>
           ) : (
             <ul className="mt-2 space-y-2 text-sm">
@@ -157,8 +166,16 @@ export default async function DashboardPage() {
         </div>
         {applications.length === 0 ? (
           <div className="mt-3">
-            <EmptyState title="No applications tracked yet" action={<LinkButton href="/scholarships" size="sm">Find a scholarship</LinkButton>}>
-              Track a programme or scholarship yourself — OpenEdu never submits anything on your behalf.
+            <EmptyState
+              title="No applications tracked yet"
+              action={
+                <LinkButton href="/scholarships" size="sm">
+                  Find a scholarship
+                </LinkButton>
+              }
+            >
+              Track a programme or scholarship yourself — OpenEdu never submits anything on your
+              behalf.
             </EmptyState>
           </div>
         ) : (
@@ -166,7 +183,10 @@ export default async function DashboardPage() {
             {applications.map((application) => {
               const days = daysUntil(application.deadline);
               return (
-                <Card key={application.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                <Card
+                  key={application.id}
+                  className="flex flex-wrap items-center justify-between gap-3 py-3"
+                >
                   <div>
                     <p className="text-sm font-medium text-ink">{application.title}</p>
                     <p className="text-xs text-ink-soft">
@@ -206,8 +226,8 @@ export default async function DashboardPage() {
         {programmes.length === 0 ? (
           <div className="mt-3">
             <EmptyState title="Catalogue is empty">
-              Seed or import institutions before recommendations can appear. Nothing is invented to fill
-              this space.
+              Seed or import institutions before recommendations can appear. Nothing is invented to
+              fill this space.
             </EmptyState>
           </div>
         ) : (
@@ -225,7 +245,9 @@ export default async function DashboardPage() {
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2 text-xs">
                   <Badge>{programme.degreeLevel.replaceAll("_", " ").toLowerCase()}</Badge>
-                  {programme.durationMonths ? <Badge>{programme.durationMonths} months</Badge> : null}
+                  {programme.durationMonths ? (
+                    <Badge>{programme.durationMonths} months</Badge>
+                  ) : null}
                   {programme.languageOfInstruction ? (
                     <Badge>{programme.languageOfInstruction}</Badge>
                   ) : null}
@@ -244,8 +266,9 @@ export default async function DashboardPage() {
 
       <Window title="a note on what changed" meta="transparency">
         <p className="text-sm text-ink-soft">
-          When a saved record changes, the platform shows the change instead of quietly rewriting your
-          understanding of it. If a source check goes stale, the next eligibility check will say so.
+          When a saved record changes, the platform shows the change instead of quietly rewriting
+          your understanding of it. If a source check goes stale, the next eligibility check will
+          say so.
         </p>
       </Window>
     </div>

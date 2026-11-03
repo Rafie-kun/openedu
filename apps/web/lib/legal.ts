@@ -161,7 +161,8 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
   {
     slug: "cookies",
     title: "Cookie notice",
-    summary: "This build sets one cookie. There is no advertising or analytics tracking to consent to.",
+    summary:
+      "This build sets one cookie. There is no advertising or analytics tracking to consent to.",
     updated: UPDATED,
     sections: [
       {
@@ -254,7 +255,7 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
       {
         heading: "Funding",
         body: [
-          "Scholarship records describe what a provider published on the date shown. Coverage components are recorded separately because \"fully funded\" rarely means every cost. Renewal conditions and continuation requirements are part of the award.",
+          'Scholarship records describe what a provider published on the date shown. Coverage components are recorded separately because "fully funded" rarely means every cost. Renewal conditions and continuation requirements are part of the award.',
         ],
       },
       {

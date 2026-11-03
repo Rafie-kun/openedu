@@ -46,16 +46,16 @@ export default async function PathwaysPage() {
 
       <Callout tone="warning" title="Read the progression condition, not the brochure">
         &quot;Progression available&quot; is weaker than &quot;guaranteed progression&quot;. Where a
-        provider has not stated whether progression is guaranteed, this page says so instead of assuming
-        it is.
+        provider has not stated whether progression is guaranteed, this page says so instead of
+        assuming it is.
       </Callout>
 
       {pathways.length === 0 ? (
         <>
           <EmptyState title="No institution-specific pathways recorded yet">
-            The catalogue does not contain published foundation, diploma or transfer routes yet. Rather
-            than invent them, here is what the categories mean and what to check on an institution&apos;s
-            own pages.
+            The catalogue does not contain published foundation, diploma or transfer routes yet.
+            Rather than invent them, here is what the categories mean and what to check on an
+            institution&apos;s own pages.
           </EmptyState>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -72,8 +72,8 @@ export default async function PathwaysPage() {
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-soft">
               <li>Is this pathway open to my nationality and my qualification system?</li>
               <li>
-                Is progression to the degree guaranteed on passing, or decided by a separate competitive
-                application?
+                Is progression to the degree guaranteed on passing, or decided by a separate
+                competitive application?
               </li>
               <li>What grade or score do I need in the pathway itself?</li>
               <li>Is the pathway&apos;s fee the same as the degree fee?</li>
@@ -101,7 +101,10 @@ export default async function PathwaysPage() {
                   {pathway.fromProgramme ? (
                     <p className="text-xs text-ink-soft">
                       Leads toward{" "}
-                      <Link href={`/programmes/${pathway.fromProgramme.slug}`} className="quiet-link">
+                      <Link
+                        href={`/programmes/${pathway.fromProgramme.slug}`}
+                        className="quiet-link"
+                      >
                         {pathway.fromProgramme.title}
                       </Link>{" "}
                       at {pathway.fromProgramme.university.name}

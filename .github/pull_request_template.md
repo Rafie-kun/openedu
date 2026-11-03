@@ -16,8 +16,8 @@
 If you ticked the first box, list the sources:
 
 | Record | Field | Source | Checked |
-| --- | --- | --- | --- |
-|  |  |  |  |
+| ------ | ----- | ------ | ------- |
+|        |       |        |         |
 
 ## Checks
 

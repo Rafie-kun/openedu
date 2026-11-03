@@ -16,13 +16,24 @@ export function FilterForm({
   resetHref: string;
 }) {
   return (
-    <form action={action} method="get" role="search" className="rounded-md border border-line bg-panel/80 p-3">
+    <form
+      action={action}
+      method="get"
+      role="search"
+      className="rounded-md border border-line bg-panel/80 p-3"
+    >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
         <div className="flex-1">
           <label htmlFor="q" className="mb-1 block text-xs font-medium text-ink-soft">
             Search
           </label>
-          <Input id="q" name="q" defaultValue={q ?? ""} placeholder="Name, city or subject" maxLength={120} />
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q ?? ""}
+            placeholder="Name, city or subject"
+            maxLength={120}
+          />
         </div>
         {children}
         <div className="flex gap-2">
@@ -77,12 +88,18 @@ export function Pagination({
       </p>
       <div className="flex gap-2">
         {page > 1 ? (
-          <Link href={build(page - 1)} className="rounded border border-line px-3 py-1.5 hover:bg-panel">
+          <Link
+            href={build(page - 1)}
+            className="rounded border border-line px-3 py-1.5 hover:bg-panel"
+          >
             Previous
           </Link>
         ) : null}
         {page < pages ? (
-          <Link href={build(page + 1)} className="rounded border border-line px-3 py-1.5 hover:bg-panel">
+          <Link
+            href={build(page + 1)}
+            className="rounded border border-line px-3 py-1.5 hover:bg-panel"
+          >
             Next
           </Link>
         ) : null}
@@ -120,7 +137,9 @@ export function UniversityCard({
           <Badge>
             {university._count.programmes} programme{university._count.programmes === 1 ? "" : "s"}
           </Badge>
-          {university.lastCheckedAt ? <Badge>checked {formatDate(university.lastCheckedAt)}</Badge> : null}
+          {university.lastCheckedAt ? (
+            <Badge>checked {formatDate(university.lastCheckedAt)}</Badge>
+          ) : null}
         </div>
       </div>
       <div className="mt-4">
@@ -158,7 +177,9 @@ export function ProgrammeCard({
         <div className="mt-3 flex flex-wrap gap-1.5">
           <Badge>{programme.degreeLevel.replaceAll("_", " ").toLowerCase()}</Badge>
           {programme.durationMonths ? <Badge>{programme.durationMonths} months</Badge> : null}
-          {programme.languageOfInstruction ? <Badge>{programme.languageOfInstruction}</Badge> : null}
+          {programme.languageOfInstruction ? (
+            <Badge>{programme.languageOfInstruction}</Badge>
+          ) : null}
         </div>
       </div>
       <div className="mt-4">
@@ -190,7 +211,9 @@ export function ScholarshipCard({
   };
 }) {
   const deadline = scholarship.deadlines[0];
-  const specified = scholarship.fundingComponents.filter((component) => component.coverage !== "UNSPECIFIED");
+  const specified = scholarship.fundingComponents.filter(
+    (component) => component.coverage !== "UNSPECIFIED",
+  );
 
   return (
     <Card as="article" className="flex h-full flex-col justify-between">
@@ -210,10 +233,14 @@ export function ScholarshipCard({
           {specified.slice(0, 2).map((component) => (
             <Badge key={component.component} tone="info">
               {component.component.toLowerCase().replaceAll("_", " ")}
-              {component.amount ? ` · ${formatMoney(component.amount, component.currencyCode ?? "USD")}` : ""}
+              {component.amount
+                ? ` · ${formatMoney(component.amount, component.currencyCode ?? "USD")}`
+                : ""}
             </Badge>
           ))}
-          {specified.length === 0 ? <Badge tone="warning">funding breakdown unspecified</Badge> : null}
+          {specified.length === 0 ? (
+            <Badge tone="warning">funding breakdown unspecified</Badge>
+          ) : null}
         </div>
         <p className="mt-3 text-xs text-ink-soft">
           {deadline

@@ -28,7 +28,13 @@ export function NewBudgetPlanForm({
       {state.success ? <Callout tone="success">{state.success}</Callout> : null}
 
       <Field label="Plan name" htmlFor="plan-title" required hint="Private to you.">
-        <Input id="plan-title" name="title" required maxLength={120} placeholder="e.g. Netherlands, BSc year one" />
+        <Input
+          id="plan-title"
+          name="title"
+          required
+          maxLength={120}
+          placeholder="e.g. Netherlands, BSc year one"
+        />
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">

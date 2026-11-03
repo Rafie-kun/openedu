@@ -55,9 +55,7 @@ export async function loadStudentSnapshot(profileId: string): Promise<StudentSna
   };
 }
 
-type ProgrammeWithRequirements = NonNullable<
-  Awaited<ReturnType<typeof loadProgrammeForMatching>>
->;
+type ProgrammeWithRequirements = NonNullable<Awaited<ReturnType<typeof loadProgrammeForMatching>>>;
 
 export async function loadProgrammeForMatching(programmeId: string) {
   return db.programme.findUnique({

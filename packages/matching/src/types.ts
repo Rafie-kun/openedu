@@ -21,17 +21,10 @@ export type RequirementKindValue =
   | "OTHER";
 
 export type RequirementStatusValue =
-  | "MET"
-  | "NOT_MET"
-  | "UNKNOWN"
-  | "NEEDS_CONFIRMATION"
-  | "NOT_APPLICABLE";
+  "MET" | "NOT_MET" | "UNKNOWN" | "NEEDS_CONFIRMATION" | "NOT_APPLICABLE";
 
 export type MatchOutcomeValue =
-  | "ELIGIBLE"
-  | "POTENTIALLY_ELIGIBLE"
-  | "NOT_CURRENTLY_ELIGIBLE"
-  | "UNVERIFIED";
+  "ELIGIBLE" | "POTENTIALLY_ELIGIBLE" | "NOT_CURRENTLY_ELIGIBLE" | "UNVERIFIED";
 
 export type QualificationLevelValue =
   | "SECONDARY"
@@ -44,11 +37,7 @@ export type QualificationLevelValue =
   | "OTHER";
 
 export type QualificationStatusValue =
-  | "IN_PROGRESS"
-  | "COMPLETED"
-  | "PARTIALLY_COMPLETED"
-  | "NOT_COMPLETED"
-  | "AWARDED";
+  "IN_PROGRESS" | "COMPLETED" | "PARTIALLY_COMPLETED" | "NOT_COMPLETED" | "AWARDED";
 
 export type ResultKindValue = "ACHIEVED" | "PREDICTED" | "ESTIMATED";
 

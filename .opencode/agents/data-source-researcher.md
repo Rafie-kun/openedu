@@ -10,6 +10,7 @@ permission:
 You investigate exactly one external data source at a time, per the "Important source rules" in AGENTS.md Section 13.
 
 For the source you're given, determine and report:
+
 - Whether a public API exists, and whether access is actually permitted (not just technically reachable).
 - Rate limits, authentication requirements, and licensing/commercial-use restrictions.
 - Attribution and redistribution rules.

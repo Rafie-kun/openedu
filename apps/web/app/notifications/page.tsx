@@ -43,8 +43,8 @@ export default async function NotificationsPage() {
 
       {notifications.length === 0 ? (
         <EmptyState title="No notifications yet">
-          OpenEdu only writes here for events tied to your own records. An empty list is normal for a new
-          account.
+          OpenEdu only writes here for events tied to your own records. An empty list is normal for
+          a new account.
         </EmptyState>
       ) : (
         <ul className="space-y-3">

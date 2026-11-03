@@ -123,17 +123,32 @@ export function QualificationForm({
         </Field>
 
         <Field label="Examination year" htmlFor="sessionYear" hint="For example 2026.">
-          <Input id="sessionYear" name="sessionYear" type="number" min={1950} max={2100} inputMode="numeric" />
+          <Input
+            id="sessionYear"
+            name="sessionYear"
+            type="number"
+            min={1950}
+            max={2100}
+            inputMode="numeric"
+          />
         </Field>
 
-        <Field label="Session" htmlFor="sessionSeries" hint="For example June, November, or Semester 1.">
+        <Field
+          label="Session"
+          htmlFor="sessionSeries"
+          hint="For example June, November, or Semester 1."
+        >
           <Input id="sessionSeries" name="sessionSeries" maxLength={40} />
         </Field>
 
         <Field
           label="Overall grade"
           htmlFor="overallGradeLabel"
-          hint={type?.scaleName ? `Scale: ${type.scaleName}` : "No grade scale recorded for this qualification."}
+          hint={
+            type?.scaleName
+              ? `Scale: ${type.scaleName}`
+              : "No grade scale recorded for this qualification."
+          }
         >
           <Select id="overallGradeLabel" name="overallGradeLabel" defaultValue="">
             <option value="">Not specified</option>
@@ -149,7 +164,8 @@ export function QualificationForm({
       <fieldset className="rounded-md border border-line bg-paper/60 p-4">
         <legend className="px-1 text-sm font-medium text-ink">Subjects and grades</legend>
         <p className="text-xs text-ink-soft">
-          Enter what is on your result slip. Predicted grades are stored separately from achieved ones.
+          Enter what is on your result slip. Predicted grades are stored separately from achieved
+          ones.
         </p>
 
         <div className="mt-3 space-y-3">
@@ -226,7 +242,11 @@ export function QualificationForm({
         </Button>
       </fieldset>
 
-      <Field label="Notes" htmlFor="notes" hint="Anything that explains an unusual result. Visible only to you.">
+      <Field
+        label="Notes"
+        htmlFor="notes"
+        hint="Anything that explains an unusual result. Visible only to you."
+      >
         <Textarea id="notes" name="notes" maxLength={1000} rows={3} />
       </Field>
 

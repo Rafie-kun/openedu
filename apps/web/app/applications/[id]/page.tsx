@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge, Card, EmptyState, SectionHeading, Window } from "@openedu/ui";
-import { APPLICATION_STATUS_LABELS, formatDate, formatDateTime, formatMoney } from "@openedu/shared";
+import {
+  APPLICATION_STATUS_LABELS,
+  formatDate,
+  formatDateTime,
+  formatMoney,
+} from "@openedu/shared";
 import { db } from "@openedu/database";
 import {
   addApplicationNoteAction,
@@ -80,7 +85,10 @@ export default async function ApplicationDetailPage({
             ) : (
               <ol className="space-y-2 text-sm">
                 {application.statusHistory.map((entry) => (
-                  <li key={entry.id} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0">
+                  <li
+                    key={entry.id}
+                    className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0"
+                  >
                     <span>
                       <Badge>{APPLICATION_STATUS_LABELS[entry.status]}</Badge>
                       {entry.note ? <span className="ml-2 text-ink-soft">{entry.note}</span> : null}
@@ -171,8 +179,8 @@ export default async function ApplicationDetailPage({
           ) : (
             <Card>
               <p className="text-sm text-ink-soft">
-                Document upload is not enabled in this deployment. Keep your files wherever you already
-                store them and track the checklist here.
+                Document upload is not enabled in this deployment. Keep your files wherever you
+                already store them and track the checklist here.
               </p>
             </Card>
           )}
@@ -192,8 +200,16 @@ export default async function ApplicationDetailPage({
             </p>
           </Card>
 
-          <EmptyState title="A reminder" action={<Link href="/applications" className="quiet-link text-sm">Back to tracker</Link>}>
-            OpenEdu does not submit applications, pay fees or accept offers. Those steps stay with you.
+          <EmptyState
+            title="A reminder"
+            action={
+              <Link href="/applications" className="quiet-link text-sm">
+                Back to tracker
+              </Link>
+            }
+          >
+            OpenEdu does not submit applications, pay fees or accept offers. Those steps stay with
+            you.
           </EmptyState>
         </aside>
       </div>

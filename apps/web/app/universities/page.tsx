@@ -38,8 +38,8 @@ export default async function UniversitiesPage({
         title="Universities"
         actions={<Badge tone="info">{result.total} in catalogue</Badge>}
       >
-        Search across institutions in the catalogue. Every record shows its verification state; a name
-        appearing here is not proof of accreditation or recognition.
+        Search across institutions in the catalogue. Every record shows its verification state; a
+        name appearing here is not proof of accreditation or recognition.
       </SectionHeading>
 
       <FilterForm action="/universities" q={q} resetHref="/universities">

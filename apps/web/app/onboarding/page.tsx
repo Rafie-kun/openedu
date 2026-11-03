@@ -20,18 +20,20 @@ export default async function OnboardingPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-5 py-6">
       <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">step 2 of 2</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+          step 2 of 2
+        </p>
         <h1 className="mt-1 font-display text-3xl text-ink">The short version of your situation</h1>
         <p className="mt-2 text-sm text-ink-soft">
-          Everything here is optional except what a specific requirement needs. You can change it later
-          without losing anything.
+          Everything here is optional except what a specific requirement needs. You can change it
+          later without losing anything.
         </p>
       </div>
 
       {countries.length === 0 ? (
         <Callout tone="warning" title="Reference data is not loaded">
-          The country and subject lists are empty. Run <code>pnpm db:seed</code> against your database,
-          then reload this page.
+          The country and subject lists are empty. Run <code>pnpm db:seed</code> against your
+          database, then reload this page.
         </Callout>
       ) : null}
 

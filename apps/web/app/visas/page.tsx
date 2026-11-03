@@ -33,28 +33,30 @@ export default async function VisasPage() {
   return (
     <div className="space-y-6">
       <SectionHeading eyebrow="destinations" title="Student visa centre">
-        Student visa rules are written by governments, change without notice and differ by nationality.
-        OpenEdu records them only from official immigration sources, with the date each requirement was
-        checked.
+        Student visa rules are written by governments, change without notice and differ by
+        nationality. OpenEdu records them only from official immigration sources, with the date each
+        requirement was checked.
       </SectionHeading>
 
       <Callout tone="warning" title="Not legal advice">
-        This page cannot tell you whether you will be granted a visa. Requirements below are a record of
-        what an official source said on a given date. Confirm on the government page before you pay for
-        anything or book travel.
+        This page cannot tell you whether you will be granted a visa. Requirements below are a
+        record of what an official source said on a given date. Confirm on the government page
+        before you pay for anything or book travel.
       </Callout>
 
       {categories.length === 0 ? (
         <>
           <EmptyState title="No verified visa records yet">
-            The source registry exists, but no country&apos;s student visa category has been recorded and
-            reviewed. Rather than publish an unchecked summary, the visa section stays empty until the
-            first official source is logged.
+            The source registry exists, but no country&apos;s student visa category has been
+            recorded and reviewed. Rather than publish an unchecked summary, the visa section stays
+            empty until the first official source is logged.
           </EmptyState>
 
           <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
             <Card>
-              <h2 className="font-display text-lg text-ink">What will be recorded per destination</h2>
+              <h2 className="font-display text-lg text-ink">
+                What will be recorded per destination
+              </h2>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-soft">
                 <li>The exact visa category name and its official government page</li>
                 <li>Mandatory and conditional requirements, each with its own source link</li>
@@ -82,8 +84,8 @@ export default async function VisasPage() {
             <Link href="/universities" className="quiet-link">
               university catalogue
             </Link>{" "}
-            links each institution&apos;s own international pages, which usually point to the correct
-            government route.
+            links each institution&apos;s own international pages, which usually point to the
+            correct government route.
           </p>
         </>
       ) : (
@@ -128,7 +130,10 @@ export default async function VisasPage() {
                       ) : null}
                       <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-ink-soft">
                         <span>
-                          checked {requirement.lastCheckedAt ? formatDate(requirement.lastCheckedAt) : "unknown"}
+                          checked{" "}
+                          {requirement.lastCheckedAt
+                            ? formatDate(requirement.lastCheckedAt)
+                            : "unknown"}
                         </span>
                         {requirement.effectiveFrom ? (
                           <span>in force from {formatDate(requirement.effectiveFrom)}</span>

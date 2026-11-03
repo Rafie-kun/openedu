@@ -25,8 +25,8 @@ export default async function LoginPage({
         </div>
       </Window>
       <p className="mt-4 text-center text-xs text-ink-soft">
-        Trouble signing in? Check that cookies are enabled for this site. Password reset needs an email
-        provider, which this deployment may not have configured.{" "}
+        Trouble signing in? Check that cookies are enabled for this site. Password reset needs an
+        email provider, which this deployment may not have configured.{" "}
         <Link href="/legal/privacy" className="quiet-link">
           Privacy notice
         </Link>

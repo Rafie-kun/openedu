@@ -38,8 +38,8 @@ export function SiteFooter() {
         <div>
           <p className="font-display text-lg text-ink">OpenEdu</p>
           <p className="mt-2 max-w-xs text-xs leading-relaxed">
-            Requirements, deadlines and funding change constantly. Every important claim on this site
-            links back to the source it came from — check that source before you act.
+            Requirements, deadlines and funding change constantly. Every important claim on this
+            site links back to the source it came from — check that source before you act.
           </p>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em]">
             open source · built by Rafie-kun
@@ -47,11 +47,16 @@ export function SiteFooter() {
         </div>
         {COLUMNS.map((column) => (
           <nav key={column.title} aria-label={column.title}>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink">{column.title}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink">
+              {column.title}
+            </p>
             <ul className="mt-2 space-y-1">
               {column.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-ink hover:underline hover:underline-offset-4">
+                  <Link
+                    href={link.href}
+                    className="hover:text-ink hover:underline hover:underline-offset-4"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -61,8 +66,8 @@ export function SiteFooter() {
         ))}
       </div>
       <p className="mt-8 text-xs">
-        OpenEdu is not a university, an admissions service, a funding body, or an immigration adviser.
-        It does not submit applications or make decisions on your behalf.
+        OpenEdu is not a university, an admissions service, a funding body, or an immigration
+        adviser. It does not submit applications or make decisions on your behalf.
       </p>
     </footer>
   );

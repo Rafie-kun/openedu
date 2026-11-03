@@ -1,6 +1,7 @@
 # MASTER DEVELOPMENT PROMPT (OpenCode Edition) — GLOBAL UNIVERSITY, SCHOLARSHIP AND STUDENT APPLICATION PLATFORM
 
 > **How to use this file in OpenCode**
+>
 > 1. Save this entire file as `AGENTS.md` in the project root. OpenCode auto-loads `AGENTS.md` as persistent project instructions on every session (it also reads an optional global `~/.config/opencode/AGENTS.md` — don't duplicate content there, keep personal/global preferences separate from this project spec).
 > 2. Paste **Section 0** below into your first message to the agent (or just say "read AGENTS.md and start Phase 0") to kick off work.
 > 3. Keep this file updated as the single source of truth — do not also paste the whole spec into chat on every session; that burns tokens for no benefit once it's in `AGENTS.md`.
@@ -76,24 +77,24 @@ Do not make students feel that their educational opportunities end because they 
 Use the following stack as the project's default architecture. Do not randomly change technologies or introduce unnecessary dependencies.
 
 | Component            | Required choice             |
-| --------------------- | --------------------------- |
+| -------------------- | --------------------------- |
 | Main coding language | TypeScript                  |
 | Data automation      | Python                      |
 | Frontend             | Next.js + React             |
 | Styling              | Tailwind CSS + custom CSS   |
 | Backend              | Next.js APIs initially      |
 | Database             | PostgreSQL                  |
-| ORM                   | Prisma                      |
+| ORM                  | Prisma                      |
 | Background jobs      | Python workers + Redis      |
-| AI                    | Gemini API                  |
-| Search                | PostgreSQL full-text search |
-| File storage          | S3-compatible storage       |
-| Monorepo              | pnpm + Turborepo            |
-| Containers            | Docker                      |
-| CI/CD                 | GitHub Actions              |
-| TypeScript testing    | Vitest                      |
-| End-to-end testing    | Playwright                  |
-| Python testing        | pytest                      |
+| AI                   | Gemini API                  |
+| Search               | PostgreSQL full-text search |
+| File storage         | S3-compatible storage       |
+| Monorepo             | pnpm + Turborepo            |
+| Containers           | Docker                      |
+| CI/CD                | GitHub Actions              |
+| TypeScript testing   | Vitest                      |
+| End-to-end testing   | Playwright                  |
+| Python testing       | pytest                      |
 
 ### Technology implementation rules
 
@@ -145,18 +146,23 @@ These five foundations must be implemented and validated before spending signifi
 Build them in this order:
 
 ## Priority 1 — Authentication and student profiles
+
 Implement secure registration, login, account management, onboarding, and student profiles. Users must be able to enter and update their academic and personal application information without repeatedly completing the same forms. The profile must support different education systems and qualification types.
 
 ## Priority 2 — Qualification and grade database
+
 Build a structured qualification and grading system that can represent education systems across the world. This is essential because grades cannot be compared reliably without understanding the qualification, awarding body, grading scale, subject, examination session, and relevant entry requirements.
 
 ## Priority 3 — University and scholarship database
+
 Establish the core global university, programme, and scholarship datasets. Build the data models, source tracking, official links, verification status, and administrative tools needed to maintain these datasets. Do not populate the database with invented institutions, fabricated scholarships, or guessed requirements.
 
 ## Priority 4 — Eligibility and matching engine
+
 Build a deterministic, explainable matching engine using the student's actual qualifications and circumstances. The system must explain why an opportunity is relevant, what requirements are satisfied, what is missing, and what needs manual confirmation. Do not make the AI model responsible for determining eligibility.
 
 ## Priority 5 — Automatic data ingestion and verification
+
 Build the automated data collection and updating pipeline. The platform must be capable of collecting information from permitted sources, detecting changes, validating records, preserving their origins, and flagging information that requires human review. The pipeline must not silently publish unverified or potentially incorrect information.
 
 ### Foundation-first development rule
@@ -490,6 +496,7 @@ Use secure headers, input validation, output encoding, safe file validation, sec
 Use environment variables and keep local secret files out of version control.
 
 Required rules:
+
 - Add `.env` to `.gitignore`.
 - Add `.env.local` and other applicable secret environment files to `.gitignore`.
 - Provide `.env.example` with variable names and placeholder values only.
@@ -608,15 +615,19 @@ After the five foundations and essential platform flows are working, add these f
 # 22. Performance, reliability and maintainability
 
 ### Performance
+
 Use server-side rendering where appropriate; pagination; database indexes; efficient query design; caching; background processing; image optimisation; lazy loading; sensible API response sizes. Avoid loading thousands of institutions or scholarships into the browser at once.
 
 ### Reliability
+
 Implement structured logging; error monitoring; job monitoring; retry handling; health checks; database backups; restore procedures; graceful handling of external API failures; timeouts; rate limiting; appropriate service fallbacks.
 
 ### Observability
+
 Track system health without unnecessarily collecting private user content. Monitor API failures, database performance, ingestion failures, failed source checks, queue length, job completion, stale data, AI service availability, notification delivery failures. Do not log secrets, passwords, access tokens, or unnecessary personal information.
 
 ### Documentation
+
 Maintain documentation for architecture, database models, API routes, data sources, ingestion processes, matching rules, environment variables, local development, testing, deployment, security, and contribution guidelines.
 
 ---
@@ -778,6 +789,7 @@ Do not rewrite unrelated parts of the application. Do not replace working code s
 This is an open-source project other humans will read and contribute to. Comments must read like a developer wrote them while working on real code, not like an AI explaining itself.
 
 **Banned:**
+
 - No comments that describe what the code obviously does (`// loop through users`, `// set the variable to true`).
 - No AI-narrator phrasing: "Note:", "Important:", "This function is responsible for...", "As requested...", "This handles the case where...", "Added to fix...", references to this task, this prompt, a ticket number, or "the user asked for".
 - No comment blocks above every function restating its signature in English. No restating the obvious.
@@ -785,6 +797,7 @@ This is an open-source project other humans will read and contribute to. Comment
 - No multi-paragraph or multi-line comment essays. One line, max, and only when it earns its place.
 
 **Allowed, when genuinely useful:**
+
 - Short, plain, human-sounding notes on non-obvious behaviour, a workaround, a known rough edge, or a hidden constraint — written the way a developer actually talks, e.g. `// this is flaky, revisit later`, `// works for now, might break on edge case X`, `// hacky fix, come back to this`.
 - A one-liner flagging something unfinished or uncertain in plain terms, not corporate-speak: `// not fully tested yet`, `// seems fine so far, watch this`.
 - Keep it casual and human — short lowercase fragments are fine, this is not documentation prose.
@@ -902,6 +915,7 @@ Use an explicit allow/ask/deny policy. Default to `"ask"` for anything destructi
 ```
 
 Notes:
+
 - Reading `.env` / `.env.local` should stay on `"ask"` (the default) — never widen this to `"allow"` globally; secrets must stay reviewed.
 - Never set `bash: "allow"` wholesale. Enumerate the safe, repeated commands (test runners, linters, `git status`/`diff`/`log`, package-manager scripts) and leave everything else on `ask`, with explicit `deny` on destructive patterns (`rm -rf`, `git push --force`, `git reset --hard`).
 
@@ -911,11 +925,7 @@ If you split documentation across multiple files beyond `AGENTS.md` (e.g. per-pa
 
 ```json
 {
-  "instructions": [
-    "AGENTS.md",
-    "apps/web/AGENTS.md",
-    "workers/data-ingestion/AGENTS.md"
-  ]
+  "instructions": ["AGENTS.md", "apps/web/AGENTS.md", "workers/data-ingestion/AGENTS.md"]
 }
 ```
 
@@ -942,6 +952,7 @@ permission:
   edit: deny
   bash: ask
 ---
+
 You investigate one data source at a time per Section 13's "Important source rules" of AGENTS.md.
 Output a structured note (API? public access? rate limits? licence? redistribution rules? automated collection allowed?) and append it to docs/data-sources.md. Never write ingestion code yourself — hand findings back to the primary agent.
 ```
@@ -968,7 +979,7 @@ Leave `enabled: false` until actually needed for a task; turn on only for the se
 
 ## 30.5 Installing skills / plugins (OpenChamber and alternatives)
 
-**OpenChamber** is a UI (desktop/web/VS Code) that runs *on top of* OpenCode — it is not itself a skill marketplace or package registry, and it requires OpenCode already installed. Do not expect it to be the mechanism that adds skills to this repo.
+**OpenChamber** is a UI (desktop/web/VS Code) that runs _on top of_ OpenCode — it is not itself a skill marketplace or package registry, and it requires OpenCode already installed. Do not expect it to be the mechanism that adds skills to this repo.
 
 To actually install reusable skills/commands/plugins into this OpenCode project, use one of:
 

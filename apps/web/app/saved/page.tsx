@@ -47,8 +47,8 @@ export default async function SavedPage() {
           </div>
         }
       >
-        A saved record keeps its own check date. When its source is rechecked or a deadline changes, the
-        record here is what gets flagged — not your memory of it.
+        A saved record keeps its own check date. When its source is rechecked or a deadline changes,
+        the record here is what gets flagged — not your memory of it.
       </SectionHeading>
 
       {saved.length === 0 ? (
@@ -65,8 +65,8 @@ export default async function SavedPage() {
             </>
           }
         >
-          Saving is a bookmark, not an application. Nothing is sent to an institution when you save a
-          record.
+          Saving is a bookmark, not an application. Nothing is sent to an institution when you save
+          a record.
         </EmptyState>
       ) : (
         <ul className="mt-2 space-y-3">
@@ -96,7 +96,11 @@ export default async function SavedPage() {
             }
 
             return (
-              <Card as="li" key={item.id} className="flex flex-wrap items-center justify-between gap-3 py-4">
+              <Card
+                as="li"
+                key={item.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-4"
+              >
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
                     {KIND_LABELS[item.kind]}

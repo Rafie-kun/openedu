@@ -22,6 +22,10 @@ export async function audit(input: AuditInput): Promise<void> {
       },
     });
   } catch (error) {
-    console.error("audit-log-failed", { action: input.action, entityType: input.entityType, error });
+    console.error("audit-log-failed", {
+      action: input.action,
+      entityType: input.entityType,
+      error,
+    });
   }
 }

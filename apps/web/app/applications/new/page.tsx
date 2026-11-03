@@ -38,13 +38,15 @@ export default async function NewApplicationPage({
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">workspace</p>
         <h1 className="mt-1 font-display text-3xl text-ink">Add an application to track</h1>
         <p className="mt-2 text-sm text-ink-soft">
-          This creates a private tracker entry only. The institution receives nothing, and no fee is paid.
+          This creates a private tracker entry only. The institution receives nothing, and no fee is
+          paid.
         </p>
       </div>
 
       <Callout tone="warning" title="Deadline honesty">
-        Enter a deadline only if you have read it on an official page. If you are unsure, leave it blank —
-        a guessed date is worse than no date, because it can make you rush or relax incorrectly.
+        Enter a deadline only if you have read it on an official page. If you are unsure, leave it
+        blank — a guessed date is worse than no date, because it can make you rush or relax
+        incorrectly.
       </Callout>
 
       <Window title="new tracker entry" meta="private to you">
@@ -63,8 +65,8 @@ export default async function NewApplicationPage({
         />
         {programmes.length === 0 && scholarships.length === 0 ? (
           <p className="mt-4 text-xs text-ink-soft">
-            The catalogue has no programmes or scholarships yet, so you can still add a custom entry by
-            title alone.
+            The catalogue has no programmes or scholarships yet, so you can still add a custom entry
+            by title alone.
           </p>
         ) : null}
       </Window>

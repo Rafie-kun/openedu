@@ -23,11 +23,13 @@ const PILLARS = [
 const STEPS = [
   {
     title: "Record what you actually have",
-    detail: "Qualifications, subjects, achieved and predicted grades, language tests — in their own scale.",
+    detail:
+      "Qualifications, subjects, achieved and predicted grades, language tests — in their own scale.",
   },
   {
     title: "Compare real requirements",
-    detail: "Each programme or scholarship is checked against your profile, requirement by requirement.",
+    detail:
+      "Each programme or scholarship is checked against your profile, requirement by requirement.",
   },
   {
     title: "See the gap",
@@ -84,9 +86,9 @@ export default function HomePage() {
               tries to tell you what is true, and where the uncertainty is.
             </p>
             <p className="text-paper/80">
-              If a requirement has not been verified against its source, the platform says so instead
-              of scoring you against it. If two sources disagree, it flags the conflict instead of
-              picking a winner.
+              If a requirement has not been verified against its source, the platform says so
+              instead of scoring you against it. If two sources disagree, it flags the conflict
+              instead of picking a winner.
             </p>
             <p className="font-mono text-xs uppercase tracking-[0.12em] text-paper/70">
               no probabilities · no fabricated deadlines · no auto-submissions
@@ -135,15 +137,15 @@ export default function HomePage() {
         <div className="space-y-4">
           <Callout tone="info" title="Where the catalogue stands">
             <p>
-              The university, programme and scholarship catalogue is being built from official sources.
-              Anything that has not been through review is labelled <strong>Not verified</strong> and is
-              excluded from confident eligibility statements.
+              The university, programme and scholarship catalogue is being built from official
+              sources. Anything that has not been through review is labelled{" "}
+              <strong>Not verified</strong> and is excluded from confident eligibility statements.
             </p>
           </Callout>
           <Callout tone="warning" title="What OpenEdu will never do">
             <p>
-              It will not submit an application, sign a declaration, pay a fee, invent a deadline, or
-              tell you that you are certain to be admitted. Those decisions stay with you and the
+              It will not submit an application, sign a declaration, pay a fee, invent a deadline,
+              or tell you that you are certain to be admitted. Those decisions stay with you and the
               institution.
             </p>
           </Callout>

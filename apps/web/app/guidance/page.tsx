@@ -77,27 +77,49 @@ const SYSTEMS = [
 ];
 
 const TERMS = [
-  ["Conditional offer", "An offer that depends on you meeting a stated condition, usually a final grade."],
+  [
+    "Conditional offer",
+    "An offer that depends on you meeting a stated condition, usually a final grade.",
+  ],
   ["Predicted grade", "A school's estimate of the grade you will achieve. It is not a result."],
-  ["Transcript", "The official record of your subjects and grades, usually issued by the school or board."],
-  ["Reference", "A short statement from a teacher, adviser or employer supporting your application."],
-  ["Personal statement", "Your own written section. Requirements on length and content differ by system."],
-  ["Deferred entry", "Starting a year later than the intake you applied for, usually after agreeing it with the institution."],
-  ["Foundation year", "A preparatory year before degree study, often for students whose school qualification is not accepted directly."],
-  ["Credit transfer", "Recognition of study you already completed toward a new qualification. It is decided by the receiving institution."],
+  [
+    "Transcript",
+    "The official record of your subjects and grades, usually issued by the school or board.",
+  ],
+  [
+    "Reference",
+    "A short statement from a teacher, adviser or employer supporting your application.",
+  ],
+  [
+    "Personal statement",
+    "Your own written section. Requirements on length and content differ by system.",
+  ],
+  [
+    "Deferred entry",
+    "Starting a year later than the intake you applied for, usually after agreeing it with the institution.",
+  ],
+  [
+    "Foundation year",
+    "A preparatory year before degree study, often for students whose school qualification is not accepted directly.",
+  ],
+  [
+    "Credit transfer",
+    "Recognition of study you already completed toward a new qualification. It is decided by the receiving institution.",
+  ],
 ];
 
 export default function GuidancePage() {
   return (
     <div className="space-y-8">
       <SectionHeading eyebrow="guidance" title="How applications actually work">
-        Applications are not one global form. The route depends on the country, the level of study and
-        sometimes the individual programme. This page explains the main systems and the words they use.
+        Applications are not one global form. The route depends on the country, the level of study
+        and sometimes the individual programme. This page explains the main systems and the words
+        they use.
       </SectionHeading>
 
       <Callout tone="warning" title="This is a map, not the territory">
-        Fees, deadlines and document rules change. Every entry below links to the official system. Read
-        that page before you plan around a date or a requirement.
+        Fees, deadlines and document rules change. Every entry below links to the official system.
+        Read that page before you plan around a date or a requirement.
       </Callout>
 
       <section aria-labelledby="systems-heading">
@@ -147,7 +169,9 @@ export default function GuidancePage() {
           <Window title="a workable order" meta="not a deadline plan">
             <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-soft">
               <li>Decide the qualification route and the country, not just the university name.</li>
-              <li>Check the specific programme page for entry requirements and the application route.</li>
+              <li>
+                Check the specific programme page for entry requirements and the application route.
+              </li>
               <li>Write down each deadline and its timezone in your own calendar.</li>
               <li>Collect transcripts and references early; they are the slowest part.</li>
               <li>Keep a copy of every submitted form and confirmation email.</li>
@@ -156,9 +180,9 @@ export default function GuidancePage() {
 
           <Window title="what the platform will not do" meta="boundaries">
             <p className="text-sm text-ink-soft">
-              OpenEdu does not prepare your personal statement, does not submit forms, does not pay fees and
-              does not contact institutions for you. It helps you compare recorded requirements and keep
-              your own notes in one place.
+              OpenEdu does not prepare your personal statement, does not submit forms, does not pay
+              fees and does not contact institutions for you. It helps you compare recorded
+              requirements and keep your own notes in one place.
             </p>
           </Window>
         </div>

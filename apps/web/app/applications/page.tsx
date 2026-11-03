@@ -52,8 +52,8 @@ export default async function ApplicationsPage() {
             </LinkButton>
           }
         >
-          A tracker entry is a private note to yourself. It does not create an account with a university
-          or a scholarship provider.
+          A tracker entry is a private note to yourself. It does not create an account with a
+          university or a scholarship provider.
         </EmptyState>
       ) : (
         <ul className="space-y-3">
@@ -64,7 +64,10 @@ export default async function ApplicationsPage() {
               <Card as="li" key={application.id} className="py-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <Link href={`/applications/${application.id}`} className="font-display text-lg text-ink hover:underline">
+                    <Link
+                      href={`/applications/${application.id}`}
+                      className="font-display text-lg text-ink hover:underline"
+                    >
                       {application.title}
                     </Link>
                     <p className="text-xs text-ink-soft">
@@ -113,7 +116,10 @@ export default async function ApplicationsPage() {
                   </div>
                 </dl>
 
-                <Link href={`/applications/${application.id}`} className="mt-3 inline-block text-sm quiet-link">
+                <Link
+                  href={`/applications/${application.id}`}
+                  className="mt-3 inline-block text-sm quiet-link"
+                >
                   Open tracker entry →
                 </Link>
               </Card>

@@ -147,9 +147,7 @@ export async function addQualificationAction(
   if (!type) return { error: "That qualification type is not recognised." };
 
   const gradeScaleId = input.gradeScaleId || null;
-  const bands = gradeScaleId
-    ? await db.gradeBand.findMany({ where: { gradeScaleId } })
-    : [];
+  const bands = gradeScaleId ? await db.gradeBand.findMany({ where: { gradeScaleId } }) : [];
   const bandByLabel = new Map(bands.map((band) => [band.label, band]));
 
   const overallBand = input.overallGradeLabel
@@ -171,7 +169,10 @@ export async function addQualificationAction(
     if (!band) {
       return { error: `The grade "${item.gradeLabel}" is not part of the selected grade scale.` };
     }
-    const subject = await db.subject.findUnique({ where: { id: item.subjectId }, select: { id: true } });
+    const subject = await db.subject.findUnique({
+      where: { id: item.subjectId },
+      select: { id: true },
+    });
     if (!subject) return { error: "One of the selected subjects could not be found." };
     results.push({
       subjectId: subject.id,

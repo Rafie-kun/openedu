@@ -84,7 +84,8 @@ const GRADE_SCALES: Array<{
     name: "Cambridge International AS & A Level grades",
     kind: "LETTER",
     description: "Grades as published by Cambridge International, from A* down to U.",
-    sourceUrl: "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-advanced/",
+    sourceUrl:
+      "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-advanced/",
     bands: [
       ["A*", 100],
       ["A", 90],
@@ -100,7 +101,8 @@ const GRADE_SCALES: Array<{
     name: "Cambridge IGCSE grades",
     kind: "LETTER",
     description: "Grades A* to G plus U. Some subjects are graded 9-1 instead.",
-    sourceUrl: "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-upper-secondary/cambridge-igcse/",
+    sourceUrl:
+      "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-upper-secondary/cambridge-igcse/",
     bands: [
       ["A*", 100],
       ["A", 90],
@@ -117,7 +119,8 @@ const GRADE_SCALES: Array<{
     code: "IB_DP",
     name: "IB Diploma Programme subject grades",
     kind: "NUMERIC",
-    description: "Each subject is graded 7 (highest) to 1. The diploma also uses theory of knowledge and extended essay points.",
+    description:
+      "Each subject is graded 7 (highest) to 1. The diploma also uses theory of knowledge and extended essay points.",
     sourceUrl: "https://www.ibo.org/programmes/diploma-programme/assessment-and-exams/",
     bands: [
       ["7", 70],
@@ -181,7 +184,8 @@ const GRADE_SCALES: Array<{
     code: "PERCENTAGE_100",
     name: "Percentage (0-100)",
     kind: "PERCENTAGE",
-    description: "A plain percentage band. Only use it when the awarding body reports percentages directly.",
+    description:
+      "A plain percentage band. Only use it when the awarding body reports percentages directly.",
     sourceUrl: "https://en.wikipedia.org/wiki/Grading_in_education",
     bands: [
       ["90-100", 90],
@@ -258,8 +262,10 @@ const QUALIFICATION_TYPES: Array<{
     countryIso2: null,
     scaleCode: "CAMBRIDGE_ALEVEL",
     awardingBodyCodes: ["CAMBRIDGE_INTL"],
-    officialUrl: "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-advanced/",
-    description: "Subject-based qualification usually taken in the final two years of secondary school.",
+    officialUrl:
+      "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-advanced/",
+    description:
+      "Subject-based qualification usually taken in the final two years of secondary school.",
   },
   {
     code: "CAMBRIDGE_IGCSE",
@@ -269,7 +275,8 @@ const QUALIFICATION_TYPES: Array<{
     countryIso2: null,
     scaleCode: "CAMBRIDGE_IGCSE",
     awardingBodyCodes: ["CAMBRIDGE_INTL"],
-    officialUrl: "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-upper-secondary/cambridge-igcse/",
+    officialUrl:
+      "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-upper-secondary/cambridge-igcse/",
     description: "International secondary qualification, usually taken around age 16.",
   },
   {
@@ -280,7 +287,8 @@ const QUALIFICATION_TYPES: Array<{
     countryIso2: null,
     scaleCode: "CAMBRIDGE_ALEVEL",
     awardingBodyCodes: ["PEARSON_EDEXCEL"],
-    officialUrl: "https://qualifications.pearson.com/en/qualifications/edexcel-international-advanced-levels.html",
+    officialUrl:
+      "https://qualifications.pearson.com/en/qualifications/edexcel-international-advanced-levels.html",
     description: "International A Level offered by Pearson Edexcel. Modules differ from Cambridge.",
   },
   {
@@ -291,7 +299,8 @@ const QUALIFICATION_TYPES: Array<{
     countryIso2: null,
     scaleCode: "CAMBRIDGE_IGCSE",
     awardingBodyCodes: ["PEARSON_EDEXCEL"],
-    officialUrl: "https://qualifications.pearson.com/en/qualifications/edexcel-international-gcses.html",
+    officialUrl:
+      "https://qualifications.pearson.com/en/qualifications/edexcel-international-gcses.html",
     description: "International GCSE offered by Pearson Edexcel.",
   },
   {
@@ -303,7 +312,8 @@ const QUALIFICATION_TYPES: Array<{
     scaleCode: "IB_DP",
     awardingBodyCodes: ["IBO"],
     officialUrl: "https://www.ibo.org/programmes/diploma-programme/",
-    description: "Two-year programme with six subject groups, theory of knowledge and an extended essay.",
+    description:
+      "Two-year programme with six subject groups, theory of knowledge and an extended essay.",
   },
   {
     code: "AP",
@@ -314,7 +324,8 @@ const QUALIFICATION_TYPES: Array<{
     scaleCode: "AP_1_5",
     awardingBodyCodes: ["COLLEGE_BOARD"],
     officialUrl: "https://apstudents.collegeboard.org/",
-    description: "Individual college-level courses and exams, usually taken alongside a US high school diploma.",
+    description:
+      "Individual college-level courses and exams, usually taken alongside a US high school diploma.",
   },
   {
     code: "WASSCE",
@@ -336,7 +347,8 @@ const QUALIFICATION_TYPES: Array<{
     scaleCode: "HSC_BD_GPA",
     awardingBodyCodes: [],
     officialUrl: "https://educationboard.gov.bd/",
-    description: "Bangladeshi upper-secondary certificate awarded by the regional education boards.",
+    description:
+      "Bangladeshi upper-secondary certificate awarded by the regional education boards.",
   },
   {
     code: "CBSE_CLASS_12",
@@ -347,7 +359,8 @@ const QUALIFICATION_TYPES: Array<{
     scaleCode: "PERCENTAGE_100",
     awardingBodyCodes: ["CBSE"],
     officialUrl: "https://www.cbse.gov.in/",
-    description: "Indian senior secondary certificate awarded by the Central Board of Secondary Education.",
+    description:
+      "Indian senior secondary certificate awarded by the Central Board of Secondary Education.",
   },
 ];
 
@@ -376,7 +389,20 @@ const SUBJECTS: Array<[code: string, name: string, area: string]> = [
   ["ENVSCI", "Environmental Science", "Sciences"],
 ];
 
-const DEGREE_TYPES: Array<[code: string, name: string, level: "FOUNDATION" | "UNDERGRADUATE" | "POSTGRADUATE" | "DOCTORAL" | "DIPLOMA" | "CERTIFICATE" | "OTHER"]> = [
+const DEGREE_TYPES: Array<
+  [
+    code: string,
+    name: string,
+    level:
+      | "FOUNDATION"
+      | "UNDERGRADUATE"
+      | "POSTGRADUATE"
+      | "DOCTORAL"
+      | "DIPLOMA"
+      | "CERTIFICATE"
+      | "OTHER",
+  ]
+> = [
   ["BA", "Bachelor of Arts", "UNDERGRADUATE"],
   ["BSC", "Bachelor of Science", "UNDERGRADUATE"],
   ["BENG", "Bachelor of Engineering", "UNDERGRADUATE"],
@@ -440,7 +466,14 @@ const DATA_SOURCES: Array<{
   code: string;
   name: string;
   organisation: string;
-  category: "UNIVERSITY_DIRECTORY" | "SCHOLARSHIP" | "IMMIGRATION" | "CURRENCY" | "RESEARCH_IDENTITY" | "NATIONAL_AUTHORITY" | "OTHER";
+  category:
+    | "UNIVERSITY_DIRECTORY"
+    | "SCHOLARSHIP"
+    | "IMMIGRATION"
+    | "CURRENCY"
+    | "RESEARCH_IDENTITY"
+    | "NATIONAL_AUTHORITY"
+    | "OTHER";
   url: string;
   accessMethod: "API" | "BULK_DOWNLOAD" | "MANUAL" | "HTML_SCRAPE";
   licenceSummary: string;
@@ -456,7 +489,8 @@ const DATA_SOURCES: Array<{
     accessMethod: "API",
     licenceSummary: "Registry data is released under CC0.",
     termsUrl: "https://ror.org/about/",
-    knownLimitations: "Identifies research organisations. Inclusion is not evidence of accreditation or degree-awarding status.",
+    knownLimitations:
+      "Identifies research organisations. Inclusion is not evidence of accreditation or degree-awarding status.",
   },
   {
     code: "OPENALEX",
@@ -487,9 +521,11 @@ const DATA_SOURCES: Array<{
     category: "CURRENCY",
     url: "https://frankfurter.dev/",
     accessMethod: "API",
-    licenceSummary: "Open-source service publishing reference rates from the European Central Bank.",
+    licenceSummary:
+      "Open-source service publishing reference rates from the European Central Bank.",
     termsUrl: "https://frankfurter.dev/",
-    knownLimitations: "Reference rates, not the rate a bank or payment provider will give you. Not every currency is covered.",
+    knownLimitations:
+      "Reference rates, not the rate a bank or payment provider will give you. Not every currency is covered.",
   },
 ];
 

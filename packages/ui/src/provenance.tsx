@@ -49,9 +49,7 @@ export function Provenance({
   note?: string;
 }) {
   const checked =
-    lastCheckedAt === null
-      ? "never checked"
-      : new Date(lastCheckedAt).toISOString().slice(0, 10);
+    lastCheckedAt === null ? "never checked" : new Date(lastCheckedAt).toISOString().slice(0, 10);
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
@@ -102,7 +100,9 @@ export function InsightCard({
     <Card>
       <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">{title}</p>
       <div className="mt-2 text-sm text-ink">{children}</div>
-      {footer ? <div className="mt-3 border-t border-line pt-3 text-xs text-ink-soft">{footer}</div> : null}
+      {footer ? (
+        <div className="mt-3 border-t border-line pt-3 text-xs text-ink-soft">{footer}</div>
+      ) : null}
     </Card>
   );
 }

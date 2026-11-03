@@ -23,8 +23,8 @@ export default async function ProfilePage() {
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">workspace</p>
         <h1 className="mt-1 font-display text-3xl text-ink">Profile</h1>
         <p className="mt-2 max-w-2xl text-sm text-ink-soft">
-          These details drive eligibility checks. Only supply what you are comfortable sharing — missing
-          information shows up as “not supplied”, not as a failure.
+          These details drive eligibility checks. Only supply what you are comfortable sharing —
+          missing information shows up as “not supplied”, not as a failure.
         </p>
       </div>
 

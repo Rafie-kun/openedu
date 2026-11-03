@@ -35,7 +35,9 @@ function RequirementRow({ item }: { item: RequirementEvaluation }) {
           </p>
           <p className="mt-0.5 text-xs text-ink-soft">
             {REQUIREMENT_KIND_LABELS[item.kind as RequirementKindValue] ?? item.kind}
-            {item.lastCheckedAt ? ` · source checked ${item.lastCheckedAt.slice(0, 10)}` : " · source never checked"}
+            {item.lastCheckedAt
+              ? ` · source checked ${item.lastCheckedAt.slice(0, 10)}`
+              : " · source never checked"}
           </p>
           <p className="mt-1 text-sm text-ink">{item.evidence}</p>
         </div>
@@ -91,8 +93,8 @@ export function EligibilityPanel({
   if (!evaluation) {
     return (
       <Callout tone="warning" title="No check available">
-        Your profile could not be compared with this record. Try reloading; if the problem continues,
-        the record may be incomplete.
+        Your profile could not be compared with this record. Try reloading; if the problem
+        continues, the record may be incomplete.
       </Callout>
     );
   }
@@ -125,8 +127,8 @@ export function EligibilityPanel({
 
       {evaluation.results.length === 0 ? (
         <p className="px-4 py-4 text-sm text-ink-soft">
-          This record has no requirement rows yet, so no comparison is possible. That is a data gap, not
-          a pass.
+          This record has no requirement rows yet, so no comparison is possible. That is a data gap,
+          not a pass.
         </p>
       ) : (
         <ul>

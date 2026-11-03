@@ -146,15 +146,15 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               What the funding actually covers
             </h2>
             <p className="mt-1 text-sm text-ink-soft">
-              Every component is listed separately. &quot;Not specified&quot; means the provider did not
-              state it — it does not mean it is included or excluded.
+              Every component is listed separately. &quot;Not specified&quot; means the provider did
+              not state it — it does not mean it is included or excluded.
             </p>
 
             {scholarship.fundingComponents.length === 0 ? (
               <div className="mt-3">
                 <EmptyState title="No funding breakdown recorded">
-                  The platform has the scholarship but not its components. Read the official page before
-                  assuming anything is covered.
+                  The platform has the scholarship but not its components. Read the official page
+                  before assuming anything is covered.
                 </EmptyState>
               </div>
             ) : (
@@ -180,12 +180,17 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
                         <td className="py-2 pr-3">
                           {FUNDING_COMPONENT_LABELS[component.component]}
                           {component.description ? (
-                            <span className="block text-xs text-ink-soft">{component.description}</span>
+                            <span className="block text-xs text-ink-soft">
+                              {component.description}
+                            </span>
                           ) : null}
                         </td>
                         <td className="py-2 pr-3">
-                          <Badge tone={component.coverage === "UNSPECIFIED" ? "warning" : "success"}>
-                            {COVERAGE_LABELS[component.coverage] ?? component.coverage.toLowerCase()}
+                          <Badge
+                            tone={component.coverage === "UNSPECIFIED" ? "warning" : "success"}
+                          >
+                            {COVERAGE_LABELS[component.coverage] ??
+                              component.coverage.toLowerCase()}
                           </Badge>
                         </td>
                         <td className="py-2 font-mono text-xs">
@@ -208,8 +213,8 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
             {scholarship.eligibilityRules.length === 0 ? (
               <div className="mt-3">
                 <EmptyState title="No eligibility conditions recorded">
-                  Without recorded conditions the platform cannot check your eligibility. That is a data
-                  gap, not an open door.
+                  Without recorded conditions the platform cannot check your eligibility. That is a
+                  data gap, not an open door.
                 </EmptyState>
               </div>
             ) : (
@@ -260,7 +265,8 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
           <Window title="deadlines" meta="provider dates">
             {scholarship.deadlines.length === 0 ? (
               <p className="text-sm text-ink-soft">
-                No deadline recorded. A missing date is not an open call — confirm on the official page.
+                No deadline recorded. A missing date is not an open call — confirm on the official
+                page.
               </p>
             ) : (
               <ul className="space-y-3 text-sm">
@@ -269,7 +275,9 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
                     <p className="font-medium text-ink">{deadline.label}</p>
                     <p className="text-xs text-ink-soft">
                       {deadline.opensAt ? `opens ${formatDate(deadline.opensAt)} · ` : ""}
-                      {deadline.closesAt ? `closes ${formatDate(deadline.closesAt)}` : "closing date not recorded"}
+                      {deadline.closesAt
+                        ? `closes ${formatDate(deadline.closesAt)}`
+                        : "closing date not recorded"}
                       {` (${deadline.timezone})`}
                     </p>
                     <Provenance
@@ -288,7 +296,13 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               <p className="text-sm text-ink">{scholarship.applicationProcess}</p>
             ) : null}
             {scholarship.applicationMethods.length === 0 ? (
-              <p className={scholarship.applicationProcess ? "mt-2 text-sm text-ink-soft" : "text-sm text-ink-soft"}>
+              <p
+                className={
+                  scholarship.applicationProcess
+                    ? "mt-2 text-sm text-ink-soft"
+                    : "text-sm text-ink-soft"
+                }
+              >
                 No application method recorded.
               </p>
             ) : (
@@ -334,7 +348,11 @@ export default async function ScholarshipPage({ params }: { params: Promise<{ sl
               </LinkButton>
             ) : null}
             {scholarship.university ? (
-              <LinkButton href={`/universities/${scholarship.university.slug}`} variant="ghost" size="sm">
+              <LinkButton
+                href={`/universities/${scholarship.university.slug}`}
+                variant="ghost"
+                size="sm"
+              >
                 About the institution
               </LinkButton>
             ) : null}

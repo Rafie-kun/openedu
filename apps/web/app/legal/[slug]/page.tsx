@@ -29,13 +29,17 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <SectionHeading eyebrow={`legal · updated ${formatDate(document.updated)}`} title={document.title}>
+      <SectionHeading
+        eyebrow={`legal · updated ${formatDate(document.updated)}`}
+        title={document.title}
+      >
         {document.summary}
       </SectionHeading>
 
       <Callout tone="warning" title="Draft for review">
-        This page describes what the code actually does, but it has not been reviewed by a lawyer and the
-        operator details are not filled in. Treat it as a working draft, not a compliance certificate.
+        This page describes what the code actually does, but it has not been reviewed by a lawyer
+        and the operator details are not filled in. Treat it as a working draft, not a compliance
+        certificate.
       </Callout>
 
       <article className="space-y-6">
@@ -59,7 +63,9 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
       </article>
 
       <nav aria-label="Other legal pages" className="border-t border-line pt-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">also worth reading</p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
+          also worth reading
+        </p>
         <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {LEGAL_DOCUMENTS.filter((item) => item.slug !== document.slug).map((item) => (
             <li key={item.slug}>

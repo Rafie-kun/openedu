@@ -41,15 +41,15 @@ export default async function ScholarshipsPage({
         title="Scholarships and funding"
         actions={<Badge tone="info">{result.total} in catalogue</Badge>}
       >
-        Funding is broken into components instead of a single &quot;fully funded&quot; label. Where a
-        provider has not stated a component, it stays unspecified.
+        Funding is broken into components instead of a single &quot;fully funded&quot; label. Where
+        a provider has not stated a component, it stays unspecified.
       </SectionHeading>
 
       <Callout tone="info" title="Funding language is often looser than it looks">
         <p>
-          &quot;Full tuition&quot; and &quot;fully funded&quot; are not the same thing. Each record here
-          separates tuition, stipend, accommodation, travel and other components, and keeps the original
-          provider wording alongside the breakdown.
+          &quot;Full tuition&quot; and &quot;fully funded&quot; are not the same thing. Each record
+          here separates tuition, stipend, accommodation, travel and other components, and keeps the
+          original provider wording alongside the breakdown.
         </p>
       </Callout>
 
@@ -87,8 +87,8 @@ export default async function ScholarshipsPage({
       {result.rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState title="No scholarships matched">
-            The catalogue only lists funding whose official page has been recorded and reviewed. It is
-            deliberately empty rather than filled with invented awards.
+            The catalogue only lists funding whose official page has been recorded and reviewed. It
+            is deliberately empty rather than filled with invented awards.
           </EmptyState>
         </div>
       ) : (

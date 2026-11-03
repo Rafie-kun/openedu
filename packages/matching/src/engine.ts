@@ -107,7 +107,11 @@ function evaluateQualification(
     accepted.length === 0 || accepted.includes(q.qualificationTypeCode);
 
   if (held.some(matchesAccepted)) {
-    return result(requirement, "MET", "A completed qualification of the required type is on your profile.");
+    return result(
+      requirement,
+      "MET",
+      "A completed qualification of the required type is on your profile.",
+    );
   }
 
   if (requirement.requiredLevel) {
@@ -142,7 +146,11 @@ function evaluateQualification(
     return result(requirement, "UNKNOWN", "No qualifications have been added to your profile yet.");
   }
 
-  return result(requirement, "NOT_MET", "None of your recorded qualifications match the required type.");
+  return result(
+    requirement,
+    "NOT_MET",
+    "None of your recorded qualifications match the required type.",
+  );
 }
 
 function evaluateSubject(
@@ -151,7 +159,11 @@ function evaluateSubject(
 ): RequirementEvaluation {
   const required = requirement.subjectCodes ?? [];
   if (required.length === 0) {
-    return result(requirement, "NEEDS_CONFIRMATION", "The required subjects are not recorded precisely.");
+    return result(
+      requirement,
+      "NEEDS_CONFIRMATION",
+      "The required subjects are not recorded precisely.",
+    );
   }
 
   const mode = requirement.matchMode ?? "ANY";
@@ -173,7 +185,11 @@ function evaluateSubject(
   const enough = mode === "ALL" ? achievedHits.length === required.length : achievedHits.length > 0;
 
   if (enough) {
-    return result(requirement, "MET", `Recorded subject result matches: ${achievedHits.join(", ")}.`);
+    return result(
+      requirement,
+      "MET",
+      `Recorded subject result matches: ${achievedHits.join(", ")}.`,
+    );
   }
 
   if (mode === "ALL" && achievedHits.length > 0) {
@@ -193,7 +209,11 @@ function evaluateSubject(
     return result(requirement, "UNKNOWN", "No subject results have been added yet.");
   }
 
-  return result(requirement, "NOT_MET", `None of ${required.join(", ")} appears in your recorded results.`);
+  return result(
+    requirement,
+    "NOT_MET",
+    `None of ${required.join(", ")} appears in your recorded results.`,
+  );
 }
 
 function evaluateGrade(
@@ -204,7 +224,11 @@ function evaluateGrade(
   const minimumRank = requirement.minimumGradeRank ?? null;
 
   if (minimumRank === null || !requiredScale) {
-    return result(requirement, "NEEDS_CONFIRMATION", "The minimum grade is not recorded precisely.");
+    return result(
+      requirement,
+      "NEEDS_CONFIRMATION",
+      "The minimum grade is not recorded precisely.",
+    );
   }
 
   const subjects = new Set(requirement.subjectCodes ?? []);
@@ -224,7 +248,8 @@ function evaluateGrade(
     return result(requirement, "UNKNOWN", "No grade recorded on the required scale.");
   }
 
-  let best: { rank: number; label: string; subject: string | null; predicted: boolean } | null = null;
+  let best: { rank: number; label: string; subject: string | null; predicted: boolean } | null =
+    null;
   for (const qualification of candidates) {
     for (const subjectResult of qualification.results) {
       if (subjects.size > 0 && !subjects.has(subjectResult.subjectCode)) continue;
@@ -291,7 +316,11 @@ function evaluateLanguage(
     .filter((entry): entry is { test: StudentLanguageTest; value: number } => entry.value !== null);
 
   if (withScores.length === 0) {
-    return result(requirement, "NEEDS_CONFIRMATION", `A ${testCode} result is recorded but its score is unclear.`);
+    return result(
+      requirement,
+      "NEEDS_CONFIRMATION",
+      `A ${testCode} result is recorded but its score is unclear.`,
+    );
   }
 
   const freshest = withScores.reduce((a, b) =>
@@ -310,7 +339,11 @@ function evaluateLanguage(
   }
 
   if (minimum === null) {
-    return result(requirement, "NEEDS_CONFIRMATION", "The required score is not recorded precisely.");
+    return result(
+      requirement,
+      "NEEDS_CONFIRMATION",
+      "The required score is not recorded precisely.",
+    );
   }
 
   if (freshest.value >= minimum) {
@@ -388,11 +421,27 @@ function evaluateRequirement(
       if (age === null) {
         return result(requirement, "UNKNOWN", "The recorded date of birth could not be read.");
       }
-      if (requirement.minAge !== null && requirement.minAge !== undefined && age < requirement.minAge) {
-        return result(requirement, "NOT_MET", `You are ${age}; the recorded minimum age is ${requirement.minAge}.`);
+      if (
+        requirement.minAge !== null &&
+        requirement.minAge !== undefined &&
+        age < requirement.minAge
+      ) {
+        return result(
+          requirement,
+          "NOT_MET",
+          `You are ${age}; the recorded minimum age is ${requirement.minAge}.`,
+        );
       }
-      if (requirement.maxAge !== null && requirement.maxAge !== undefined && age > requirement.maxAge) {
-        return result(requirement, "NOT_MET", `You are ${age}; the recorded maximum age is ${requirement.maxAge}.`);
+      if (
+        requirement.maxAge !== null &&
+        requirement.maxAge !== undefined &&
+        age > requirement.maxAge
+      ) {
+        return result(
+          requirement,
+          "NOT_MET",
+          `You are ${age}; the recorded maximum age is ${requirement.maxAge}.`,
+        );
       }
       return result(requirement, "MET", `Your age (${age}) falls inside the recorded range.`);
     }
@@ -401,14 +450,26 @@ function evaluateRequirement(
       const required = requirement.valueString ? order[requirement.valueString] : undefined;
       const actual = student.financialNeedLevel ? order[student.financialNeedLevel] : undefined;
       if (!required) {
-        return result(requirement, "NEEDS_CONFIRMATION", "The recorded financial-need condition is unclear.");
+        return result(
+          requirement,
+          "NEEDS_CONFIRMATION",
+          "The recorded financial-need condition is unclear.",
+        );
       }
       if (!actual) {
-        return result(requirement, "UNKNOWN", "Add your financial need level if you want this checked.");
+        return result(
+          requirement,
+          "UNKNOWN",
+          "Add your financial need level if you want this checked.",
+        );
       }
       return actual >= required
         ? result(requirement, "MET", "Your stated financial need meets the recorded condition.")
-        : result(requirement, "NOT_MET", "Your stated financial need is below the recorded condition.");
+        : result(
+            requirement,
+            "NOT_MET",
+            "Your stated financial need is below the recorded condition.",
+          );
     }
     case "DEGREE_LEVEL":
       return evaluateSimpleList(
@@ -476,7 +537,9 @@ function buildNextSteps(
     switch (item.status) {
       case "NOT_MET":
         if (item.kind === "SUBJECT") {
-          push(`Look for accepted alternatives to the missing subject on the official page${item.sourceUrl ? ` (${item.sourceUrl})` : ""}.`);
+          push(
+            `Look for accepted alternatives to the missing subject on the official page${item.sourceUrl ? ` (${item.sourceUrl})` : ""}.`,
+          );
         } else if (item.kind === "LANGUAGE") {
           push("Retake the language test, or check whether a different accepted test would work.");
         } else if (item.kind === "GRADE") {
@@ -489,7 +552,9 @@ function buildNextSteps(
         push(`Add the missing profile information so "${item.label}" can be checked.`);
         break;
       case "NEEDS_CONFIRMATION":
-        push(`Confirm "${item.label}" directly with the provider${item.sourceUrl ? ` (${item.sourceUrl})` : ""}.`);
+        push(
+          `Confirm "${item.label}" directly with the provider${item.sourceUrl ? ` (${item.sourceUrl})` : ""}.`,
+        );
         break;
       default:
         break;
@@ -502,10 +567,7 @@ function buildNextSteps(
   return steps;
 }
 
-function summarise(
-  outcome: MatchOutcomeValue,
-  results: RequirementEvaluation[],
-): string {
+function summarise(outcome: MatchOutcomeValue, results: RequirementEvaluation[]): string {
   const mandatory = results.filter((item) => item.isMandatory);
   const met = mandatory.filter((item) => item.status === "MET").length;
   const notMet = mandatory.filter((item) => item.status === "NOT_MET").length;

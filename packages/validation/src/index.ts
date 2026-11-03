@@ -41,7 +41,7 @@ export const passwordChangeSchema = z
 
 export const deleteAccountSchema = z.object({
   password: z.string().min(1).max(PASSWORD_MAX),
-  confirmation: z.literal("DELETE", { message: 'Type DELETE to confirm' }),
+  confirmation: z.literal("DELETE", { message: "Type DELETE to confirm" }),
 });
 
 export const degreeLevels = [

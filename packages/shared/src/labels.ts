@@ -52,10 +52,7 @@ export function verificationTone(status: VerificationStatusValue): VerificationT
 }
 
 export type MatchOutcomeValue =
-  | "ELIGIBLE"
-  | "POTENTIALLY_ELIGIBLE"
-  | "NOT_CURRENTLY_ELIGIBLE"
-  | "UNVERIFIED";
+  "ELIGIBLE" | "POTENTIALLY_ELIGIBLE" | "NOT_CURRENTLY_ELIGIBLE" | "UNVERIFIED";
 
 export const MATCH_OUTCOME_LABELS: Record<MatchOutcomeValue, string> = {
   ELIGIBLE: "Requirements appear to be met",

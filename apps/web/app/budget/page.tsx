@@ -89,13 +89,14 @@ export default async function BudgetPage() {
           </LinkButton>
         }
       >
-        Your own numbers, kept separate from published ones. OpenEdu does not convert currencies here
-        because no exchange rate source is configured yet, so totals stay grouped by currency.
+        Your own numbers, kept separate from published ones. OpenEdu does not convert currencies
+        here because no exchange rate source is configured yet, so totals stay grouped by currency.
       </SectionHeading>
 
       <Callout tone="info" title="Three kinds of number">
-        A university-published fee, a government cost-of-living estimate and your own guess are not the
-        same evidence. Each line records which one it is, and a published figure keeps its source link.
+        A university-published fee, a government cost-of-living estimate and your own guess are not
+        the same evidence. Each line records which one it is, and a published figure keeps its
+        source link.
       </Callout>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
@@ -116,8 +117,9 @@ export default async function BudgetPage() {
 
       {plans.length === 0 ? (
         <EmptyState title="No plans yet">
-          Create one above, then add the costs you actually expect. If the catalogue has published costs
-          for a destination, you can copy a line from the reference table below into your plan.
+          Create one above, then add the costs you actually expect. If the catalogue has published
+          costs for a destination, you can copy a line from the reference table below into your
+          plan.
         </EmptyState>
       ) : (
         <ul className="space-y-5">
@@ -126,7 +128,11 @@ export default async function BudgetPage() {
             for (const item of plan.items) {
               const amount = Number(item.amount.toString());
               if (!Number.isFinite(amount)) continue;
-              const totals = byCurrency.get(item.currencyCode) ?? { monthly: 0, yearly: 0, oneTime: 0 };
+              const totals = byCurrency.get(item.currencyCode) ?? {
+                monthly: 0,
+                yearly: 0,
+                oneTime: 0,
+              };
               addToTotals(totals, amount, item.frequency);
               byCurrency.set(item.currencyCode, totals);
             }
@@ -140,8 +146,8 @@ export default async function BudgetPage() {
                       {plan.programme
                         ? `${plan.programme.title} · ${plan.programme.university.name}`
                         : plan.targetCountryId
-                          ? countries.find((country) => country.id === plan.targetCountryId)?.name ??
-                            "Destination set"
+                          ? (countries.find((country) => country.id === plan.targetCountryId)
+                              ?.name ?? "Destination set")
                           : "No destination set"}{" "}
                       · totals in {plan.currencyCode}
                     </p>
@@ -164,11 +170,21 @@ export default async function BudgetPage() {
                     <table className="w-full min-w-[34rem] border-collapse text-sm">
                       <thead>
                         <tr className="border-b border-line text-left font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-                          <th scope="col" className="py-2 pr-3">Cost</th>
-                          <th scope="col" className="py-2 pr-3">Amount</th>
-                          <th scope="col" className="py-2 pr-3">How often</th>
-                          <th scope="col" className="py-2 pr-3">Source</th>
-                          <th scope="col" className="py-2 text-right">Remove</th>
+                          <th scope="col" className="py-2 pr-3">
+                            Cost
+                          </th>
+                          <th scope="col" className="py-2 pr-3">
+                            Amount
+                          </th>
+                          <th scope="col" className="py-2 pr-3">
+                            How often
+                          </th>
+                          <th scope="col" className="py-2 pr-3">
+                            Source
+                          </th>
+                          <th scope="col" className="py-2 text-right">
+                            Remove
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -240,7 +256,9 @@ export default async function BudgetPage() {
                 ) : null}
 
                 <details className="rounded-md border border-line/70 bg-paper/50 px-4 py-3">
-                  <summary className="cursor-pointer text-sm font-medium text-ink">Add a cost</summary>
+                  <summary className="cursor-pointer text-sm font-medium text-ink">
+                    Add a cost
+                  </summary>
                   <div className="mt-3">
                     <AddBudgetItemForm
                       action={addBudgetItemAction}
@@ -260,8 +278,8 @@ export default async function BudgetPage() {
           Published reference costs
         </h2>
         <p className="text-sm text-ink-soft">
-          Only figures recorded from a university or government source appear here. When this table is
-          empty, no source has been logged yet.
+          Only figures recorded from a university or government source appear here. When this table
+          is empty, no source has been logged yet.
         </p>
 
         {publishedCosts.length === 0 ? (
@@ -275,12 +293,24 @@ export default async function BudgetPage() {
               <table className="w-full min-w-[40rem] border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-line text-left font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-                    <th scope="col" className="py-2 pr-3">Where</th>
-                    <th scope="col" className="py-2 pr-3">Category</th>
-                    <th scope="col" className="py-2 pr-3">Amount</th>
-                    <th scope="col" className="py-2 pr-3">Basis</th>
-                    <th scope="col" className="py-2 pr-3">Checking</th>
-                    <th scope="col" className="py-2 text-right">Plan</th>
+                    <th scope="col" className="py-2 pr-3">
+                      Where
+                    </th>
+                    <th scope="col" className="py-2 pr-3">
+                      Category
+                    </th>
+                    <th scope="col" className="py-2 pr-3">
+                      Amount
+                    </th>
+                    <th scope="col" className="py-2 pr-3">
+                      Basis
+                    </th>
+                    <th scope="col" className="py-2 pr-3">
+                      Checking
+                    </th>
+                    <th scope="col" className="py-2 text-right">
+                      Plan
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -315,7 +345,10 @@ export default async function BudgetPage() {
                         {plans.length === 0 ? (
                           <span className="text-xs text-ink-soft">Create a plan first</span>
                         ) : (
-                          <form action={copyCostEstimateAction} className="flex items-center justify-end gap-2">
+                          <form
+                            action={copyCostEstimateAction}
+                            className="flex items-center justify-end gap-2"
+                          >
                             <input type="hidden" name="estimateId" value={cost.id} />
                             <label htmlFor={`plan-for-${cost.id}`} className="sr-only">
                               Add to plan

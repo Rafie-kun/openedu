@@ -17,10 +17,7 @@ async function emailBucket(email: string): Promise<string> {
   return hashIdentifier(email.toLowerCase(), pepper);
 }
 
-export async function registerAction(
-  _prev: FormState,
-  formData: FormData,
-): Promise<FormState> {
+export async function registerAction(_prev: FormState, formData: FormData): Promise<FormState> {
   const raw = {
     displayName: readString(formData, "displayName"),
     email: readString(formData, "email"),

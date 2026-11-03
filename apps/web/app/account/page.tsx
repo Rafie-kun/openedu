@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge, Card, LinkButton, SectionHeading, Window } from "@openedu/ui";
 import { db } from "@openedu/database";
-import {
-  changePasswordAction,
-  deleteAccountAction,
-} from "@/app/actions/profile";
+import { changePasswordAction, deleteAccountAction } from "@/app/actions/profile";
 import { updateNotificationPreferencesAction } from "@/app/actions/workspace";
 import {
   DeleteAccountForm,
@@ -66,8 +63,8 @@ export default async function AccountPage() {
             </LinkButton>
           </div>
           <p className="mt-3 text-xs text-ink-soft">
-            The export is a JSON file built from your profile, qualifications, saved items and tracker
-            entries at the moment you request it.
+            The export is a JSON file built from your profile, qualifications, saved items and
+            tracker entries at the moment you request it.
           </p>
         </Window>
 
@@ -81,8 +78,9 @@ export default async function AccountPage() {
             }}
           />
           <p className="mt-3 text-xs text-ink-soft">
-            Email delivery is {isEmailConfigured() ? "configured" : "not configured in this deployment"}.
-            In-app notifications work either way.
+            Email delivery is{" "}
+            {isEmailConfigured() ? "configured" : "not configured in this deployment"}. In-app
+            notifications work either way.
           </p>
         </Window>
 
@@ -126,7 +124,10 @@ export default async function AccountPage() {
           ) : (
             <ul className="space-y-2 text-sm">
               {consents.map((record) => (
-                <li key={record.id} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0">
+                <li
+                  key={record.id}
+                  className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0"
+                >
                   <span>
                     {record.kind.replaceAll("_", " ").toLowerCase()}{" "}
                     <span className="text-ink-soft">v{record.version}</span>
@@ -154,8 +155,8 @@ export default async function AccountPage() {
         <Card className="border-blush/40">
           <h2 className="font-display text-xl text-ink">Delete account</h2>
           <p className="mt-1 text-sm text-ink-soft">
-            Deletion is immediate and permanent for your profile data. There is no soft-delete window in
-            this deployment.
+            Deletion is immediate and permanent for your profile data. There is no soft-delete
+            window in this deployment.
           </p>
           <div className="mt-4">
             <DeleteAccountForm action={deleteAccountAction} />
