@@ -9,7 +9,8 @@ approves a candidate in the admin area before anything becomes public.
 
 ## What exists today
 
-- one real adapter: ROR (`sources/ror.py`), which looks institutions up by exact name
+- two real adapters: ROR (`sources/ror.py`) and OpenAlex (`sources/openalex.py`), both looking
+  institutions up by name
 - the pipeline: fetch, parse, normalise, validate, hash, diff, queue for review
 - a Postgres store and an in-memory store, so the pipeline can be tested without a database
 - change detection that runs the same query twice without creating duplicates
@@ -35,6 +36,9 @@ the URL is stripped before connecting, because libpq rejects unknown options.
 
 On Windows, use `$env:PYTHONPATH="src"` and `$env:DATABASE_URL="..."` before the command.
 
+OpenAlex works the same way; set `--source OPENALEX`. It accepts an optional `INGEST_CONTACT_EMAIL`
+to use OpenAlex's polite pool (see their docs for what that means for rate limits).
+
 ## Tests
 
 ```bash
@@ -54,6 +58,7 @@ Tests use recorded payloads and a fake transport, so they run without a network 
 | `INGEST_TIMEOUT_SECONDS`      | `30`                      | per request                                            |
 | `INGEST_MIN_INTERVAL_SECONDS` | `1`                       | pause between requests, so the source is not hammered  |
 | `INGEST_MAX_ATTEMPTS`         | `3`                       | 4xx responses other than rate limits are not retried   |
+| `INGEST_CONTACT_EMAIL`        | none                      | OpenAlex only; added as `mailto` on requests           |
 
 ## Adding a source
 

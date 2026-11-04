@@ -13,6 +13,7 @@ class Settings:
     timeout_seconds: float
     min_interval_seconds: float
     max_attempts: int
+    contact_email: str | None
 
 
 def load_settings(environ: dict[str, str] | None = None) -> Settings:
@@ -23,4 +24,5 @@ def load_settings(environ: dict[str, str] | None = None) -> Settings:
         timeout_seconds=float(env.get("INGEST_TIMEOUT_SECONDS", "30")),
         min_interval_seconds=float(env.get("INGEST_MIN_INTERVAL_SECONDS", "1")),
         max_attempts=int(env.get("INGEST_MAX_ATTEMPTS", "3")),
+        contact_email=env.get("INGEST_CONTACT_EMAIL") or None,
     )

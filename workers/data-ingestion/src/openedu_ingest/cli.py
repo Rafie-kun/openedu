@@ -7,14 +7,18 @@ import sys
 from .config import load_settings
 from .http import Fetcher
 from .jobs.run_source import run_source
+from .sources.openalex import OpenAlexAdapter
 from .sources.ror import RorAdapter
 from .store import InMemoryStore, PostgresStore
 
 
-def build_adapter(source: str, queries: list[str]):
-    if source.upper() == "ROR":
+def build_adapter(source: str, queries: list[str], settings):
+    code = source.upper()
+    if code == "ROR":
         return RorAdapter(queries)
-    raise SystemExit(f"unknown source {source!r}, known sources: ROR")
+    if code == "OPENALEX":
+        return OpenAlexAdapter(queries, mailto=settings.contact_email)
+    raise SystemExit(f"unknown source {source!r}, known sources: ROR, OPENALEX")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -39,7 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     settings = load_settings()
 
     if args.command == "run":
-        adapter = build_adapter(args.source, args.query)
+        adapter = build_adapter(args.source, args.query, settings)
         if args.dry_run:
             store = InMemoryStore()
         elif settings.database_url:
