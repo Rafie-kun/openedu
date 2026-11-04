@@ -155,6 +155,23 @@ export const notificationPreferencesSchema = z.object({
   dataChangeAlerts: z.boolean().default(true),
 });
 
+export const reviewDecisionSchema = z.object({
+  reviewId: z.string().min(1),
+  note: z.string().trim().max(1000).optional(),
+});
+
+export const candidatePromotionSchema = z.object({
+  reviewId: z.string().min(1),
+  name: z.string().trim().min(2).max(400),
+  city: z.string().trim().min(1).max(120),
+  countryCode: z
+    .string()
+    .trim()
+    .regex(/^[A-Za-z]{2}$/, "Use the two-letter country code"),
+  websiteUrl: z.url("Use a full https:// address"),
+  note: z.string().trim().max(1000).optional(),
+});
+
 export const adminVerificationSchema = z.object({
   entityType: z.enum(["University", "Programme", "Scholarship", "VisaCategory"]),
   entityId: z.string().min(1),
