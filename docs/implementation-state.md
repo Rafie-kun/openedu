@@ -20,8 +20,7 @@ compliance.
 
 ## Last verified commit
 
-`6bf47b6` — "docs: split product spec out of AGENTS.md for token efficiency" (`master`, pushed). The M2
-commit described below is not yet made.
+`75b97c1` — "docs(privacy): cookie, data-flow, threat-model and legal-review audit" (`master`).
 
 ## Current blockers
 
