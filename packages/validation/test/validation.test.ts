@@ -1,15 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
+  admissionRequirementSchema,
   applicationDocumentSchema,
   applicationTaskSchema,
   assistantMessageSchema,
+  languageRequirementSchema,
   languageTestSchema,
   loginSchema,
   profileSchema,
   programmeCreateSchema,
+  programmeDeadlineSchema,
   qualificationSchema,
   registerSchema,
   scholarshipCreateSchema,
+  scholarshipDeadlineSchema,
+  scholarshipEligibilityRuleSchema,
+  scholarshipFundingComponentSchema,
+  tuitionFeeSchema,
 } from "../src/index";
 
 describe("registerSchema", () => {
@@ -169,6 +176,178 @@ describe("scholarshipCreateSchema", () => {
     expect(
       scholarshipCreateSchema.safeParse({ ...base, degreeLevels: ["UNDERGRADUATE", "PHD"] })
         .success,
+    ).toBe(false);
+  });
+});
+
+describe("admissionRequirementSchema", () => {
+  const base = {
+    programmeId: "p1",
+    kind: "QUALIFICATION",
+    label: "A Levels or equivalent",
+    sourceUrl: "https://example.edu/entry",
+  };
+
+  it("accepts a row with only its label and source", () => {
+    const parsed = admissionRequirementSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.isMandatory).toBe(true);
+  });
+
+  it("rejects an unknown requirement kind", () => {
+    expect(admissionRequirementSchema.safeParse({ ...base, kind: "IELTS" }).success).toBe(false);
+  });
+
+  it("requires a real source URL", () => {
+    expect(admissionRequirementSchema.safeParse({ ...base, sourceUrl: "" }).success).toBe(false);
+  });
+});
+
+describe("languageRequirementSchema", () => {
+  it("uppercases the test code", () => {
+    const parsed = languageRequirementSchema.safeParse({
+      programmeId: "p1",
+      testCode: "ielts",
+      minimumScore: "6.5",
+      sourceUrl: "https://example.edu/english",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.testCode).toBe("IELTS");
+  });
+
+  it("rejects an empty minimum score", () => {
+    expect(
+      languageRequirementSchema.safeParse({
+        programmeId: "p1",
+        testCode: "TOEFL",
+        minimumScore: "",
+        sourceUrl: "https://example.edu/english",
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("programmeDeadlineSchema", () => {
+  const base = {
+    programmeId: "p1",
+    label: "Round 1",
+    sourceUrl: "https://example.edu/dates",
+  };
+
+  it("defaults the timezone to UTC", () => {
+    const parsed = programmeDeadlineSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.timezone).toBe("UTC");
+  });
+
+  it("rejects an unreadable date", () => {
+    expect(programmeDeadlineSchema.safeParse({ ...base, closesAt: "not a date" }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe("tuitionFeeSchema", () => {
+  it("coerces a typed amount", () => {
+    const parsed = tuitionFeeSchema.safeParse({
+      programmeId: "p1",
+      amount: "9250",
+      currencyCode: "GBP",
+      sourceUrl: "https://example.edu/fees",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.amount).toBe(9250);
+  });
+
+  it("rejects a currency that is not three letters", () => {
+    expect(
+      tuitionFeeSchema.safeParse({
+        programmeId: "p1",
+        currencyCode: "POUNDS",
+        sourceUrl: "https://example.edu/fees",
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("scholarshipEligibilityRuleSchema", () => {
+  const base = {
+    scholarshipId: "s1",
+    kind: "NATIONALITY",
+    label: "Open to nationals of listed countries",
+    valueString: "BD,IN,NG",
+    sourceUrl: "https://example.org/eligibility",
+  };
+
+  it("keeps the comma-separated country codes as written", () => {
+    const parsed = scholarshipEligibilityRuleSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.valueString).toBe("BD,IN,NG");
+  });
+
+  it("coerces a numeric minimum", () => {
+    const parsed = scholarshipEligibilityRuleSchema.safeParse({
+      ...base,
+      kind: "GRADE",
+      minValue: "3",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.minValue).toBe(3);
+  });
+});
+
+describe("scholarshipFundingComponentSchema", () => {
+  const base = {
+    scholarshipId: "s1",
+    component: "TUITION",
+  };
+
+  it("defaults coverage to unspecified and the flag to false", () => {
+    const parsed = scholarshipFundingComponentSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.coverage).toBe("UNSPECIFIED");
+      expect(parsed.data.isSpecified).toBe(false);
+    }
+  });
+
+  it("accepts an empty currency but not a malformed one", () => {
+    expect(scholarshipFundingComponentSchema.safeParse({ ...base, currencyCode: "" }).success).toBe(
+      true,
+    );
+    expect(
+      scholarshipFundingComponentSchema.safeParse({ ...base, currencyCode: "EURO" }).success,
+    ).toBe(false);
+  });
+
+  it("rejects an unknown component", () => {
+    expect(
+      scholarshipFundingComponentSchema.safeParse({ ...base, component: "POCKET_MONEY" }).success,
+    ).toBe(false);
+  });
+});
+
+describe("scholarshipDeadlineSchema", () => {
+  it("accepts a window with both dates", () => {
+    expect(
+      scholarshipDeadlineSchema.safeParse({
+        scholarshipId: "s1",
+        label: "Main round",
+        opensAt: "2026-10-01T09:00",
+        closesAt: "2027-01-15T17:00",
+        sourceUrl: "https://example.org/dates",
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects an unreadable date", () => {
+    expect(
+      scholarshipDeadlineSchema.safeParse({
+        scholarshipId: "s1",
+        label: "Main round",
+        closesAt: "15/01/2027",
+        sourceUrl: "https://example.org/dates",
+      }).success,
     ).toBe(false);
   });
 });

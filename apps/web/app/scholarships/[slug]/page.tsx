@@ -31,9 +31,15 @@ async function loadScholarship(slug: string) {
       provider: true,
       hostCountry: true,
       university: true,
-      eligibilityRules: { orderBy: { createdAt: "asc" } },
+      eligibilityRules: {
+        where: { verificationStatus: { not: "ARCHIVED" } },
+        orderBy: { createdAt: "asc" },
+      },
       fundingComponents: true,
-      deadlines: { orderBy: { closesAt: "asc" } },
+      deadlines: {
+        where: { verificationStatus: { not: "ARCHIVED" } },
+        orderBy: { closesAt: "asc" },
+      },
       documentRequirements: true,
       applicationMethods: true,
     },

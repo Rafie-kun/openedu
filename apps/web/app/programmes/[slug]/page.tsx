@@ -20,12 +20,16 @@ async function loadProgramme(slug: string) {
       degreeType: true,
       subjects: { include: { subject: true } },
       admissionRequirements: {
+        where: { verificationStatus: { not: "ARCHIVED" } },
         include: { qualificationType: true, subject: true, gradeScale: true },
         orderBy: { createdAt: "asc" },
       },
-      languageRequirements: true,
-      tuitionFees: true,
-      deadlines: { orderBy: { closesAt: "asc" } },
+      languageRequirements: { where: { verificationStatus: { not: "ARCHIVED" } } },
+      tuitionFees: { where: { verificationStatus: { not: "ARCHIVED" } } },
+      deadlines: {
+        where: { verificationStatus: { not: "ARCHIVED" } },
+        orderBy: { closesAt: "asc" },
+      },
       pathwaysFrom: { orderBy: { title: "asc" } },
     },
   });

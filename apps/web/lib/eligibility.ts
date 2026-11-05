@@ -63,9 +63,10 @@ export async function loadProgrammeForMatching(programmeId: string) {
     include: {
       university: true,
       admissionRequirements: {
+        where: { verificationStatus: { not: "ARCHIVED" } },
         include: { qualificationType: true, subject: true, gradeScale: true },
       },
-      languageRequirements: true,
+      languageRequirements: { where: { verificationStatus: { not: "ARCHIVED" } } },
     },
   });
 }
@@ -73,7 +74,11 @@ export async function loadProgrammeForMatching(programmeId: string) {
 export async function loadScholarshipForMatching(scholarshipId: string) {
   return db.scholarship.findUnique({
     where: { id: scholarshipId },
-    include: { provider: true, eligibilityRules: true, fundingComponents: true },
+    include: {
+      provider: true,
+      eligibilityRules: { where: { verificationStatus: { not: "ARCHIVED" } } },
+      fundingComponents: true,
+    },
   });
 }
 

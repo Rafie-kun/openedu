@@ -173,7 +173,18 @@ export const candidatePromotionSchema = z.object({
 });
 
 export const adminVerificationSchema = z.object({
-  entityType: z.enum(["University", "Programme", "Scholarship", "VisaCategory"]),
+  entityType: z.enum([
+    "University",
+    "Programme",
+    "Scholarship",
+    "VisaCategory",
+    "AdmissionRequirement",
+    "LanguageRequirement",
+    "ProgrammeDeadline",
+    "TuitionFee",
+    "ScholarshipEligibilityRule",
+    "ScholarshipDeadline",
+  ]),
   entityId: z.string().min(1),
   status: z.enum([
     "VERIFIED",
@@ -205,6 +216,116 @@ export const scholarshipCreateSchema = z.object({
   officialUrl: z.url("Use the full https:// address"),
   sourceUrl: z.url("Use the full https:// address"),
   description: z.string().trim().max(1000).optional(),
+});
+
+export const requirementKinds = [
+  "QUALIFICATION",
+  "SUBJECT",
+  "GRADE",
+  "LANGUAGE",
+  "NATIONALITY",
+  "RESIDENCY",
+  "AGE",
+  "FINANCIAL_NEED",
+  "DEGREE_LEVEL",
+  "SUBJECT_AREA",
+  "OTHER",
+] as const;
+
+export const fundingComponents = [
+  "TUITION",
+  "STIPEND",
+  "ACCOMMODATION",
+  "MEALS",
+  "HEALTH_INSURANCE",
+  "AIRFARE",
+  "VISA_FEES",
+  "TRAVEL",
+  "BOOKS",
+  "RESEARCH",
+  "OTHER",
+] as const;
+
+export const coverageTypes = ["FULL", "PARTIAL", "FIXED_AMOUNT", "UNSPECIFIED"] as const;
+
+const dateTimeInput = z
+  .string()
+  .trim()
+  .refine(
+    (value) => value === "" || !Number.isNaN(new Date(value).getTime()),
+    "Use a valid date and time",
+  );
+
+export const admissionRequirementSchema = z.object({
+  programmeId: z.string().min(1),
+  kind: z.enum(requirementKinds),
+  label: z.string().trim().min(2).max(200),
+  description: z.string().trim().max(1000).optional().or(z.literal("")),
+  qualificationTypeId: z.string().min(1).optional().or(z.literal("")),
+  subjectId: z.string().min(1).optional().or(z.literal("")),
+  gradeScaleId: z.string().min(1).optional().or(z.literal("")),
+  minimumGradeLabel: z.string().trim().max(40).optional().or(z.literal("")),
+  minimumGradeRank: z.coerce.number().int().min(0).max(1000).optional(),
+  isMandatory: z.coerce.boolean().default(true),
+  sourceUrl: z.url("Use the full https:// address"),
+});
+
+export const languageRequirementSchema = z.object({
+  programmeId: z.string().min(1),
+  testCode: z.string().trim().min(2).max(20).toUpperCase(),
+  minimumScore: z.string().trim().min(1).max(20),
+  scaleNote: z.string().trim().max(120).optional().or(z.literal("")),
+  isMandatory: z.coerce.boolean().default(true),
+  sourceUrl: z.url("Use the full https:// address"),
+});
+
+export const programmeDeadlineSchema = z.object({
+  programmeId: z.string().min(1),
+  label: z.string().trim().min(1).max(160),
+  intake: z.string().trim().max(80).optional().or(z.literal("")),
+  opensAt: dateTimeInput.optional(),
+  closesAt: dateTimeInput.optional(),
+  timezone: z.string().trim().min(1).max(60).default("UTC"),
+  sourceUrl: z.url("Use the full https:// address"),
+});
+
+export const tuitionFeeSchema = z.object({
+  programmeId: z.string().min(1),
+  amount: z.coerce.number().min(0).max(10_000_000).optional(),
+  currencyCode: isoCurrency,
+  period: z.string().trim().min(1).max(20).default("YEAR"),
+  isInternational: z.coerce.boolean().default(true),
+  notes: z.string().trim().max(300).optional().or(z.literal("")),
+  sourceUrl: z.url("Use the full https:// address"),
+});
+
+export const scholarshipEligibilityRuleSchema = z.object({
+  scholarshipId: z.string().min(1),
+  kind: z.enum(requirementKinds),
+  label: z.string().trim().min(2).max(200),
+  valueString: z.string().trim().max(300).optional().or(z.literal("")),
+  minValue: z.coerce.number().min(-1000).max(100_000).optional(),
+  isMandatory: z.coerce.boolean().default(true),
+  sourceUrl: z.url("Use the full https:// address"),
+});
+
+export const scholarshipFundingComponentSchema = z.object({
+  scholarshipId: z.string().min(1),
+  component: z.enum(fundingComponents),
+  coverage: z.enum(coverageTypes).default("UNSPECIFIED"),
+  amount: z.coerce.number().min(0).max(10_000_000).optional(),
+  currencyCode: z.string().trim().toUpperCase().pipe(isoCurrency).optional().or(z.literal("")),
+  description: z.string().trim().max(300).optional().or(z.literal("")),
+  isSpecified: z.coerce.boolean().default(false),
+});
+
+export const scholarshipDeadlineSchema = z.object({
+  scholarshipId: z.string().min(1),
+  label: z.string().trim().min(1).max(160),
+  opensAt: dateTimeInput.optional(),
+  closesAt: dateTimeInput.optional(),
+  timezone: z.string().trim().min(1).max(60).default("UTC"),
+  sourceUrl: z.url("Use the full https:// address"),
 });
 
 export const assistantMessageSchema = z.object({

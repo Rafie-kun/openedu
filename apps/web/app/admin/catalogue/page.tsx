@@ -9,12 +9,9 @@ import {
 } from "@openedu/shared";
 import type { DegreeLevelValue, VerificationStatusValue } from "@openedu/shared";
 import { Badge, Callout, Card, EmptyState, SectionHeading, Window } from "@openedu/ui";
-import {
-  createProgrammeAction,
-  createScholarshipAction,
-  setCatalogueVerificationAction,
-} from "@/app/actions/admin";
+import { createProgrammeAction, createScholarshipAction } from "@/app/actions/admin";
 import { ProgrammeForm, ScholarshipForm } from "@/components/catalogue-forms";
+import { CatalogueVerificationButtons } from "@/components/catalogue-verification";
 import { requireAdmin } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Catalogue records" };
@@ -23,65 +20,6 @@ export const dynamic = "force-dynamic";
 function StatusBadge({ status }: { status: string }) {
   const value = status as VerificationStatusValue;
   return <Badge tone={verificationTone(value)}>{VERIFICATION_LABELS[value] ?? status}</Badge>;
-}
-
-function VerificationButtons({
-  entityType,
-  entityId,
-  status,
-}: {
-  entityType: "Programme" | "Scholarship";
-  entityId: string;
-  status: string;
-}) {
-  const verified = status === "VERIFIED" || status === "PARTIALLY_VERIFIED";
-  const archived = status === "ARCHIVED";
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {!verified && !archived ? (
-        <form action={setCatalogueVerificationAction}>
-          <input type="hidden" name="entityType" value={entityType} />
-          <input type="hidden" name="entityId" value={entityId} />
-          <input type="hidden" name="status" value="VERIFIED" />
-          <button
-            type="submit"
-            className="rounded-md border border-sage/50 bg-sage/10 px-3 py-1.5 text-xs text-sage hover:border-sage"
-          >
-            Mark checked against source
-          </button>
-        </form>
-      ) : null}
-
-      {verified ? (
-        <form action={setCatalogueVerificationAction}>
-          <input type="hidden" name="entityType" value={entityType} />
-          <input type="hidden" name="entityId" value={entityId} />
-          <input type="hidden" name="status" value="PENDING_REVIEW" />
-          <button
-            type="submit"
-            className="rounded-md border border-line px-3 py-1.5 text-xs text-ink-soft hover:border-ink/40 hover:text-ink"
-          >
-            Send back to review
-          </button>
-        </form>
-      ) : null}
-
-      {!archived ? (
-        <form action={setCatalogueVerificationAction}>
-          <input type="hidden" name="entityType" value={entityType} />
-          <input type="hidden" name="entityId" value={entityId} />
-          <input type="hidden" name="status" value="ARCHIVED" />
-          <button
-            type="submit"
-            className="rounded-md border border-line px-3 py-1.5 text-xs text-ink-soft hover:border-blush hover:text-blush"
-          >
-            Archive
-          </button>
-        </form>
-      ) : null}
-    </div>
-  );
 }
 
 export default async function AdminCataloguePage() {
@@ -190,8 +128,14 @@ export default async function AdminCataloguePage() {
                   </div>
                   <StatusBadge status={programme.verificationStatus} />
                 </div>
-                <div className="mt-3">
-                  <VerificationButtons
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/admin/catalogue/programme/${programme.id}`}
+                    className="text-xs text-ink-soft underline underline-offset-2 hover:text-ink"
+                  >
+                    Requirements, fees and deadlines
+                  </Link>
+                  <CatalogueVerificationButtons
                     entityType="Programme"
                     entityId={programme.id}
                     status={programme.verificationStatus}
@@ -255,8 +199,14 @@ export default async function AdminCataloguePage() {
                   </div>
                   <StatusBadge status={scholarship.verificationStatus} />
                 </div>
-                <div className="mt-3">
-                  <VerificationButtons
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/admin/catalogue/scholarship/${scholarship.id}`}
+                    className="text-xs text-ink-soft underline underline-offset-2 hover:text-ink"
+                  >
+                    Eligibility, funding and deadlines
+                  </Link>
+                  <CatalogueVerificationButtons
                     entityType="Scholarship"
                     entityId={scholarship.id}
                     status={scholarship.verificationStatus}
