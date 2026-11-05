@@ -1,7 +1,10 @@
 # Privacy
 
 Where personal data lives, what it is for, how a student gets it out or deletes it, and what has not been
-reviewed. No claim of compliance with any law is made here or by the application.
+reviewed. No claim of compliance with any law is made here or by the application. See also
+`docs/data-flow.md` for a purpose-by-purpose table, `docs/cookie-inventory.md` for the one cookie and
+everything checked and not found, and `docs/legal-review-checklist.md` for what a qualified reviewer still
+needs to decide.
 
 ## Data inventory
 

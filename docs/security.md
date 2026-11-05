@@ -1,7 +1,8 @@
 # Security
 
 What this build actually does, and what it still does not. `SECURITY.md` is the reporting policy; this
-file is the engineering record.
+file is the engineering record. See `docs/threat-model.md` for the fuller threat-by-threat breakdown this
+file's controls map onto.
 
 ## Threat model
 

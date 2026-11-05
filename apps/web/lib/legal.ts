@@ -168,7 +168,7 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
       {
         heading: "The only cookie",
         body: [
-          "openedu_session is a strictly necessary cookie. It holds a random session token so the server can tell that you are signed in. It is httpOnly, SameSite=Lax, expires after 30 days of inactivity, and is marked Secure in production.",
+          "openedu_session is a strictly necessary cookie. It holds a random session token so the server can tell that you are signed in. It is httpOnly, SameSite=Lax, expires 30 days after you sign in regardless of activity in between, and is marked Secure in production.",
         ],
       },
       {
