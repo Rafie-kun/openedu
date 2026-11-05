@@ -1,6 +1,6 @@
 # Status
 
-Phase numbering follows the roadmap in `AGENTS.md` section 26. "Done" means the behaviour exists and is
+Phase numbering follows `docs/roadmap.md`. "Done" means the behaviour exists and is
 reachable in the app; "partial" means some of it works and the missing part is named.
 
 | Phase | Scope                                  | State   | Evidence                                                                                                                                                                                                                                                                                                   |

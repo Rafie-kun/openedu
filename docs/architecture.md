@@ -1,6 +1,6 @@
 # Architecture
 
-What is in the repository today, and why it is arranged this way. Requirements come from `AGENTS.md`;
+What is in the repository today, and why it is arranged this way. Requirements come from `docs/product-spec.md`;
 this file records the decisions that the code actually reflects.
 
 ## Repository layout
@@ -163,6 +163,16 @@ Context: search had to work without a search service. Decision: university searc
 exactly that expression.
 Consequences: the SQL expression and the index must stay identical; programmes and scholarships use
 Prisma `contains` filters and have no index of their own.
+
+### 2026-11-05 — Product spec split out of AGENTS.md
+
+Context: `AGENTS.md` had grown to roughly 72 KB of mostly stable product requirements, repeated into every
+session's context regardless of what the task actually touched. Decision: the normative requirements moved
+to `docs/product-spec.md` verbatim (by section), the phase list to `docs/roadmap.md`, and a live
+current-state summary to `docs/implementation-state.md`. `AGENTS.md` keeps only rules that change agent
+behaviour on every turn — non-negotiables, working rules, OpenCode config — and points to the rest.
+Consequences: a session reads `docs/implementation-state.md` first and only opens `docs/product-spec.md` for
+the section a task needs, instead of the whole file loading as persistent context every time.
 
 ### 2026-11-05 — Manual catalogue entry is separate from verification
 
