@@ -49,7 +49,7 @@ SHA-256 hash, and only on sessions, consents and audit entries.
 | Consents                     | Record which document version was accepted       | Kept with the account                                                       |
 | Audit entries                | Keep a security trail                            | Kept indefinitely; not covered by any retention job                         |
 | Notifications                | Inform the student                               | No retention job; nothing creates them yet                                  |
-| AI tables                    | Reserved for a future assistant                  | Empty                                                                       |
+| AI conversations             | Let you review an earlier answer                 | Stored with your profile, included in export, deleted with the account      |
 
 There is no scheduled deletion job for any table. Anything described as short-lived depends on the code
 paths above, not on a scheduler.
@@ -86,13 +86,21 @@ Two things to be precise about:
 
 ## AI disclosure and consent
 
-The assistant is not enabled. There is no provider client and no key is read anywhere except the
-`isAiConfigured()` check that powers a status badge. `ConsentKind.AI_PROCESSING` exists so that consent
-can be recorded per purpose later; no record of that kind is written today.
+The assistant is optional and only active when `GEMINI_API_KEY` is set by the operator. `getAiProvider()`
+returns `null` otherwise, `api/assistant` answers 503, and `/assistant` renders a read-only notice.
 
-The published position, in `apps/web/lib/legal.ts` under `/legal/ai`, is that a future assistant may
-explain results but may not decide eligibility, invent requirements, submit anything, or see another
-student's records, and that using it would be optional.
+What a request sends: the message, the last ten messages of the thread, and up to ten catalogue rows
+selected by keyword. The student's academic summary is sent only when `includeProfile` is true for that
+request, which the UI leaves unticked. Documents are never read, and the model has no tool that can query
+the database or write anything.
+
+`ConsentKind.AI_PROCESSING` exists so consent can be recorded per purpose; no record of that kind is
+written today, because the per-message checkbox is the control actually in force. That gap is deliberate
+and should be closed before a public launch that markets the assistant.
+
+The published position, in `apps/web/lib/legal.ts` under `/legal/ai`, is that the assistant may explain
+results but may not decide eligibility, invent requirements, submit anything, or see another student's
+records.
 
 Consent records that do exist: `TERMS` and `PRIVACY`, written at registration with version
 `2026-11-02` (the constant `CONSENT_VERSION` in `apps/web/app/actions/auth.ts`). Registration is refused

@@ -194,13 +194,15 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
   {
     slug: "ai",
     title: "AI usage disclosure",
-    summary: "Where an AI assistant could appear, what it may do, and what it may never decide.",
+    summary: "When the assistant is available, what it is sent, and what it may never decide.",
     updated: UPDATED,
     sections: [
       {
         heading: "Current state",
         body: [
-          "The AI assistant is not enabled in this build. There is a provider abstraction and a consent record type, but no conversation interface, and no requests are sent to any model provider.",
+          "The assistant is optional and only runs when the operator of this installation has configured a model provider key. The account page shows whether it is configured here. When it is not, the assistant page is read-only and no requests leave the platform.",
+          "When it is configured, a question you send, the recent messages in the thread, and the catalogue records that match your question are sent to the provider. If you tick the academic summary box, your nationality, qualifications, grades, language tests, intended level and financial need band are sent too. It is off by default. Uploaded documents are never sent and cannot be attached to a message.",
+          "Replies and the records they cite are stored against your profile so the page can show the thread. They are included in your data export and deleted with your account.",
         ],
       },
       {
@@ -214,15 +216,15 @@ export const LEGAL_DOCUMENTS: LegalDocument[] = [
         ],
       },
       {
-        heading: "How retrieval would work",
+        heading: "How retrieval works",
         body: [
-          "Answers would be grounded in catalogue records and the source links attached to them, and would cite those records. When the needed information is not in the catalogue, the correct answer is that it is not available, followed by a link to the official source.",
+          "Answers are grounded in catalogue records and the source links attached to them, and cite those records by number. Eligibility lines in an answer come from the platform's rules engine, not from the model. When the needed information is not in the catalogue, the expected answer is that it is not available, followed by a link to the official source.",
         ],
       },
       {
         heading: "Your choice",
         body: [
-          "If the assistant is enabled by an operator, using it is optional and requires consent for that specific purpose. The rest of the platform continues to work without it. Where it is disabled, the account page says so.",
+          "Using the assistant is optional and the rest of the platform works without it. Sharing your academic summary is a per-message choice and stays off until you turn it on. Do not paste passport numbers, application portal credentials or other identifiers into a message.",
         ],
       },
     ],

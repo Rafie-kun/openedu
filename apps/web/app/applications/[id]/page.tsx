@@ -10,11 +10,17 @@ import {
 } from "@openedu/shared";
 import { db } from "@openedu/database";
 import {
+  addApplicationDocumentAction,
   addApplicationNoteAction,
+  addApplicationTaskAction,
   deleteApplicationAction,
+  deleteApplicationDocumentAction,
+  deleteApplicationTaskAction,
+  toggleApplicationDocumentAction,
+  toggleApplicationTaskAction,
   updateApplicationStatusAction,
 } from "@/app/actions/workspace";
-import { NoteForm, StatusForm } from "@/components/application-forms";
+import { DocumentForm, NoteForm, StatusForm, TaskForm } from "@/components/application-forms";
 import { requireUser } from "@/lib/session";
 import { getOrCreateProfile } from "@/lib/student";
 
@@ -102,6 +108,63 @@ export default async function ApplicationDetailPage({
             )}
           </Window>
 
+          <Window title="tasks" meta="your own checklist">
+            {application.tasks.length === 0 ? (
+              <p className="text-sm text-ink-soft">No tasks yet.</p>
+            ) : (
+              <ul className="space-y-2">
+                {application.tasks.map((task) => (
+                  <li
+                    key={task.id}
+                    className="flex flex-wrap items-start justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0"
+                  >
+                    <form action={toggleApplicationTaskAction} className="flex items-start gap-2">
+                      <input type="hidden" name="applicationId" value={application.id} />
+                      <input type="hidden" name="taskId" value={task.id} />
+                      <button
+                        type="submit"
+                        className="mt-0.5 rounded border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-ink-soft hover:border-ink/40 hover:text-ink"
+                        aria-label={
+                          task.completedAt ? `Reopen ${task.title}` : `Complete ${task.title}`
+                        }
+                      >
+                        {task.completedAt ? "reopen" : "done"}
+                      </button>
+                    </form>
+                    <span className="min-w-0 flex-1">
+                      <span
+                        className={
+                          task.completedAt
+                            ? "text-sm text-ink-soft line-through"
+                            : "text-sm text-ink"
+                        }
+                      >
+                        {task.title}
+                      </span>
+                      <span className="block text-xs text-ink-soft">
+                        {task.isRequired ? "required" : "optional"}
+                        {task.dueAt ? ` · due ${formatDate(task.dueAt)}` : ""}
+                      </span>
+                    </span>
+                    <form action={deleteApplicationTaskAction}>
+                      <input type="hidden" name="applicationId" value={application.id} />
+                      <input type="hidden" name="taskId" value={task.id} />
+                      <button
+                        type="submit"
+                        className="text-xs text-ink-soft hover:text-blush hover:underline"
+                      >
+                        Remove
+                      </button>
+                    </form>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-4 border-t border-line/60 pt-3">
+              <TaskForm action={addApplicationTaskAction} applicationId={application.id} />
+            </div>
+          </Window>
+
           <Window title="private notes" meta="only you can read these">
             <NoteForm action={addApplicationNoteAction} applicationId={application.id} />
             <div className="mt-4 space-y-3">
@@ -163,27 +226,72 @@ export default async function ApplicationDetailPage({
             ) : null}
           </Window>
 
-          {application.documents.length > 0 ? (
-            <Window title="documents" meta="on this entry">
-              <ul className="space-y-2 text-sm">
+          <Window title="document checklist" meta="labels only">
+            {application.documents.length === 0 ? (
+              <p className="text-sm text-ink-soft">Nothing on the checklist yet.</p>
+            ) : (
+              <ul className="space-y-2">
                 {application.documents.map((document) => (
-                  <li key={document.id}>
-                    {document.label}
-                    <span className="block text-xs text-ink-soft">
-                      {document.uploadedAt ? formatDate(document.uploadedAt) : "not uploaded"}
+                  <li
+                    key={document.id}
+                    className="flex flex-wrap items-start justify-between gap-2 border-b border-line/50 pb-2 last:border-0 last:pb-0"
+                  >
+                    <form
+                      action={toggleApplicationDocumentAction}
+                      className="flex items-start gap-2"
+                    >
+                      <input type="hidden" name="applicationId" value={application.id} />
+                      <input type="hidden" name="documentId" value={document.id} />
+                      <button
+                        type="submit"
+                        className="mt-0.5 rounded border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-ink-soft hover:border-ink/40 hover:text-ink"
+                        aria-label={
+                          document.uploadedAt
+                            ? `Mark ${document.label} as not ready`
+                            : `Mark ${document.label} as ready`
+                        }
+                      >
+                        {document.uploadedAt ? "ready" : "mark ready"}
+                      </button>
+                    </form>
+                    <span className="min-w-0 flex-1">
+                      <span
+                        className={
+                          document.uploadedAt
+                            ? "text-sm text-ink-soft line-through"
+                            : "text-sm text-ink"
+                        }
+                      >
+                        {document.label}
+                      </span>
+                      <span className="block text-xs text-ink-soft">
+                        {document.uploadedAt
+                          ? `marked ready ${formatDate(document.uploadedAt)}`
+                          : "not ready"}
+                      </span>
                     </span>
+                    <form action={deleteApplicationDocumentAction}>
+                      <input type="hidden" name="applicationId" value={application.id} />
+                      <input type="hidden" name="documentId" value={document.id} />
+                      <button
+                        type="submit"
+                        className="text-xs text-ink-soft hover:text-blush hover:underline"
+                      >
+                        Remove
+                      </button>
+                    </form>
                   </li>
                 ))}
               </ul>
-            </Window>
-          ) : (
-            <Card>
-              <p className="text-sm text-ink-soft">
-                Document upload is not enabled in this deployment. Keep your files wherever you
-                already store them and track the checklist here.
-              </p>
-            </Card>
-          )}
+            )}
+            <div className="mt-4 border-t border-line/60 pt-3">
+              <DocumentForm action={addApplicationDocumentAction} applicationId={application.id} />
+            </div>
+            <p className="mt-3 text-xs text-ink-soft">
+              Files are not uploaded. Keep them where you already store them and use this list to
+              track what is ready.
+            </p>
+          </Window>
 
           <Card>
             <form action={deleteApplicationAction}>

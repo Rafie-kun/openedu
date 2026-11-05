@@ -946,7 +946,6 @@ Example `.opencode/agents/data-source-researcher.md`:
 ---
 description: Researches a single external data source (API availability, licence, rate limits, attribution rules) before any ingestion code is written. Never writes code — produces a findings note for docs/data-sources.md.
 mode: subagent
-model: anthropic/claude-sonnet-5
 permission:
   webfetch: allow
   edit: deny

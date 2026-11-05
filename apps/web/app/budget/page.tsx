@@ -9,7 +9,7 @@ import {
   SectionHeading,
   Window,
 } from "@openedu/ui";
-import { COST_BASIS_LABELS, COST_CATEGORY_LABELS, formatMoney } from "@openedu/shared";
+import { COST_BASIS_LABELS, COST_CATEGORY_LABELS, formatDate, formatMoney } from "@openedu/shared";
 import { db } from "@openedu/database";
 import {
   addBudgetItemAction,
@@ -22,6 +22,7 @@ import { AddBudgetItemForm, NewBudgetPlanForm } from "@/components/budget-forms"
 import { getOrCreateProfile, listCountries } from "@/lib/student";
 import { requireUser } from "@/lib/session";
 import { toVerificationStatus } from "@/lib/display";
+import { convertAmount, getRates, SUPPORTED_CURRENCIES } from "@/lib/exchange-rates";
 
 export const metadata: Metadata = { title: "Budget planner" };
 export const dynamic = "force-dynamic";
@@ -55,11 +56,20 @@ function addToTotals(totals: Totals, amount: number, frequency: string) {
   }
 }
 
-export default async function BudgetPage() {
+export default async function BudgetPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ display?: string }>;
+}) {
   const user = await requireUser("/budget");
   const profile = await getOrCreateProfile(user.id);
+  const requested = (await searchParams).display?.toUpperCase();
+  const displayCode =
+    requested && (SUPPORTED_CURRENCIES as readonly string[]).includes(requested)
+      ? requested
+      : "USD";
 
-  const [plans, countries, publishedCosts] = await Promise.all([
+  const [plans, countries, publishedCosts, rates] = await Promise.all([
     db.budgetPlan.findMany({
       where: { profileId: profile.id },
       include: {
@@ -76,6 +86,7 @@ export default async function BudgetPage() {
       orderBy: [{ country: { name: "asc" } }, { category: "asc" }],
       take: 100,
     }),
+    getRates(displayCode),
   ]);
 
   return (
@@ -89,8 +100,9 @@ export default async function BudgetPage() {
           </LinkButton>
         }
       >
-        Your own numbers, kept separate from published ones. OpenEdu does not convert currencies
-        here because no exchange rate source is configured yet, so totals stay grouped by currency.
+        Your own numbers, kept separate from published ones. Totals stay in the currency you entered
+        and can be shown in another currency using a dated reference rate. A conversion is an
+        estimate, not the rate your bank will use.
       </SectionHeading>
 
       <Callout tone="info" title="Three kinds of number">
@@ -98,6 +110,54 @@ export default async function BudgetPage() {
         the same evidence. Each line records which one it is, and a published figure keeps its
         source link.
       </Callout>
+
+      <Card>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 className="font-display text-lg text-ink">Reference exchange rates</h2>
+            {rates ? (
+              <p className="mt-1 text-sm text-ink-soft">
+                {rates.source} · {rates.base} · rate date{" "}
+                {formatDate(`${rates.rateDate}T00:00:00Z`)}
+                {rates.stale ? " · the latest fetch failed, so these may be older" : ""}
+              </p>
+            ) : (
+              <p className="mt-1 text-sm text-ink-soft">
+                No rate is available right now. Totals stay in their original currency.
+              </p>
+            )}
+          </div>
+          <form method="get" className="flex flex-wrap items-end gap-2">
+            <div>
+              <label htmlFor="display" className="mb-1 block text-xs font-medium text-ink-soft">
+                Show conversions in
+              </label>
+              <select
+                id="display"
+                name="display"
+                defaultValue={displayCode}
+                className="rounded border border-line bg-panel px-2 py-1.5 text-sm"
+              >
+                {SUPPORTED_CURRENCIES.map((code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="rounded-md border border-line px-3 py-1.5 text-xs text-ink-soft hover:border-ink/40 hover:text-ink"
+            >
+              Convert
+            </button>
+          </form>
+        </div>
+        <p className="mt-3 text-xs text-ink-soft">
+          Rates come from the European Central Bank reference set published by Frankfurter. They are
+          not a quote and do not include bank or card fees.
+        </p>
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <Window title="new plan" meta="private to you">
@@ -237,21 +297,41 @@ export default async function BudgetPage() {
 
                 {byCurrency.size > 0 ? (
                   <div className="flex flex-wrap gap-3">
-                    {[...byCurrency.entries()].map(([currency, totals]) => (
-                      <div
-                        key={currency}
-                        className="rounded-md border border-line bg-paper/70 px-3 py-2 text-xs text-ink-soft"
-                      >
-                        <p className="font-mono uppercase tracking-[0.12em]">{currency}</p>
-                        <p className="mt-1 text-sm text-ink">
-                          {formatMoney(totals.monthly, currency)} monthly ·{" "}
-                          {formatMoney(totals.yearly, currency)} yearly
-                        </p>
-                        <p className="text-sm text-ink">
-                          {formatMoney(totals.oneTime, currency)} one time
-                        </p>
-                      </div>
-                    ))}
+                    {[...byCurrency.entries()].map(([currency, totals]) => {
+                      const monthly = convertAmount(totals.monthly, currency, displayCode, rates);
+                      const yearly = convertAmount(totals.yearly, currency, displayCode, rates);
+                      const oneTime = convertAmount(totals.oneTime, currency, displayCode, rates);
+                      const converted = monthly !== null && yearly !== null && oneTime !== null;
+
+                      return (
+                        <div
+                          key={currency}
+                          className="rounded-md border border-line bg-paper/70 px-3 py-2 text-xs text-ink-soft"
+                        >
+                          <p className="font-mono uppercase tracking-[0.12em]">{currency}</p>
+                          <p className="mt-1 text-sm text-ink">
+                            {formatMoney(totals.monthly, currency)} monthly ·{" "}
+                            {formatMoney(totals.yearly, currency)} yearly
+                          </p>
+                          <p className="text-sm text-ink">
+                            {formatMoney(totals.oneTime, currency)} one time
+                          </p>
+                          {currency !== displayCode ? (
+                            converted ? (
+                              <p className="mt-1 border-t border-line/60 pt-1 text-ink-soft">
+                                ≈ {formatMoney(monthly, displayCode)} monthly ·{" "}
+                                {formatMoney(yearly, displayCode)} yearly ·{" "}
+                                {formatMoney(oneTime, displayCode)} one time
+                              </p>
+                            ) : (
+                              <p className="mt-1 border-t border-line/60 pt-1 text-ink-soft">
+                                No reference rate for {currency} → {displayCode}
+                              </p>
+                            )
+                          ) : null}
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : null}
 

@@ -89,6 +89,10 @@ export async function GET() {
           },
           orderBy: { generatedAt: "asc" },
         },
+        aiConversations: {
+          include: { messages: { orderBy: { createdAt: "asc" } } },
+          orderBy: { createdAt: "asc" },
+        },
       },
     }),
     db.notification.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),

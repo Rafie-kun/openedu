@@ -95,16 +95,18 @@ version. `DataVersion` is unique per `(entityType, entityId, version)` and store
 `BudgetPlan`, `BudgetItem`.
 
 `VisaCategory` is unique per `(countryId, code)`. `ExchangeRate` is unique per
-`(baseCurrencyId, quoteCurrencyId, rateDate, sourceName)`; the table is empty and no conversion code
-exists. `CostEstimate.basis` distinguishes university-published, government, third-party and
-user-entered figures.
+`(baseCurrencyId, quoteCurrencyId, rateDate, sourceName)` and is written by
+`apps/web/lib/exchange-rates.ts` from Frankfurter. `CostEstimate.basis` distinguishes
+university-published, government, third-party and user-entered figures.
 
 ### AI and platform operations (7)
 
 `AIConversation`, `AIMessage`, `AIUsageRecord`, `Notification`, `NotificationDelivery`, `FeatureFlag`,
 `SystemConfiguration`.
 
-All empty except `Notification` reads, and nothing creates notifications yet.
+`AIConversation` and `AIMessage` are written by `api/assistant`; `AIMessage.citations` stores the
+retrieved record list as JSON. `AIUsageRecord` gets one row per provider call. Nothing creates
+notifications yet.
 
 ## Key invariants
 

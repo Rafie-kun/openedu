@@ -13,8 +13,9 @@ data bug. Relevant attackers: another student trying to read or change someone e
 automated client abusing registration or login; a stolen session token; anyone reaching a misconfigured
 deployment.
 
-Out of scope by construction: there is no payment flow, no file upload and no AI request path, so payment
-fraud, malicious uploads and prompt injection have no surface yet.
+Out of scope by construction: there is no payment flow and no file upload, so payment fraud and malicious
+uploads have no surface. The assistant is a live prompt-injection surface, treated under its own heading
+below.
 
 ## Authentication and passwords
 
@@ -145,6 +146,24 @@ page states this to the user.
 When uploads land, the required controls are: content sniffing rather than trusting `mimeType` or the
 extension, size limits before buffering, randomised storage keys, signed short-lived URLs, per-user
 authorisation checks on every read, and no plaintext copy kept after processing.
+
+## AI assistant
+
+`api/assistant` is the only path that sends student-supplied text off the deployment. Controls:
+
+- Authentication before any work, then a per-user limit of 20 messages per hour through `rateLimit`.
+- The provider client is server-only; `GEMINI_API_KEY` is read in `lib/env.ts` and never reaches a
+  client bundle. With no key the route returns 503 before touching a model.
+- Retrieval is a parameterised Prisma query built from filtered keywords. No model output goes into
+  SQL, and the model has no tools, no database client and no write path.
+- The message body is capped at 2,000 characters by `assistantMessageSchema`.
+- The system prompt treats catalogue text as data, and the UI warns against pasting identifiers.
+  Prompt injection cannot escalate beyond producing a wrong sentence, because nothing downstream acts
+  on model output.
+
+Residual risks, accepted for now: a retrieved source record could contain hostile text and steer a
+reply; answers are not evaluated against a benchmark; conversation retention has no automatic expiry.
+None of these can change data or grant access.
 
 ## Not done yet
 

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  applicationDocumentSchema,
+  applicationTaskSchema,
+  assistantMessageSchema,
   languageTestSchema,
   loginSchema,
   profileSchema,
@@ -83,5 +86,37 @@ describe("languageTestSchema", () => {
     const parsed = languageTestSchema.safeParse({ testCode: "ielts", score: "7.0" });
     expect(parsed.success).toBe(true);
     if (parsed.success) expect(parsed.data.testCode).toBe("IELTS");
+  });
+});
+
+describe("applicationTaskSchema", () => {
+  it("defaults isRequired to true when the field is absent", () => {
+    const parsed = applicationTaskSchema.safeParse({ title: "Ask for a reference" });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.isRequired).toBe(true);
+  });
+
+  it("rejects a task without a title", () => {
+    expect(applicationTaskSchema.safeParse({ title: "  " }).success).toBe(false);
+  });
+});
+
+describe("assistantMessageSchema", () => {
+  it("keeps the profile opt-in off by default", () => {
+    const parsed = assistantMessageSchema.safeParse({ message: "Which programme fits me?" });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.includeProfile).toBe(false);
+  });
+
+  it("rejects a one-character message", () => {
+    expect(assistantMessageSchema.safeParse({ message: "?" }).success).toBe(false);
+  });
+});
+
+describe("applicationDocumentSchema", () => {
+  it("trims the label", () => {
+    const parsed = applicationDocumentSchema.safeParse({ label: "  Transcript  " });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.label).toBe("Transcript");
   });
 });

@@ -95,6 +95,31 @@ export async function rejectReviewAction(_prev: FormState, formData: FormData): 
   return { success: "Rejected. The source record stays for history." };
 }
 
+export async function setSourceActiveAction(formData: FormData): Promise<void> {
+  const admin = await requireAdmin();
+  const sourceId = readString(formData, "sourceId");
+  const isActive = readString(formData, "isActive") === "true";
+  if (!sourceId) return;
+
+  const source = await db.dataSource.findUnique({
+    where: { id: sourceId },
+    select: { id: true, code: true, isActive: true },
+  });
+  if (!source) return;
+
+  await db.dataSource.update({ where: { id: source.id }, data: { isActive } });
+  await audit({
+    actorId: admin.id,
+    action: isActive ? "admin.source_enabled" : "admin.source_disabled",
+    entityType: "DataSource",
+    entityId: source.id,
+    metadata: { code: source.code, previous: source.isActive },
+  });
+
+  revalidatePath("/admin/sources");
+  revalidatePath("/admin");
+}
+
 export async function promoteCandidateAction(
   _prev: FormState,
   formData: FormData,

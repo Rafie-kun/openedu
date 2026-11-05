@@ -10,7 +10,7 @@ How to run this repository locally, and what the checks actually do.
 | pnpm       | 9 or newer                                           | `packageManager` pins 11.22.0; `corepack enable` is enough |
 | PostgreSQL | 17 in `docker-compose.yml`, any recent version works | or your own instance                                       |
 | Docker     | optional but easiest                                 | `db` and `redis` services                                  |
-| Python     | only for worker tests                                | no worker exists yet, see below                            |
+| Python     | 3.11 or newer for `workers/data-ingestion`           | `uv sync` or `pip install -e .[dev]` in that directory     |
 
 There is no `packages/config` workspace and no `apps/admin`.
 
@@ -61,7 +61,7 @@ still builds; the image is not expected to reach a database at build time.
 
 ```bash
 docker compose up -d db          # PostgreSQL on 5432
-docker compose up -d redis       # only needed once workers exist
+docker compose up -d redis       # only needed once the queue lands
 ```
 
 The compose file also defines a `web` service under the `full` profile, which builds `Dockerfile`. It
@@ -105,7 +105,7 @@ pnpm dev          # turbo run dev --parallel; only apps/web has a dev script
 ```
 
 `pnpm dev:admin` is defined at the root but fails: `apps/admin` does not exist. `pnpm worker:test`
-fails for the same reason.
+runs pytest in `workers/data-ingestion`.
 
 ## Checks
 
@@ -117,13 +117,13 @@ fails for the same reason.
 | `pnpm format:check` | `prettier --check .` with `.prettierrc.json`                                  |
 | `pnpm format`       | `prettier --write .`                                                          |
 
-`apps/web` sets `"test": "vitest run --passWithNoTests"` and `vitest.config.ts` includes
-`test/**/*.test.ts`. That directory does not exist, so the web suite currently passes with zero tests.
-`pnpm test:e2e` runs `playwright test`, but there is no Playwright config and no `e2e` directory, so it
-fails.
+`apps/web` sets `"test": "vitest run --passWithNoTests"` and `vitest.config.ts` includes both
+`test/**/*.test.ts` and `lib/**/*.test.ts`. The suites there cover the ingestion candidate helpers, the
+Gemini client with a stubbed `fetch`, and rate-payload parsing and conversion. `pnpm test:e2e` runs
+`playwright test`, but there is no Playwright config and no `e2e` directory, so it fails.
 
-The useful suites today are `packages/matching/test/engine.test.ts` (18 cases) and the validation and
-shared tests.
+The useful suites today are `packages/matching/test/engine.test.ts` (18 cases), the validation and
+shared tests, and the three `apps/web/lib` suites.
 
 CI runs three jobs: `checks` (generate, typecheck, test, build), `migrations` (against a real Postgres
 service: deploy, then seed twice), and `formatting`.

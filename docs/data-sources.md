@@ -74,6 +74,25 @@ Notes on reading that table:
   is accredited.
 - `WHED` is registered as `MANUAL` precisely so no code is written against it before permission exists.
 
+## Frankfurter today
+
+`apps/web/lib/exchange-rates.ts` is the only source integration in the request path. It calls
+`https://api.frankfurter.app/latest?from=CODE`, validates that the response names the base it asked for
+and only keeps positive numeric rates, then upserts one `ExchangeRate` row per quote currency with
+`sourceName = "Frankfurter"` and the ECB rate date. A stored snapshot younger than 12 hours is reused
+without a request.
+
+What the numbers mean:
+
+- These are ECB reference rates, published once per working day. A weekend or holiday request returns
+  the previous working day's date, and the rate date on screen shows that, not the fetch time.
+- A conversion is an estimate for planning. It is not a bank, card or transfer quote and excludes fees.
+- When the fetch fails the page falls back to the newest stored snapshot and marks it stale. When no
+  snapshot exists at all, the budget page says so instead of converting.
+
+Frankfurter's own terms and the ECB's reuse conditions still have to be re-read before this is treated
+as settled for production. The `FRANKFURTER` `DataSource` row records that gap in `licenceSummary`.
+
 ## Candidate sources, not integrated
 
 Researched but not implemented. Nothing below has an adapter, a schedule, or approved permission.
@@ -87,7 +106,7 @@ Researched but not implemented. Nothing below has an adapter, a schedule, or app
 | National ministries and higher education authorities  | `NATIONAL_AUTHORITY` | No rows                                                                                        |
 | Official scholarship providers and government portals | `SCHOLARSHIP`        | No rows. No scholarship is seeded at all                                                       |
 | Official immigration portals                          | `IMMIGRATION`        | No rows. No visa record is seeded                                                              |
-| Frankfurter                                           | Currency             | Registered. No `ExchangeRate` rows and no conversion code                                      |
+| Frankfurter                                           | Currency             | Registered and used for reference rates. Fetched on demand by `apps/web/lib/exchange-rates.ts` |
 
 The `Currency` table is seeded with 40 ISO 4217 codes. That is reference data, not a rate source.
 
@@ -96,8 +115,9 @@ The `Currency` table is seeded with 40 ISO 4217 codes. That is reference data, n
 State of the data as committed:
 
 - No `IngestionJob`, `IngestionRun`, `SourceRecord`, `ChangeLog`, `VerificationRecord` or
-  `ReviewQueueItem` row exists.
-- No Python worker exists. `pnpm worker:test` points at `workers/data-ingestion`, which is absent.
+  `ReviewQueueItem` row is seeded. The worker creates them when a run is actually executed.
+- `workers/data-ingestion` exists and is tested, but nothing schedules it yet: a run is a manual CLI
+  invocation.
 - Every seeded catalogue row is `UNVERIFIED` with `lastCheckedAt` equal to the seed run time. That
   timestamp means "written by the seed", not "checked against the source".
 - No programme, scholarship, deadline, tuition fee, requirement or visa record is seeded. The matching

@@ -1,7 +1,12 @@
 "use server";
 
 import { db } from "@openedu/database";
-import { applicationSchema, applicationStatusSchema } from "@openedu/validation";
+import {
+  applicationDocumentSchema,
+  applicationSchema,
+  applicationStatusSchema,
+  applicationTaskSchema,
+} from "@openedu/validation";
 import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";
 import { requireUser } from "@/lib/session";
@@ -159,6 +164,126 @@ export async function addApplicationNoteAction(formData: FormData): Promise<void
   await db.applicationNote.create({
     data: { applicationId: owned.id, body: body.slice(0, 4000) },
   });
+  revalidatePath(`/applications/${applicationId}`);
+}
+
+export async function addApplicationTaskAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const parsed = applicationTaskSchema.safeParse({
+    title: readString(formData, "title"),
+    dueAt: readString(formData, "dueAt"),
+    isRequired: formData.get("isRequired") === "on",
+  });
+  if (!applicationId || !parsed.success) return;
+
+  const profile = await profileFor(user.id);
+  const owned = await db.studentApplication.findFirst({
+    where: { id: applicationId, profileId: profile.id },
+    select: { id: true },
+  });
+  if (!owned) return;
+
+  await db.applicationTask.create({
+    data: {
+      applicationId: owned.id,
+      title: parsed.data.title,
+      dueAt: parsed.data.dueAt ? new Date(`${parsed.data.dueAt}T00:00:00.000Z`) : null,
+      isRequired: parsed.data.isRequired,
+    },
+  });
+
+  revalidatePath(`/applications/${applicationId}`);
+}
+
+export async function toggleApplicationTaskAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const taskId = readString(formData, "taskId");
+  if (!applicationId || !taskId) return;
+
+  const profile = await profileFor(user.id);
+  const task = await db.applicationTask.findFirst({
+    where: { id: taskId, application: { id: applicationId, profileId: profile.id } },
+    select: { id: true, completedAt: true },
+  });
+  if (!task) return;
+
+  await db.applicationTask.update({
+    where: { id: task.id },
+    data: { completedAt: task.completedAt ? null : new Date() },
+  });
+
+  revalidatePath(`/applications/${applicationId}`);
+  revalidatePath("/calendar");
+}
+
+export async function deleteApplicationTaskAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const taskId = readString(formData, "taskId");
+  if (!applicationId || !taskId) return;
+
+  const profile = await profileFor(user.id);
+  await db.applicationTask.deleteMany({
+    where: { id: taskId, application: { id: applicationId, profileId: profile.id } },
+  });
+
+  revalidatePath(`/applications/${applicationId}`);
+}
+
+export async function addApplicationDocumentAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const parsed = applicationDocumentSchema.safeParse({ label: readString(formData, "label") });
+  if (!applicationId || !parsed.success) return;
+
+  const profile = await profileFor(user.id);
+  const owned = await db.studentApplication.findFirst({
+    where: { id: applicationId, profileId: profile.id },
+    select: { id: true },
+  });
+  if (!owned) return;
+
+  await db.applicationDocument.create({
+    data: { applicationId: owned.id, label: parsed.data.label },
+  });
+
+  revalidatePath(`/applications/${applicationId}`);
+}
+
+export async function toggleApplicationDocumentAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const documentId = readString(formData, "documentId");
+  if (!applicationId || !documentId) return;
+
+  const profile = await profileFor(user.id);
+  const document = await db.applicationDocument.findFirst({
+    where: { id: documentId, application: { id: applicationId, profileId: profile.id } },
+    select: { id: true, uploadedAt: true },
+  });
+  if (!document) return;
+
+  await db.applicationDocument.update({
+    where: { id: document.id },
+    data: { uploadedAt: document.uploadedAt ? null : new Date() },
+  });
+
+  revalidatePath(`/applications/${applicationId}`);
+}
+
+export async function deleteApplicationDocumentAction(formData: FormData): Promise<void> {
+  const user = await requireUser("/applications");
+  const applicationId = readString(formData, "applicationId");
+  const documentId = readString(formData, "documentId");
+  if (!applicationId || !documentId) return;
+
+  const profile = await profileFor(user.id);
+  await db.applicationDocument.deleteMany({
+    where: { id: documentId, application: { id: applicationId, profileId: profile.id } },
+  });
+
   revalidatePath(`/applications/${applicationId}`);
 }
 

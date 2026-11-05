@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { unstable_rethrow } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getCurrentUser } from "@/lib/session";
@@ -19,6 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   try {
     user = await getCurrentUser();
   } catch (error) {
+    unstable_rethrow(error);
     console.error("session-lookup-failed", error);
   }
 

@@ -10,6 +10,8 @@ const NAV = [
   { href: "/scholarships", label: "Scholarships" },
   { href: "/guidance", label: "Guidance" },
   { href: "/visas", label: "Visas" },
+  { href: "/calendar", label: "Calendar" },
+  { href: "/assistant", label: "Assistant" },
 ];
 
 export function SiteHeader({ user }: { user: CurrentUser | null }) {

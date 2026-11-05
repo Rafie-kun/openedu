@@ -7,7 +7,7 @@ this file records the decisions that the code actually reflects.
 
 | Path                     | Purpose                                                                                    |
 | ------------------------ | ------------------------------------------------------------------------------------------ |
-| `apps/web`               | The only application. Next.js App Router pages, server actions, two route handlers.        |
+| `apps/web`               | The only application. Next.js App Router pages, server actions, three route handlers.      |
 | `packages/database`      | Prisma schema, migrations, seed script, and the generated client re-exported as `db`.      |
 | `packages/matching`      | Pure TypeScript eligibility engine and its unit tests. No database, no React, no Next.     |
 | `packages/shared`        | Labels, formatting helpers, profile completeness, `safeInternalPath`.                      |
@@ -15,8 +15,9 @@ this file records the decisions that the code actually reflects.
 | `packages/validation`    | Zod schemas shared by server actions.                                                      |
 | `prisma` (in `packages`) | Schema and migrations live under `packages/database/prisma`.                               |
 
-Referenced but not present: `apps/admin` (root script `dev:admin` points at `@openedu/admin`),
-`workers/data-ingestion` (root script `worker:test` and `.prettierignore` point at it),
+| `workers/data-ingestion` | Python source adapters, normalisers and the CLI, with its own `pyproject.toml` and tests. |
+
+Referenced but not present: `apps/admin` (root script `dev:admin` points at `@openedu/admin`) and
 `packages/config`. Nothing imports them.
 
 ## Request and data flow
@@ -43,8 +44,9 @@ is written; every page view recomputes.
 
 ## Why Next route handlers instead of a separate backend
 
-There are two route handlers only: `apps/web/app/api/health/route.ts` and
-`apps/web/app/api/account/export/route.ts`. Everything else is a server action.
+There are three route handlers: `apps/web/app/api/health/route.ts`,
+`apps/web/app/api/account/export/route.ts` and `apps/web/app/api/assistant/route.ts`. Everything else
+is a server action.
 
 The reason is deployment: `Dockerfile` builds only `@openedu/web` and starts it with
 `pnpm --filter @openedu/web start`, and `docker-compose.yml` exposes a single port. A second service
@@ -70,26 +72,29 @@ of the rules.
 TypeScript owns the request path, the database, and the matching rules. Python is reserved for data
 ingestion: fetching, parsing, normalising, validating source records, and writing provenance rows.
 
-No Python exists in the repository yet, so the boundary is currently a plan rather than a running
-interface. When it lands it should write through the `DataSource`, `IngestionRun`, `SourceRecord`,
-`ChangeLog` and `VerificationRecord` tables and never touch student tables.
+`workers/data-ingestion` does exactly that through `DataSource`, `IngestionRun`, `SourceRecord` and
+`ChangeLog`, and opens a `ReviewQueueItem` when a record needs a person. It never touches student
+tables. The two sides share the database, not a library, so the boundary is the schema.
 
 ## AI provider abstraction
 
-The platform is meant to work with no AI configuration at all. Today that is true in the strongest
-sense: there is no provider client, no SDK dependency, and no route that calls a model.
+The platform works with no AI configuration at all, and that is still the default state. The provider
+is selected at request time from configuration, not at build time.
 
-What exists:
+- `apps/web/lib/ai/types.ts` defines `AiProvider` (`complete(messages, system)` returning text, model
+  and usage) and the citation shape. No vendor type escapes behind this interface.
+- `apps/web/lib/ai/gemini.ts` is the only implementation, a plain `fetch` against the Generative
+  Language API. There is no SDK dependency, so an unused key costs nothing at build time.
+- `apps/web/lib/ai/index.ts` returns `null` unless `GEMINI_API_KEY` is set and `AI_PROVIDER` names
+  `gemini`. `api/assistant` answers 503 in that case and `/assistant` renders read-only.
+- `apps/web/lib/ai/context.ts` retrieves catalogue rows by keyword, numbers them, and builds the
+  system prompt from them. Eligibility lines come from `evaluateOpportunity`, never from the model.
+- `api/assistant` persists the exchange to `AIConversation`/`AIMessage` with the citation list, and
+  writes `AIUsageRecord` per call. The student's academic summary is only included when the request
+  opts in; documents are never sent.
 
-- `apps/web/lib/env.ts` validates `AI_PROVIDER`, `GEMINI_API_KEY` and `GEMINI_MODEL`, and
-  `isAiConfigured()` reports whether a key is present. Nothing else reads the key.
-- `AIConversation`, `AIMessage` and `AIUsageRecord` tables, all empty.
-- `ConsentKind.AI_PROCESSING` in the consent enum.
-- `apps/web/lib/legal.ts` states plainly that the assistant is not enabled.
-
-So "works without an API key" is not a fallback path, it is the only path. When an assistant is added,
-the rule stays: the engine decides eligibility, and the model may only explain results built from
-catalogue rows.
+The rule that outlasts the provider: the engine decides eligibility, and the model may only explain
+results built from catalogue rows. Swapping vendors means one new class behind `AiProvider`.
 
 ## Decision log
 
@@ -158,6 +163,25 @@ Context: search had to work without a search service. Decision: university searc
 exactly that expression.
 Consequences: the SQL expression and the index must stay identical; programmes and scholarships use
 Prisma `contains` filters and have no index of their own.
+
+### 2026-11-05 — Exchange rates are stored, dated and shown as estimates
+
+Context: budget totals spanned several currencies and nothing converted them. Decision:
+`apps/web/lib/exchange-rates.ts` fetches Frankfurter (ECB reference rates), upserts `ExchangeRate`
+rows keyed by base, quote, rate date and source, and reuses a snapshot younger than 12 hours.
+Conversion divides by the stored quote-per-base rate; the budget page shows the source, rate date and
+a stale marker when the latest fetch failed.
+Consequences: totals keep their original currency and a conversion is always labelled an estimate. A
+missing rate shows "no reference rate" rather than a guessed number.
+
+### 2026-11-05 — Assistant is a route handler over retrieved rows, not an agent
+
+Context: the assistant had to cite records and stay off eligibility decisions. Decision: retrieval is
+a keyword query against the three catalogue tables, results are numbered `[n]` in the prompt, and the
+same list is stored on the message. There is no tool loop, no database access from the model, and no
+write path.
+Consequences: an answer can only mention what the query returned, and every reply carries its
+sources. The cost is that broad questions retrieve weakly; the prompt tells the model to say so.
 
 ### 2026-11-03 — Health check reports configuration, not secrets
 

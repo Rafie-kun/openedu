@@ -164,6 +164,76 @@ export function NoteForm({
   );
 }
 
+export function TaskForm({
+  action,
+  applicationId,
+}: {
+  action: (formData: FormData) => Promise<void>;
+  applicationId: string;
+}) {
+  return (
+    <form action={action} className="space-y-3">
+      <input type="hidden" name="applicationId" value={applicationId} />
+      <div className="grid gap-3 sm:grid-cols-[1.4fr_0.6fr]">
+        <div>
+          <label htmlFor="task-title" className="mb-1 block text-xs font-medium text-ink-soft">
+            Task
+          </label>
+          <Input
+            id="task-title"
+            name="title"
+            required
+            maxLength={160}
+            placeholder="e.g. Ask referee for a letter"
+          />
+        </div>
+        <div>
+          <label htmlFor="task-due" className="mb-1 block text-xs font-medium text-ink-soft">
+            Due
+          </label>
+          <Input id="task-due" name="dueAt" type="date" />
+        </div>
+      </div>
+      <Checkbox
+        id="task-required"
+        name="isRequired"
+        label="Required for this application"
+        defaultChecked
+      />
+      <Button type="submit" variant="secondary" size="sm">
+        Add task
+      </Button>
+    </form>
+  );
+}
+
+export function DocumentForm({
+  action,
+  applicationId,
+}: {
+  action: (formData: FormData) => Promise<void>;
+  applicationId: string;
+}) {
+  return (
+    <form action={action} className="space-y-3">
+      <input type="hidden" name="applicationId" value={applicationId} />
+      <label htmlFor="document-label" className="block text-xs font-medium text-ink-soft">
+        Document to collect
+      </label>
+      <Input
+        id="document-label"
+        name="label"
+        required
+        maxLength={160}
+        placeholder="e.g. Official transcript"
+      />
+      <Button type="submit" variant="secondary" size="sm">
+        Add to checklist
+      </Button>
+    </form>
+  );
+}
+
 export function PasswordChangeForm({ action }: { action: StateAction }) {
   const [state, formAction, pending] = useActionState(action, EMPTY_FORM_STATE);
   return (

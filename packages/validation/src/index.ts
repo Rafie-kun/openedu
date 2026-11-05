@@ -187,6 +187,21 @@ export const adminVerificationSchema = z.object({
   note: z.string().trim().max(1000).optional(),
 });
 
+export const assistantMessageSchema = z.object({
+  message: z.string().trim().min(2, "Ask a little more than that").max(2000),
+  includeProfile: z.coerce.boolean().default(false),
+});
+
+export const applicationTaskSchema = z.object({
+  title: z.string().trim().min(1).max(160),
+  dueAt: dateOnly.optional().or(z.literal("")),
+  isRequired: z.coerce.boolean().default(true),
+});
+
+export const applicationDocumentSchema = z.object({
+  label: z.string().trim().min(1).max(160),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().trim().max(120).optional(),
   country: z.string().trim().max(3).optional(),

@@ -34,18 +34,23 @@ Working today:
 - student profile, qualifications with subject-level results, predicted vs achieved grades, language tests
 - university, programme and scholarship pages with verification badges and source links
 - deterministic eligibility checks per programme and scholarship, including missing-data states
-- saved opportunities, application tracker with status history and private notes, in-app notifications
+- saved opportunities, application tracker with status history, private notes, tasks, a document checklist
+  and a deadline calendar that separates your own dates from catalogue dates
+- budget plans with Frankfurter reference rates, shown with their rate date and labelled as estimates
+- an optional assistant that answers from catalogue rows, cites them and stores the thread; it stays off
+  when no provider key is configured
 - qualification reference data for several international systems, plus a small set of real institutions
-- a Python ingestion worker with one working source adapter (ROR lookups), change detection and a review queue
+- a Python ingestion worker with ROR and OpenAlex adapters, change detection, and an admin review queue
+  and source registry
 
 Not built yet:
 
-- the admin application (review items are written to the database but nothing reads them yet)
+- an admin record editor. Programme, scholarship, deadline and visa tables are still empty, and the
+  platform does not invent rows to fill them
 - the Redis queue and the scheduler for the ingestion worker
 - document upload and storage
-- email delivery
-- the AI assistant UI (the provider abstraction and consent model exist, but nothing is enabled)
-- verified visa records. The visa page exists and will stay empty until official sources are recorded.
+- email delivery and notification generation
+- verified visa records. The visa page exists and will stay empty until official sources are recorded
 
 The catalogue currently contains institutions and reference data only. There are no invented
 scholarships, no invented deadlines and no guessed entry requirements. If a page looks empty, that is
