@@ -40,21 +40,36 @@ Working today:
 - an optional assistant that answers from catalogue rows, cites them and stores the thread; it stays off
   when no provider key is configured
 - qualification reference data for several international systems, plus a small set of real institutions
+- all 198 ISO 3166-1 countries seeded as reference rows (code, name, region only — no education-system or
+  visa claim attached to any of them)
 - a Python ingestion worker with ROR and OpenAlex adapters, change detection, and an admin review queue
   and source registry
+- admin editors for programmes, scholarships, and their sourced child records (admission requirements,
+  language conditions, tuition fees, deadlines, scholarship eligibility rules, funding components) at
+  `/admin/catalogue`, each starting unverified and checked individually against its own source
 
 Not built yet:
 
-- editors for requirements, fees, deadlines and visa records. Programmes and scholarships can be added
-  through `/admin/catalogue`, but the platform does not invent rows to fill the rest
+- real programme or scholarship data. The editors above can create and verify a record, but none has been
+  entered yet — that's a deliberately separate step, not something seeded in bulk
 - the Redis queue and the scheduler for the ingestion worker
 - document upload and storage
 - email delivery and notification generation
-- verified visa records. The visa page exists and will stay empty until official sources are recorded
+- verified visa records and a country directory page. Countries exist as reference rows; there is no
+  `/countries` route and the visa page stays empty until official sources are recorded
 
 The catalogue currently contains institutions and reference data only. There are no invented
 scholarships, no invented deadlines and no guessed entry requirements. If a page looks empty, that is
 the actual state of the data.
+
+## Documentation
+
+`docs/implementation-state.md` is the fastest way to see what's currently in progress, what's blocked, and
+what the next task is. `docs/product-spec.md` has the full product requirements; `docs/roadmap.md` has the
+phase order; `docs/status.md` has the phase-by-phase done/partial/not-started breakdown. The privacy and
+security audit lives in `docs/privacy.md`, `docs/security.md`, `docs/threat-model.md`,
+`docs/cookie-inventory.md`, `docs/data-flow.md` and `docs/legal-review-checklist.md` — none of it claims
+legal compliance; it states what's implemented and what still needs a qualified reviewer.
 
 ## Stack
 
@@ -87,9 +102,9 @@ On Windows, copy the env file with `Copy-Item .env.example .env`.
 `AUTH_SECRET` must be at least 32 characters. Generate one with `openssl rand -base64 32` or any
 equivalent. Never commit your `.env`.
 
-The app runs at http://localhost:3000. The seed loads countries, grade scales, qualification types,
-subjects, degree types, currencies and a handful of institutions marked `UNVERIFIED`. It does not load
-fake requirements.
+The app runs at http://localhost:3000. The seed loads all 198 countries, grade scales, qualification
+types, subjects, degree types, currencies and a handful of institutions marked `UNVERIFIED`. It does not
+load fake requirements, programmes or scholarships.
 
 ### Checks
 
