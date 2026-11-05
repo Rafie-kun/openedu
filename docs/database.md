@@ -198,7 +198,7 @@ twice to prove the seed is idempotent.
 
 | Table               | Rows | Notes                                                                                           |
 | ------------------- | ---: | ----------------------------------------------------------------------------------------------- |
-| `Country`           |   65 | ISO codes, names and regions only. No education-system claims                                   |
+| `Country`           |  198 | Every ISO 3166-1 country, ISO codes, names and regions only. No education-system or visa claims |
 | `GradeScale`        |    7 | Cambridge A Level, Cambridge IGCSE, IB DP, AP 1-5, WASSCE, Bangladesh HSC GPA, percentage       |
 | `GradeBand`         |   51 | Labels and ranks per scale; ranks are what the engine compares                                  |
 | `QualificationType` |    9 | Cambridge A Level and IGCSE, Edexcel IAL and IGCSE, IB DP, AP, WASSCE, Bangladesh HSC, CBSE XII |
