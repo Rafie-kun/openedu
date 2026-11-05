@@ -164,6 +164,15 @@ exactly that expression.
 Consequences: the SQL expression and the index must stay identical; programmes and scholarships use
 Prisma `contains` filters and have no index of their own.
 
+### 2026-11-05 — Manual catalogue entry is separate from verification
+
+Context: the catalogue had models but no way to add a real programme or scholarship, and seeding
+invented rows is not acceptable. Decision: `/admin/catalogue` creates a record from an official URL and
+the source page an admin says they opened, always as `PENDING_REVIEW`. A separate action marks it
+checked, sets `lastCheckedAt`, writes a `VerificationRecord` and audits the change.
+Consequences: entering a record never claims it is verified, and the public badge reflects the second
+step. Creating a scholarship also creates or reuses its provider by slug.
+
 ### 2026-11-05 — Exchange rates are stored, dated and shown as estimates
 
 Context: budget totals spanned several currencies and nothing converted them. Decision:

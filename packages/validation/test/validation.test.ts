@@ -6,8 +6,10 @@ import {
   languageTestSchema,
   loginSchema,
   profileSchema,
+  programmeCreateSchema,
   qualificationSchema,
   registerSchema,
+  scholarshipCreateSchema,
 } from "../src/index";
 
 describe("registerSchema", () => {
@@ -118,5 +120,55 @@ describe("applicationDocumentSchema", () => {
     const parsed = applicationDocumentSchema.safeParse({ label: "  Transcript  " });
     expect(parsed.success).toBe(true);
     if (parsed.success) expect(parsed.data.label).toBe("Transcript");
+  });
+});
+
+describe("programmeCreateSchema", () => {
+  const base = {
+    universityId: "u1",
+    title: "BSc Computer Science",
+    degreeLevel: "UNDERGRADUATE",
+    officialUrl: "https://example.edu/bsc",
+    sourceUrl: "https://example.edu/bsc",
+  };
+
+  it("accepts a record without a duration", () => {
+    const parsed = programmeCreateSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.durationMonths).toBeUndefined();
+  });
+
+  it("rejects a source that is not a URL", () => {
+    expect(programmeCreateSchema.safeParse({ ...base, sourceUrl: "not a url" }).success).toBe(
+      false,
+    );
+  });
+
+  it("rejects an unknown degree level", () => {
+    expect(programmeCreateSchema.safeParse({ ...base, degreeLevel: "BACHELOR" }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe("scholarshipCreateSchema", () => {
+  const base = {
+    name: "Example Global Scholarship",
+    providerName: "Example Foundation",
+    officialUrl: "https://example.org/scholarship",
+    sourceUrl: "https://example.org/scholarship",
+  };
+
+  it("defaults degree levels to an empty list", () => {
+    const parsed = scholarshipCreateSchema.safeParse(base);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.degreeLevels).toEqual([]);
+  });
+
+  it("keeps only known degree levels", () => {
+    expect(
+      scholarshipCreateSchema.safeParse({ ...base, degreeLevels: ["UNDERGRADUATE", "PHD"] })
+        .success,
+    ).toBe(false);
   });
 });

@@ -1,11 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { db } from "@openedu/database";
-import { candidatePromotionSchema, reviewDecisionSchema } from "@openedu/validation";
+import {
+  adminVerificationSchema,
+  candidatePromotionSchema,
+  programmeCreateSchema,
+  reviewDecisionSchema,
+  scholarshipCreateSchema,
+} from "@openedu/validation";
 import { audit } from "@/lib/audit";
 import { draftFromPayload, slugify, uniqueSlug } from "@/lib/candidates";
-import { fieldErrorsFrom, readString, type FormState } from "@/lib/forms";
+import { fieldErrorsFrom, readAll, readString, type FormState } from "@/lib/forms";
 import { requireAdmin } from "@/lib/session";
 
 async function openReviewItem(reviewId: string) {
@@ -231,4 +238,244 @@ export async function promoteCandidateAction(
   revalidatePath("/universities");
   revalidatePath(`/universities/${slug}`);
   return { success: `${created.name} was added as an unverified institution.` };
+}
+
+async function freeProgrammeSlug(base: string): Promise<string> {
+  const root = slugify(base) || "programme";
+  const taken = await db.programme.findMany({
+    where: { slug: { startsWith: root } },
+    select: { slug: true },
+  });
+  return uniqueSlug(
+    root,
+    taken.map((row) => row.slug),
+  );
+}
+
+async function freeScholarshipSlug(base: string): Promise<string> {
+  const root = slugify(base) || "scholarship";
+  const taken = await db.scholarship.findMany({
+    where: { slug: { startsWith: root } },
+    select: { slug: true },
+  });
+  return uniqueSlug(
+    root,
+    taken.map((row) => row.slug),
+  );
+}
+
+export async function createProgrammeAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const admin = await requireAdmin();
+  const parsed = programmeCreateSchema.safeParse({
+    universityId: readString(formData, "universityId"),
+    title: readString(formData, "title"),
+    degreeLevel: readString(formData, "degreeLevel"),
+    durationMonths: readString(formData, "durationMonths") || undefined,
+    officialUrl: readString(formData, "officialUrl"),
+    sourceUrl: readString(formData, "sourceUrl"),
+    tuitionSummary: readString(formData, "tuitionSummary") || undefined,
+  });
+  if (!parsed.success) {
+    return {
+      error: "Check the highlighted fields.",
+      fieldErrors: fieldErrorsFrom(parsed.error.issues),
+    };
+  }
+
+  const university = await db.university.findUnique({
+    where: { id: parsed.data.universityId },
+    select: { id: true, name: true },
+  });
+  if (!university) {
+    return {
+      error: "That institution is not in the catalogue.",
+      fieldErrors: { universityId: "Pick one from the list" },
+    };
+  }
+
+  const duplicate = await db.programme.findFirst({
+    where: { universityId: university.id, officialUrl: parsed.data.officialUrl },
+    select: { slug: true },
+  });
+  if (duplicate) {
+    return {
+      error: "This programme page is already recorded for that institution.",
+      fieldErrors: { officialUrl: "Already recorded" },
+    };
+  }
+
+  const slug = await freeProgrammeSlug(`${university.name} ${parsed.data.title}`);
+
+  const created = await db.programme.create({
+    data: {
+      slug,
+      universityId: university.id,
+      title: parsed.data.title,
+      degreeLevel: parsed.data.degreeLevel,
+      durationMonths: parsed.data.durationMonths ?? null,
+      officialUrl: parsed.data.officialUrl,
+      sourceUrl: parsed.data.sourceUrl,
+      tuitionSummary: parsed.data.tuitionSummary ?? null,
+      verificationStatus: "PENDING_REVIEW",
+    },
+    select: { id: true, slug: true, title: true },
+  });
+
+  await audit({
+    actorId: admin.id,
+    action: "admin.programme_created",
+    entityType: "Programme",
+    entityId: created.id,
+    metadata: { universityId: university.id, sourceUrl: parsed.data.sourceUrl },
+  });
+
+  revalidatePath("/admin/catalogue");
+  revalidatePath("/programmes");
+  redirect(`/programmes/${created.slug}`);
+}
+
+export async function createScholarshipAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const admin = await requireAdmin();
+  const parsed = scholarshipCreateSchema.safeParse({
+    name: readString(formData, "name"),
+    providerName: readString(formData, "providerName"),
+    hostCountryId: readString(formData, "hostCountryId") || undefined,
+    degreeLevels: readAll(formData, "degreeLevels"),
+    officialUrl: readString(formData, "officialUrl"),
+    sourceUrl: readString(formData, "sourceUrl"),
+    description: readString(formData, "description") || undefined,
+  });
+  if (!parsed.success) {
+    return {
+      error: "Check the highlighted fields.",
+      fieldErrors: fieldErrorsFrom(parsed.error.issues),
+    };
+  }
+
+  const duplicate = await db.scholarship.findFirst({
+    where: { officialUrl: parsed.data.officialUrl },
+    select: { slug: true },
+  });
+  if (duplicate) {
+    return {
+      error: "A scholarship with this official page is already recorded.",
+      fieldErrors: { officialUrl: "Already recorded" },
+    };
+  }
+
+  const provider = await db.scholarshipProvider.upsert({
+    where: { slug: slugify(parsed.data.providerName) || "provider" },
+    update: {},
+    create: {
+      slug: slugify(parsed.data.providerName) || "provider",
+      name: parsed.data.providerName,
+      countryId: parsed.data.hostCountryId || null,
+      websiteUrl: parsed.data.officialUrl,
+      verificationStatus: "PENDING_REVIEW",
+      sourceUrl: parsed.data.sourceUrl,
+    },
+    select: { id: true, name: true },
+  });
+
+  const slug = await freeScholarshipSlug(parsed.data.name);
+
+  const created = await db.scholarship.create({
+    data: {
+      slug,
+      name: parsed.data.name,
+      providerId: provider.id,
+      hostCountryId: parsed.data.hostCountryId || null,
+      degreeLevels: parsed.data.degreeLevels,
+      description: parsed.data.description ?? null,
+      officialUrl: parsed.data.officialUrl,
+      sourceUrl: parsed.data.sourceUrl,
+      verificationStatus: "PENDING_REVIEW",
+    },
+    select: { id: true, slug: true, name: true },
+  });
+
+  await audit({
+    actorId: admin.id,
+    action: "admin.scholarship_created",
+    entityType: "Scholarship",
+    entityId: created.id,
+    metadata: { providerId: provider.id, sourceUrl: parsed.data.sourceUrl },
+  });
+
+  revalidatePath("/admin/catalogue");
+  revalidatePath("/scholarships");
+  redirect(`/scholarships/${created.slug}`);
+}
+
+export async function setCatalogueVerificationAction(formData: FormData): Promise<void> {
+  const admin = await requireAdmin();
+  const parsed = adminVerificationSchema.safeParse({
+    entityType: readString(formData, "entityType"),
+    entityId: readString(formData, "entityId"),
+    status: readString(formData, "status"),
+    note: readString(formData, "note") || undefined,
+  });
+  if (!parsed.success) return;
+
+  const { entityType, entityId, status } = parsed.data;
+  const checkedAt = status === "VERIFIED" || status === "PARTIALLY_VERIFIED" ? new Date() : null;
+
+  let slug: string | null = null;
+  let sourceUrl: string | null = null;
+
+  if (entityType === "Programme") {
+    const record = await db.programme.findUnique({
+      where: { id: entityId },
+      select: { slug: true, sourceUrl: true },
+    });
+    if (!record) return;
+    slug = record.slug;
+    sourceUrl = record.sourceUrl;
+    await db.programme.update({
+      where: { id: entityId },
+      data: { verificationStatus: status, lastCheckedAt: checkedAt },
+    });
+  } else if (entityType === "Scholarship") {
+    const record = await db.scholarship.findUnique({
+      where: { id: entityId },
+      select: { slug: true, sourceUrl: true },
+    });
+    if (!record) return;
+    slug = record.slug;
+    sourceUrl = record.sourceUrl;
+    await db.scholarship.update({
+      where: { id: entityId },
+      data: { verificationStatus: status, lastCheckedAt: checkedAt },
+    });
+  } else {
+    return;
+  }
+
+  await db.verificationRecord.create({
+    data: {
+      entityType,
+      entityId,
+      status,
+      checkedById: admin.id,
+      sourceUrl,
+      note: parsed.data.note ?? null,
+    },
+  });
+
+  await audit({
+    actorId: admin.id,
+    action: "admin.catalogue_verification_set",
+    entityType,
+    entityId,
+    metadata: { status, sourceUrl },
+  });
+
+  revalidatePath("/admin/catalogue");
+  revalidatePath(entityType === "Programme" ? `/programmes/${slug}` : `/scholarships/${slug}`);
 }

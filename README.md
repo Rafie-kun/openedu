@@ -45,8 +45,8 @@ Working today:
 
 Not built yet:
 
-- an admin record editor. Programme, scholarship, deadline and visa tables are still empty, and the
-  platform does not invent rows to fill them
+- editors for requirements, fees, deadlines and visa records. Programmes and scholarships can be added
+  through `/admin/catalogue`, but the platform does not invent rows to fill the rest
 - the Redis queue and the scheduler for the ingestion worker
 - document upload and storage
 - email delivery and notification generation

@@ -187,6 +187,26 @@ export const adminVerificationSchema = z.object({
   note: z.string().trim().max(1000).optional(),
 });
 
+export const programmeCreateSchema = z.object({
+  universityId: z.string().min(1, "Pick a university"),
+  title: z.string().trim().min(2).max(300),
+  degreeLevel: z.enum(degreeLevels),
+  durationMonths: z.coerce.number().int().min(1).max(144).optional(),
+  officialUrl: z.url("Use the full https:// address"),
+  sourceUrl: z.url("Use the full https:// address"),
+  tuitionSummary: z.string().trim().max(300).optional(),
+});
+
+export const scholarshipCreateSchema = z.object({
+  name: z.string().trim().min(2).max(300),
+  providerName: z.string().trim().min(2).max(300),
+  hostCountryId: z.string().min(1).optional().or(z.literal("")),
+  degreeLevels: z.array(z.enum(degreeLevels)).max(7).default([]),
+  officialUrl: z.url("Use the full https:// address"),
+  sourceUrl: z.url("Use the full https:// address"),
+  description: z.string().trim().max(1000).optional(),
+});
+
 export const assistantMessageSchema = z.object({
   message: z.string().trim().min(2, "Ask a little more than that").max(2000),
   includeProfile: z.coerce.boolean().default(false),
