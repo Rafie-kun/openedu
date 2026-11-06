@@ -219,7 +219,7 @@ export function Checkbox({
   label,
   description,
   ...props
-}: ComponentProps<"input"> & { label: string; description?: string }) {
+}: ComponentProps<"input"> & { label: ReactNode; description?: string }) {
   const id = props.id ?? props.name;
   return (
     <div className="flex items-start gap-3">

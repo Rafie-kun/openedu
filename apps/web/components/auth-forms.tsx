@@ -65,13 +65,27 @@ export function RegisterForm({ action }: { action: Action }) {
         <Checkbox
           id="acceptTerms"
           name="acceptTerms"
-          label="I accept the terms of service"
+          label={
+            <>
+              I accept the{" "}
+              <Link href="/legal/terms" target="_blank" className="quiet-link">
+                terms of service
+              </Link>
+            </>
+          }
           description="Read them first — they are short and honest about what this platform cannot do."
         />
         <Checkbox
           id="acceptPrivacy"
           name="acceptPrivacy"
-          label="I have read the privacy notice"
+          label={
+            <>
+              I have read the{" "}
+              <Link href="/legal/privacy" target="_blank" className="quiet-link">
+                privacy notice
+              </Link>
+            </>
+          }
           description="Your grades and profile stay private to your account."
         />
       </div>
