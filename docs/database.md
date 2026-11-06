@@ -70,7 +70,8 @@ Funding is recorded per component (`TUITION`, `STIPEND`, `ACCOMMODATION`, and so
 | `MatchResult`            | Outcome, engine version, completeness, optional rule version |
 | `MatchRequirementResult` | Per-requirement status, evidence, source URL and check date  |
 
-Nothing writes `MatchResult` today; evaluations are computed per request.
+`lib/eligibility.ts` writes a `MatchResult` row and its `MatchRequirementResult` children on every
+evaluation, in addition to computing it live and returning it to the caller — see `docs/matching-engine.md`.
 
 ### Applications and saved items (6)
 

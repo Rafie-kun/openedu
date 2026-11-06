@@ -147,6 +147,16 @@ Do not add a rule that reads the AI provider, the network, or the clock other th
 | Only predicted grade for a grade requirement      | `NEEDS_CONFIRMATION`, `POTENTIALLY_ELIGIBLE`                   |
 | Requirement carries a source                      | `sourceUrl` and `lastCheckedAt` copied to the result           |
 
+## Persistence
+
+`apps/web/lib/eligibility.ts`'s `evaluateProgrammeForProfile`/`evaluateScholarshipForProfile` always compute
+live, then write the result: a `MatchResult` row (outcome, `engineVersion`, `dataCompleteness`, summary) plus
+one `MatchRequirementResult` row per requirement (status, evidence, source, `lastCheckedAt`), in a single
+transaction. Every call appends a new row rather than overwriting — this is a history, not a cache; nothing
+reads a persisted row instead of recomputing, and nothing prunes old rows yet. `MatchingRuleVersion` stays
+unused: the engine has no versioned rule table to point `ruleVersionId` at, only `ENGINE_VERSION`'s semver
+string, which is what gets stored instead.
+
 ## Known gaps
 
 - `bestRecordedGrade` is exported from `packages/matching/src/index.ts` but no application code calls

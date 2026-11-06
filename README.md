@@ -46,7 +46,11 @@ Working today:
   and source registry
 - admin editors for programmes, scholarships, and their sourced child records (admission requirements,
   language conditions, tuition fees, deadlines, scholarship eligibility rules, funding components) at
-  `/admin/catalogue`, each starting unverified and checked individually against its own source
+  `/admin/catalogue`, each starting unverified and checked individually against its own source; archiving
+  one removes it from public pages and from matching immediately
+- every eligibility check is persisted: a `MatchResult` row plus a `MatchRequirementResult` per requirement,
+  written alongside the live evaluation shown to the student, with the engine version and completeness
+  recorded
 
 Not built yet:
 

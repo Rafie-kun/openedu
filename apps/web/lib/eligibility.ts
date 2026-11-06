@@ -174,6 +174,39 @@ export function scholarshipSnapshot(scholarship: ScholarshipRules): OpportunityS
   };
 }
 
+async function persistMatchResult(
+  profileId: string,
+  target: { programmeId?: string; scholarshipId?: string },
+  evaluation: MatchEvaluation,
+): Promise<void> {
+  await db.$transaction(async (tx) => {
+    const matchResult = await tx.matchResult.create({
+      data: {
+        profileId,
+        programmeId: target.programmeId ?? null,
+        scholarshipId: target.scholarshipId ?? null,
+        outcome: evaluation.outcome,
+        engineVersion: evaluation.engineVersion,
+        dataCompleteness: evaluation.completeness,
+        summary: evaluation.summary,
+      },
+    });
+    await tx.matchRequirementResult.createMany({
+      data: evaluation.results.map((result) => ({
+        matchResultId: matchResult.id,
+        requirementKey: result.key,
+        requirementLabel: result.label,
+        kind: result.kind,
+        status: result.status,
+        evidence: result.evidence,
+        sourceUrl: result.sourceUrl,
+        lastCheckedAt: result.lastCheckedAt ? new Date(result.lastCheckedAt) : null,
+        isMandatory: result.isMandatory,
+      })),
+    });
+  });
+}
+
 export async function evaluateProgrammeForProfile(
   profileId: string,
   programmeId: string,
@@ -183,7 +216,9 @@ export async function evaluateProgrammeForProfile(
     loadProgrammeForMatching(programmeId),
   ]);
   if (!snapshot || !programme) return null;
-  return evaluateOpportunity(programmeSnapshot(programme), snapshot);
+  const evaluation = evaluateOpportunity(programmeSnapshot(programme), snapshot);
+  await persistMatchResult(profileId, { programmeId }, evaluation);
+  return evaluation;
 }
 
 export async function evaluateScholarshipForProfile(
@@ -195,5 +230,22 @@ export async function evaluateScholarshipForProfile(
     loadScholarshipForMatching(scholarshipId),
   ]);
   if (!snapshot || !scholarship) return null;
-  return evaluateOpportunity(scholarshipSnapshot(scholarship), snapshot);
+  const evaluation = evaluateOpportunity(scholarshipSnapshot(scholarship), snapshot);
+  await persistMatchResult(profileId, { scholarshipId }, evaluation);
+  return evaluation;
+}
+
+export async function latestMatchResult(
+  profileId: string,
+  target: { programmeId?: string; scholarshipId?: string },
+) {
+  return db.matchResult.findFirst({
+    where: {
+      profileId,
+      programmeId: target.programmeId ?? null,
+      scholarshipId: target.scholarshipId ?? null,
+    },
+    orderBy: { generatedAt: "desc" },
+    include: { requirementResults: true },
+  });
 }

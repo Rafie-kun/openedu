@@ -5,28 +5,34 @@ For the full phase-by-phase picture see `docs/status.md`; for the backlog order 
 
 ## Current milestone
 
-M3, Part 1 of 3 (country reference data) complete, pending commit/push. Parts 2 (real institution pilot)
-and 3 (source documentation) each need separate explicit go-ahead before starting, per the user's
-instruction to split M3 into three confirmed parts.
+Milestone 4 (persistent eligibility) complete. Milestone 3 Part 2 (real institution/programme/scholarship
+pilot) was scoped down this session: live per-fact verification of specific programme/scholarship data from
+official pages was not completed (see below), so no programme or scholarship row was entered. Part 3 (source
+documentation) is covered by the existing `docs/data-sources.md`, which already states accurately that no
+programme/scholarship is seeded — no change was needed there this session.
 
 ## Last completed milestone
 
-M3 Part 1 — `packages/database/prisma/seed.ts`'s `COUNTRIES` array expanded from 72 to all 198 ISO 3166-1
-countries (codes, name, region only — no education-system or visa-route claim attached to any entry, since
-that would require per-country sourcing that belongs in Part 2/3, not bulk reference data).
+Milestone 4 — `apps/web/lib/eligibility.ts` now persists every evaluation: a `MatchResult` row (outcome,
+`engineVersion`, `dataCompleteness`, summary) plus one `MatchRequirementResult` per requirement, written in
+a transaction after the live computation. `latestMatchResult` reads the most recent row for a profile/target
+pair. See `docs/matching-engine.md` "Persistence" for exactly what is and is not covered (it is a history,
+not a cache or a staleness check).
 
 ## Last verified commit
 
-`09e1652` — "docs: update implementation-state with M2 commit" (`master`). The Part 1 commit described
-here is not yet made.
+`4a60f3e` — "fix(auth): hyperlink terms and privacy notice in the register form" (`master`). The persistence
+work described here is not yet committed.
 
 ## Current blockers
 
+- Milestone 3 Part 2 is still blocked on the same constraint as before: entering a real programme or
+  scholarship requires per-fact verification against a live official page (exact requirement wording, fee,
+  deadline). Attempted this session for DAAD's scholarship database; its page is a JS-rendered search UI
+  with no fetchable static facts, so nothing was entered rather than guessing at numbers.
 - Docker Desktop's daemon is not running on this machine, so Postgres on 5432 is unreachable locally. The
-  expanded `COUNTRIES` array has not been run against a live database this session — only typechecked and
-  checked programmatically for duplicate ISO codes (198 rows, zero duplicates).
-- M3 Part 2 (real institution/programme/scholarship pilot) needs the user's explicit go-ahead and, ideally,
-  their steer on which handful of countries/institutions to prioritise for low-grade-friendly entry routes.
+  new `MatchResult`/`MatchRequirementResult` writes are typechecked and build-tested but not run against a
+  live database this session.
 - Every item in `docs/legal-review-checklist.md`'s "Blocking" section remains open.
 - Pre-existing, not yet fixed: `adminVerificationSchema`'s `entityType` enum still lists `University` and
   `VisaCategory`, which `applyCatalogueVerification` has no case for.
@@ -34,17 +40,20 @@ here is not yet made.
 
 ## Most important next task
 
-Present the requested list — countries plus a handful of real institutions known for low/standard-grade
-entry routes for international students — and get the user's go-ahead for M3 Part 2 before entering any
-programme or scholarship data.
+Milestone 3 Part 2 needs a different approach than "enter data from memory": either the user supplies
+specific official pages with known-current facts to transcribe, or a live-browser/fetch pass is run per
+institution before any row is entered. Until then, the honest state is a country directory with no
+programme or scholarship data to match against.
 
 ## Last successful checks
 
-`pnpm format` / `format:check`, `pnpm turbo run typecheck test` (12/12 tasks) after the `COUNTRIES` change.
-No live seed run (`pnpm db:seed`) against Postgres this session — Docker is down locally.
+`pnpm db:generate`, `pnpm turbo run typecheck` (6/6), `pnpm turbo run test build` (7/7, 86 tests). No live
+seed run or manual DB-backed click-through this session — Docker is down locally.
 
-## Relevant files for the active task (M3 Part 2, once approved)
+## Relevant files for the active task
 
-- `apps/web/app/admin/catalogue/page.tsx`, `apps/web/app/admin/catalogue/[kind]/[id]/page.tsx`
-- `apps/web/app/actions/admin.ts` (`promoteCandidateAction`, `createProgrammeAction`, `createScholarshipAction`)
-- `docs/data-sources.md`, `docs/status.md`
+- `apps/web/lib/eligibility.ts`, `packages/database/prisma/schema.prisma` (`MatchResult`,
+  `MatchRequirementResult`, `MatchingRuleVersion`)
+- `docs/matching-engine.md`, `docs/database.md`, `docs/status.md`
+- For M3 Part 2 when resumed: `apps/web/app/admin/catalogue/[kind]/[id]/page.tsx`,
+  `apps/web/app/actions/admin.ts`, `docs/data-sources.md`
