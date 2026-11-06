@@ -781,6 +781,399 @@ const UNIVERSITIES: Array<{
     websiteUrl: "https://www.du.ac.bd/",
     type: "PUBLIC",
   },
+  {
+    slug: "university-of-lodz",
+    name: "University of Lodz",
+    officialName: "Uniwersytet Łódzki",
+    countryIso2: "PL",
+    city: "Łódź",
+    websiteUrl: "https://www.uni.lodz.pl/en",
+    type: "PUBLIC",
+  },
+  {
+    slug: "ucsi-university",
+    name: "UCSI University",
+    officialName: "UCSI University",
+    countryIso2: "MY",
+    city: "Springhill, Negeri Sembilan",
+    websiteUrl: "https://www.ucsiuniversity.edu.my/",
+    type: "PRIVATE",
+  },
+  {
+    slug: "ravensbourne-university-london",
+    name: "Ravensbourne University London",
+    officialName: "Ravensbourne University London",
+    countryIso2: "GB",
+    city: "London",
+    websiteUrl: "https://www.ravensbourne.ac.uk/",
+    type: "OTHER",
+  },
+  {
+    slug: "university-of-the-people",
+    name: "University of the People",
+    officialName: "University of the People",
+    countryIso2: "US",
+    city: "Pasadena, California",
+    websiteUrl: "https://www.uopeople.edu/",
+    type: "OTHER",
+  },
+];
+
+// Collected 2026-11-06 from each programme's live official page; source URLs below are those pages.
+// Every figure, requirement and deadline is transcribed as published — nothing estimated or converted.
+const PROGRAMMES: Array<{
+  universitySlug: string;
+  slug: string;
+  title: string;
+  degreeLevel: "FOUNDATION" | "UNDERGRADUATE" | "POSTGRADUATE";
+  durationMonths: number | null;
+  officialUrl: string;
+  sourceUrl: string;
+  admissionRequirements: Array<{
+    kind: "QUALIFICATION" | "SUBJECT" | "OTHER";
+    label: string;
+    description: string;
+    sourceUrl: string;
+  }>;
+  languageRequirements: Array<{
+    testCode: string;
+    minimumScore: string;
+    scaleNote: string | null;
+    sourceUrl: string;
+  }>;
+  tuitionFees: Array<{
+    amount: string | null;
+    currencyCode: string;
+    period: string;
+    notes: string;
+    sourceUrl: string;
+  }>;
+  deadlines: Array<{
+    label: string;
+    opensAt: string | null;
+    closesAt: string | null;
+    sourceUrl: string;
+  }>;
+}> = [
+  {
+    universitySlug: "university-of-lodz",
+    slug: "lodz-business-management-ba",
+    title: "Business Management (full-time first cycle studies, in English)",
+    degreeLevel: "UNDERGRADUATE",
+    durationMonths: 36,
+    officialUrl:
+      "https://www.rekrutacja.uni.lodz.pl/en-gb/offer/WYZSZE2026C/programme/DLBMa_08/criteria/preview/turn/1/",
+    sourceUrl: "https://www.uni.lodz.pl/en/ba-bachelors-degree",
+    admissionRequirements: [
+      {
+        kind: "QUALIFICATION",
+        label: "Secondary school-leaving certificate, IB diploma, EB diploma, or equivalent",
+        description:
+          "A secondary school-leaving certificate, International Baccalaureate diploma, European Baccalaureate diploma, or a foreign certificate entitling the holder to undertake higher education in the country where it was issued, plus a transcript of records.",
+        sourceUrl:
+          "https://www.uni.lodz.pl/en/candidate-zone/information-for-candidates-without-polish-citizenship/how-to-apply-for-ba-bachelors-for-candidates-who-do-not-hold-polish-citizenship",
+      },
+      {
+        kind: "SUBJECT",
+        label: "English plus one of Physics, Geography, History, IT or Mathematics",
+        description:
+          "English is an obligatory subject. One additional obligatory subject must be selected from Physics, Geography, History, Information Technology, Mathematics, or a foreign language.",
+        sourceUrl:
+          "https://www.rekrutacja.uni.lodz.pl/en-gb/offer/WYZSZE2026C/programme/DLBMa_08/criteria/preview/turn/1/",
+      },
+      {
+        kind: "OTHER",
+        label: "Entrance exam for applicants without IB/EB or a recognised-equivalent certificate",
+        description:
+          "Applicants with certificates from outside the EU/OECD/EFTA, or without an IB/EB diploma or a document recognised under an international agreement, take an entrance exam. The university states the absence of national examination results does not disqualify the candidate but awards points only at the basic level.",
+        sourceUrl:
+          "https://www.uni.lodz.pl/en/candidate-zone/information-for-candidates-without-polish-citizenship/how-to-apply-for-ba-bachelors-for-candidates-who-do-not-hold-polish-citizenship",
+      },
+    ],
+    languageRequirements: [
+      {
+        testCode: "IELTS",
+        minimumScore: "6.0",
+        scaleNote: "English at B2 or above; IELTS 6.0 and TOEFL iBT 87 given as examples",
+        sourceUrl:
+          "https://www.uni.lodz.pl/en/candidate-zone/information-for-candidates-without-polish-citizenship/how-to-apply-for-ba-bachelors-for-candidates-who-do-not-hold-polish-citizenship",
+      },
+    ],
+    tuitionFees: [
+      {
+        amount: "2500",
+        currencyCode: "EUR",
+        period: "YEAR",
+        notes:
+          "Listed as the programme tuition fee; the page does not explicitly label this as the international-student fee specifically.",
+        sourceUrl: "https://www.uni.lodz.pl/en/ba-bachelors-degree",
+      },
+    ],
+    deadlines: [
+      {
+        label:
+          "2026 intake registration and application-fee payment (passed; next intake not yet published)",
+        opensAt: "2026-05-07",
+        closesAt: "2026-07-13",
+        sourceUrl:
+          "https://www.rekrutacja.uni.lodz.pl/en-gb/offer/WYZSZE2026C/programme/DLBMa_08/criteria/preview/turn/1/",
+      },
+    ],
+  },
+  {
+    universitySlug: "ucsi-university",
+    slug: "ucsi-foundation-in-arts",
+    title: "Foundation in Arts",
+    degreeLevel: "FOUNDATION",
+    durationMonths: 12,
+    officialUrl: "https://www.ucsiuniversity.edu.my/programmes/foundation-in-arts/",
+    sourceUrl: "https://www.ucsiuniversity.edu.my/programmes/foundation-in-arts/",
+    admissionRequirements: [
+      {
+        kind: "QUALIFICATION",
+        label: "SPM/O-Levels 5 credits, UEC 3 credits, or recognised equivalent",
+        description:
+          "SPM/O-levels with 5 credits; UEC with 3 credits; or any other equivalent qualification recognised by the Malaysian Government.",
+        sourceUrl: "https://www.ucsiuniversity.edu.my/programmes/foundation-in-arts/",
+      },
+    ],
+    languageRequirements: [
+      {
+        testCode: "IELTS",
+        minimumScore: "4.0",
+        scaleNote:
+          "Exemption threshold from Basic/Foundation English modules, not a hard admission minimum; TOEFL 30-31 and MUET Band 2 given as alternative exemption scores. Below SPM English B+ and no exemption score requires taking Basic English (SE004) before English Foundation (SE005) during the year.",
+        sourceUrl: "https://www.ucsiuniversity.edu.my/programmes/foundation-in-arts/",
+      },
+    ],
+    tuitionFees: [
+      {
+        amount: "40006",
+        currencyCode: "MYR",
+        period: "TOTAL",
+        notes:
+          "Approximate total fee for international students for the full programme; the university states the final amount can vary with visa-processing and administrative charges.",
+        sourceUrl: "https://www.ucsiuniversity.edu.my/programmes/foundation-in-arts/",
+      },
+    ],
+    deadlines: [],
+  },
+  {
+    universitySlug: "ravensbourne-university-london",
+    slug: "ravensbourne-business-management-international-year-one",
+    title: "BSc (Hons) Business Management with International Year One",
+    degreeLevel: "UNDERGRADUATE",
+    durationMonths: 36,
+    officialUrl:
+      "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+    sourceUrl:
+      "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+    admissionRequirements: [
+      {
+        kind: "QUALIFICATION",
+        label: "GCSE English grade 4+ plus one of several listed alternative qualifications",
+        description:
+          "GCSE Grade 4 or above in English, plus one of: two A Levels at grade CC or above; BTEC Extended Diploma at grade MPP; UAL Level 3 Extended Diploma; T Level (pass or above); Access to Higher Education Diploma; International Baccalaureate at grade 24 or above; or other/mixed qualifications equivalent to 64 UCAS Tariff points.",
+        sourceUrl:
+          "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+      },
+      {
+        kind: "OTHER",
+        label:
+          "Designed for applicants who don't meet direct-entry requirements for the standard degree",
+        description:
+          "The university describes the programme as an ideal pathway for students who want to join the Business Management degree at Ravensbourne but don't meet the direct entry requirements; the first year combines business modules with English-language and academic study support.",
+        sourceUrl:
+          "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+      },
+    ],
+    languageRequirements: [
+      {
+        testCode: "IELTS",
+        minimumScore: "5.5",
+        scaleNote:
+          "Overall 5.5, no component below 5.5, or an equivalent English-language qualification",
+        sourceUrl:
+          "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+      },
+    ],
+    tuitionFees: [
+      {
+        amount: "18950",
+        currencyCode: "GBP",
+        period: "YEAR",
+        notes:
+          "International-student fee for 2026-27 entry only; the university states it is subject to change for 2027-28 entry.",
+        sourceUrl:
+          "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+      },
+    ],
+    deadlines: [
+      {
+        label: "Intake starts (no fixed application deadline published)",
+        opensAt: null,
+        closesAt: "2027-01-01",
+        sourceUrl:
+          "https://www.ravensbourne.ac.uk/study/undergraduate/bsc-hons-business-management-international-year-one",
+      },
+    ],
+  },
+];
+
+const SCHOLARSHIP_PROVIDERS: Array<{
+  slug: string;
+  name: string;
+  type: "GOVERNMENT" | "UNIVERSITY" | "PRIVATE" | "FOUNDATION" | "CHARITY" | "OTHER";
+  countryIso2: string | null;
+  websiteUrl: string;
+}> = [
+  {
+    slug: "university-of-the-people",
+    name: "University of the People",
+    type: "UNIVERSITY",
+    countryIso2: "US",
+    websiteUrl: "https://www.uopeople.edu/",
+  },
+  {
+    slug: "romania-ministry-of-foreign-affairs",
+    name: "Romanian Ministry of Foreign Affairs",
+    type: "GOVERNMENT",
+    countryIso2: "RO",
+    websiteUrl: "https://www.mae.ro/",
+  },
+];
+
+const SCHOLARSHIPS: Array<{
+  providerSlug: string;
+  universitySlug: string | null;
+  hostCountryIso2: string | null;
+  slug: string;
+  name: string;
+  degreeLevels: Array<"FOUNDATION" | "UNDERGRADUATE" | "POSTGRADUATE">;
+  officialUrl: string;
+  sourceUrl: string;
+  eligibilityRules: Array<{
+    kind: "QUALIFICATION" | "GRADE" | "LANGUAGE" | "OTHER";
+    label: string;
+    valueString: string | null;
+    minValue: number | null;
+    sourceUrl: string;
+  }>;
+  fundingComponents: Array<{
+    component: "TUITION" | "STIPEND" | "ACCOMMODATION" | "OTHER";
+    coverage: "PARTIAL" | "UNSPECIFIED";
+    description: string;
+  }>;
+  deadlines: Array<{
+    label: string;
+    opensAt: string | null;
+    closesAt: string | null;
+    sourceUrl: string;
+  }>;
+}> = [
+  {
+    providerSlug: "university-of-the-people",
+    universitySlug: "university-of-the-people",
+    hostCountryIso2: null,
+    slug: "uopeople-scholarships",
+    name: "UoPeople Scholarships",
+    degreeLevels: [],
+    officialUrl: "https://www.uopeople.edu/tuition-free/scholarships/",
+    sourceUrl:
+      "https://www.uopeople.edu/tuition-free/scholarships/terms-conditions-uopeoples-scholarships/",
+    eligibilityRules: [
+      {
+        kind: "OTHER",
+        label: "Open to accepted or currently enrolled students; no GPA minimum stated",
+        valueString:
+          "Anyone struggling to afford higher education can apply once accepted to UoPeople; applications are based on self-evaluation and trust, no financial documentation required.",
+        minValue: null,
+        sourceUrl: "https://www.uopeople.edu/tuition-free/scholarships/",
+      },
+      {
+        kind: "OTHER",
+        label: "Must maintain Satisfactory Academic Progress to keep the award",
+        valueString:
+          "A scholarship may be at risk if the recipient is placed on Academic Warning, and may be withdrawn if required progress is not maintained.",
+        minValue: null,
+        sourceUrl:
+          "https://www.uopeople.edu/tuition-free/scholarships/terms-conditions-uopeoples-scholarships/",
+      },
+    ],
+    fundingComponents: [
+      {
+        component: "TUITION",
+        coverage: "PARTIAL",
+        description:
+          "Funds are allocated to the student's account solely to pay course Assessment Fees (up to 10 Assessment Fees per award); not a tuition-wide or living-cost award.",
+      },
+    ],
+    deadlines: [],
+  },
+  {
+    providerSlug: "romania-ministry-of-foreign-affairs",
+    universitySlug: null,
+    hostCountryIso2: "RO",
+    slug: "romania-mfa-non-eu-scholarships-2026-2027",
+    name: "Ministry of Foreign Affairs Scholarships for non-EU citizens (2026-2027)",
+    degreeLevels: ["UNDERGRADUATE", "POSTGRADUATE"],
+    officialUrl: "https://studyinromania.gov.ro/mfa_2026-2027",
+    sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
+    eligibilityRules: [
+      {
+        kind: "GRADE",
+        label: "Average of at least 7/10 (or 'Good') in the last graduated school",
+        valueString:
+          "7 out of 10 in the Romanian scoring system, or the 'Good' score, as applicable",
+        minValue: 7,
+        sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
+      },
+      {
+        kind: "QUALIFICATION",
+        label: "Baccalaureate or equivalent for bachelor's applicants",
+        valueString:
+          "Completed high-school or pre-university studies and obtained a baccalaureate degree or equivalent",
+        minValue: null,
+        sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
+      },
+      {
+        kind: "OTHER",
+        label: "Nationality exclusions apply",
+        valueString:
+          "Excludes applicants of Romanian origin and historical communities covered by other programmes, people with protection status in Romania, specified stateless persons, diplomatic/consular staff and certain family members, certain international-organisation staff and family members, and recipients of another Romanian state scholarship for the same study cycle.",
+        minValue: null,
+        sourceUrl: "https://studyinromania.gov.ro/mfa_2026-2027",
+      },
+    ],
+    fundingComponents: [
+      {
+        component: "TUITION",
+        coverage: "PARTIAL",
+        description:
+          "Tuition for the Romanian-language preparatory year and for the actual studies, up to the duration of the study cycle; registration/application fees waived.",
+      },
+      {
+        component: "STIPEND",
+        coverage: "UNSPECIFIED",
+        description:
+          "A monthly scholarship during the preparatory year and during bachelor's/master's/doctoral studies; monetary amount not stated on the cited page.",
+      },
+      {
+        component: "ACCOMMODATION",
+        coverage: "UNSPECIFIED",
+        description:
+          "Accommodation in student dormitories, subject to available places and the allocated subsidy.",
+      },
+    ],
+    deadlines: [
+      {
+        label: "2026-2027 call (passed; next call not yet published)",
+        opensAt: null,
+        closesAt: "2026-03-31",
+        sourceUrl: "https://studyinromania.gov.ro/mfa_2026-2027",
+      },
+    ],
+  },
 ];
 
 async function main() {
@@ -975,6 +1368,211 @@ async function main() {
     });
   }
 
+  const universityBySlug = new Map(
+    (await db.university.findMany({ select: { id: true, slug: true } })).map((u) => [u.slug, u.id]),
+  );
+
+  for (const programme of PROGRAMMES) {
+    const universityId = universityBySlug.get(programme.universitySlug);
+    if (!universityId) continue;
+    const record = await db.programme.upsert({
+      where: { slug: programme.slug },
+      update: {
+        title: programme.title,
+        degreeLevel: programme.degreeLevel,
+        durationMonths: programme.durationMonths,
+        officialUrl: programme.officialUrl,
+      },
+      create: {
+        slug: programme.slug,
+        universityId,
+        title: programme.title,
+        degreeLevel: programme.degreeLevel,
+        durationMonths: programme.durationMonths,
+        officialUrl: programme.officialUrl,
+        sourceUrl: programme.sourceUrl,
+        verificationStatus: "PENDING_REVIEW",
+        lastCheckedAt: now,
+      },
+    });
+
+    for (const requirement of programme.admissionRequirements) {
+      const existing = await db.admissionRequirement.findFirst({
+        where: { programmeId: record.id, label: requirement.label },
+      });
+      if (existing) continue;
+      await db.admissionRequirement.create({
+        data: {
+          programmeId: record.id,
+          kind: requirement.kind,
+          label: requirement.label,
+          description: requirement.description,
+          sourceUrl: requirement.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+
+    for (const language of programme.languageRequirements) {
+      const existing = await db.languageRequirement.findFirst({
+        where: { programmeId: record.id, testCode: language.testCode },
+      });
+      if (existing) continue;
+      await db.languageRequirement.create({
+        data: {
+          programmeId: record.id,
+          testCode: language.testCode,
+          minimumScore: language.minimumScore,
+          scaleNote: language.scaleNote,
+          sourceUrl: language.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+
+    for (const fee of programme.tuitionFees) {
+      const existing = await db.tuitionFee.findFirst({
+        where: { programmeId: record.id, currencyCode: fee.currencyCode, period: fee.period },
+      });
+      if (existing) continue;
+      await db.tuitionFee.create({
+        data: {
+          programmeId: record.id,
+          amount: fee.amount,
+          currencyCode: fee.currencyCode,
+          period: fee.period,
+          isInternational: true,
+          notes: fee.notes,
+          sourceUrl: fee.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+
+    for (const deadline of programme.deadlines) {
+      const existing = await db.programmeDeadline.findFirst({
+        where: { programmeId: record.id, label: deadline.label },
+      });
+      if (existing) continue;
+      await db.programmeDeadline.create({
+        data: {
+          programmeId: record.id,
+          label: deadline.label,
+          opensAt: deadline.opensAt ? new Date(deadline.opensAt) : null,
+          closesAt: deadline.closesAt ? new Date(deadline.closesAt) : null,
+          sourceUrl: deadline.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+  }
+
+  for (const provider of SCHOLARSHIP_PROVIDERS) {
+    await db.scholarshipProvider.upsert({
+      where: { slug: provider.slug },
+      update: { name: provider.name, type: provider.type, websiteUrl: provider.websiteUrl },
+      create: {
+        slug: provider.slug,
+        name: provider.name,
+        type: provider.type,
+        countryId: provider.countryIso2 ? (countryByIso2.get(provider.countryIso2) ?? null) : null,
+        websiteUrl: provider.websiteUrl,
+        sourceUrl: provider.websiteUrl,
+        verificationStatus: "UNVERIFIED",
+        lastCheckedAt: now,
+      },
+    });
+  }
+
+  const providerBySlug = new Map(
+    (await db.scholarshipProvider.findMany({ select: { id: true, slug: true } })).map((p) => [
+      p.slug,
+      p.id,
+    ]),
+  );
+
+  for (const scholarship of SCHOLARSHIPS) {
+    const providerId = providerBySlug.get(scholarship.providerSlug);
+    if (!providerId) continue;
+    const record = await db.scholarship.upsert({
+      where: { slug: scholarship.slug },
+      update: { name: scholarship.name, degreeLevels: scholarship.degreeLevels },
+      create: {
+        slug: scholarship.slug,
+        name: scholarship.name,
+        providerId,
+        universityId: scholarship.universitySlug
+          ? (universityBySlug.get(scholarship.universitySlug) ?? null)
+          : null,
+        hostCountryId: scholarship.hostCountryIso2
+          ? (countryByIso2.get(scholarship.hostCountryIso2) ?? null)
+          : null,
+        degreeLevels: scholarship.degreeLevels,
+        officialUrl: scholarship.officialUrl,
+        sourceUrl: scholarship.sourceUrl,
+        verificationStatus: "PENDING_REVIEW",
+        lastCheckedAt: now,
+      },
+    });
+
+    for (const rule of scholarship.eligibilityRules) {
+      const existing = await db.scholarshipEligibilityRule.findFirst({
+        where: { scholarshipId: record.id, label: rule.label },
+      });
+      if (existing) continue;
+      await db.scholarshipEligibilityRule.create({
+        data: {
+          scholarshipId: record.id,
+          kind: rule.kind,
+          label: rule.label,
+          valueString: rule.valueString,
+          minValue: rule.minValue,
+          sourceUrl: rule.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+
+    for (const component of scholarship.fundingComponents) {
+      await db.scholarshipFundingComponent.upsert({
+        where: {
+          scholarshipId_component: { scholarshipId: record.id, component: component.component },
+        },
+        update: { coverage: component.coverage, description: component.description },
+        create: {
+          scholarshipId: record.id,
+          component: component.component,
+          coverage: component.coverage,
+          description: component.description,
+          isSpecified: true,
+        },
+      });
+    }
+
+    for (const deadline of scholarship.deadlines) {
+      const existing = await db.scholarshipDeadline.findFirst({
+        where: { scholarshipId: record.id, label: deadline.label },
+      });
+      if (existing) continue;
+      await db.scholarshipDeadline.create({
+        data: {
+          scholarshipId: record.id,
+          label: deadline.label,
+          opensAt: deadline.opensAt ? new Date(deadline.opensAt) : null,
+          closesAt: deadline.closesAt ? new Date(deadline.closesAt) : null,
+          sourceUrl: deadline.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
+        },
+      });
+    }
+  }
+
   const counts = {
     countries: await db.country.count(),
     gradeScales: await db.gradeScale.count(),
@@ -985,6 +1583,16 @@ async function main() {
     currencies: await db.currency.count(),
     dataSources: await db.dataSource.count(),
     universities: await db.university.count(),
+    programmes: await db.programme.count(),
+    admissionRequirements: await db.admissionRequirement.count(),
+    languageRequirements: await db.languageRequirement.count(),
+    tuitionFees: await db.tuitionFee.count(),
+    programmeDeadlines: await db.programmeDeadline.count(),
+    scholarshipProviders: await db.scholarshipProvider.count(),
+    scholarships: await db.scholarship.count(),
+    scholarshipEligibilityRules: await db.scholarshipEligibilityRule.count(),
+    scholarshipFundingComponents: await db.scholarshipFundingComponent.count(),
+    scholarshipDeadlines: await db.scholarshipDeadline.count(),
   };
 
   console.log("seed complete", counts);

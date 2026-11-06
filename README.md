@@ -52,10 +52,16 @@ Working today:
   written alongside the live evaluation shown to the student, with the engine version and completeness
   recorded
 
+- a small real pilot catalogue: 3 programmes (University of Łódź Business Management, UCSI Foundation in
+  Arts, Ravensbourne BSc Business Management with International Year One) and 2 scholarships (UoPeople
+  Scholarships, Romania MFA non-EU scholarships), each with real admission/eligibility rules, fees,
+  language requirements and deadlines, every fact tied to the official page it came from and a collection
+  date — seeded as `PENDING_REVIEW`, not `VERIFIED`
+
 Not built yet:
 
-- real programme or scholarship data. The editors above can create and verify a record, but none has been
-  entered yet — that's a deliberately separate step, not something seeded in bulk
+- a full programme/scholarship catalogue. Five real records exist as a pilot; everything beyond that still
+  needs the same per-fact verification against a live official page before it can be entered
 - the Redis queue and the scheduler for the ingestion worker
 - document upload and storage
 - email delivery and notification generation

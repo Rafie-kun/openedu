@@ -120,10 +120,16 @@ State of the data as committed:
   invocation.
 - Every seeded catalogue row is `UNVERIFIED` with `lastCheckedAt` equal to the seed run time. That
   timestamp means "written by the seed", not "checked against the source".
-- No programme, scholarship, deadline, tuition fee, requirement or visa record is seeded. The matching
-  engine therefore reports `UNVERIFIED` for empty opportunities rather than inferring anything.
+- Five catalogue records are seeded with real data: 3 programmes (University of Łódź Business
+  Management, UCSI Foundation in Arts, Ravensbourne BSc Business Management with International Year
+  One) and 2 scholarships (UoPeople Scholarships, Romania Ministry of Foreign Affairs non-EU
+  scholarships). Each requirement, fee, language condition and deadline carries the exact official page
+  it was transcribed from and a collection date of 2026-11-06. All start `PENDING_REVIEW`, not
+  `VERIFIED` — a fact collected once is not the same as an admin re-checking it against the live page.
+  No visa record is seeded.
 - Institution names, cities, types and official URLs are facts taken from the institutions themselves.
-  Nothing about their entry requirements, fees or recognition is asserted.
+  Nothing about their entry requirements, fees or recognition beyond the five seeded records above is
+  asserted.
 - The four `DataSource` licence notes have not been re-read against the live terms pages since they
   were written. Treat them as claims to re-check before an adapter is built.
 

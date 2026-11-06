@@ -5,34 +5,41 @@ For the full phase-by-phase picture see `docs/status.md`; for the backlog order 
 
 ## Current milestone
 
-Milestone 4 (persistent eligibility) complete. Milestone 3 Part 2 (real institution/programme/scholarship
-pilot) was scoped down this session: live per-fact verification of specific programme/scholarship data from
-official pages was not completed (see below), so no programme or scholarship row was entered. Part 3 (source
-documentation) is covered by the existing `docs/data-sources.md`, which already states accurately that no
-programme/scholarship is seeded — no change was needed there this session.
+Milestone 3 Part 2 — a real, sourced pilot of 3 programmes and 2 scholarships is seeded. Not the full
+"all countries" scope originally floated; a deliberately small, genuinely verified start. Milestone 4
+(persistent eligibility) is already complete from the prior session.
 
 ## Last completed milestone
 
-Milestone 4 — `apps/web/lib/eligibility.ts` now persists every evaluation: a `MatchResult` row (outcome,
-`engineVersion`, `dataCompleteness`, summary) plus one `MatchRequirementResult` per requirement, written in
-a transaction after the live computation. `latestMatchResult` reads the most recent row for a profile/target
-pair. See `docs/matching-engine.md` "Persistence" for exactly what is and is not covered (it is a history,
-not a cache or a staleness check).
+Milestone 3 Part 2 — `packages/database/prisma/seed.ts` now seeds:
+
+- Programmes: University of Łódź "Business Management" (undergraduate), UCSI University "Foundation in
+  Arts" (foundation), Ravensbourne University London "BSc (Hons) Business Management with International
+  Year One" (undergraduate) — each with real admission requirements, language requirements, tuition fees
+  and deadlines, sourced from their live official pages.
+- Scholarships: UoPeople Scholarships, Romania Ministry of Foreign Affairs non-EU scholarships (2026-2027)
+  — each with real eligibility rules, funding components and deadlines.
+- Every fact carries the exact official URL it was transcribed from (a separate AI tool did the live
+  browsing/research since this session's own web tools couldn't reach static content; I only entered facts
+  that tool reported finding on a live page, with its URL — nothing from memory). All rows start
+  `PENDING_REVIEW`, not `VERIFIED`: collecting a fact is not the same as an admin re-checking it.
+- 4 real universities added to the `UNIVERSITIES` seed array to host them (Łódź, UCSI, Ravensbourne,
+  University of the People).
 
 ## Last verified commit
 
-`4a60f3e` — "fix(auth): hyperlink terms and privacy notice in the register form" (`master`). The persistence
-work described here is not yet committed.
+`b62534f` — "feat(matching): persist eligibility evaluations" (`master`). The seed data described here is
+not yet committed.
 
 ## Current blockers
 
-- Milestone 3 Part 2 is still blocked on the same constraint as before: entering a real programme or
-  scholarship requires per-fact verification against a live official page (exact requirement wording, fee,
-  deadline). Attempted this session for DAAD's scholarship database; its page is a JS-rendered search UI
-  with no fetchable static facts, so nothing was entered rather than guessing at numbers.
-- Docker Desktop's daemon is not running on this machine, so Postgres on 5432 is unreachable locally. The
-  new `MatchResult`/`MatchRequirementResult` writes are typechecked and build-tested but not run against a
-  live database this session.
+- Docker Desktop's daemon is still not running on this machine, so the new seed data has been typechecked
+  and build-verified only — never actually run against a live Postgres database. A live `pnpm db:seed` run
+  is the next real verification step once Docker is available.
+- Growing this pilot further needs the same per-fact live-page verification used here; this session's own
+  `websearch`/`firecrawl` tools could not reliably reach live page content (search returned nothing,
+  firecrawl blocked this connection as a VPN/proxy). An external research pass (as used for this batch) or
+  exact URLs from the user are the two ways to keep adding real records.
 - Every item in `docs/legal-review-checklist.md`'s "Blocking" section remains open.
 - Pre-existing, not yet fixed: `adminVerificationSchema`'s `entityType` enum still lists `University` and
   `VisaCategory`, which `applyCatalogueVerification` has no case for.
@@ -40,20 +47,20 @@ work described here is not yet committed.
 
 ## Most important next task
 
-Milestone 3 Part 2 needs a different approach than "enter data from memory": either the user supplies
-specific official pages with known-current facts to transcribe, or a live-browser/fetch pass is run per
-institution before any row is entered. Until then, the honest state is a country directory with no
-programme or scholarship data to match against.
+Run `pnpm db:seed` against a live database once Docker is available, to confirm the new programme/
+scholarship rows actually write and relate correctly (foreign keys, upserts, the funding-component unique
+constraint). Then have an admin move the pilot rows from `PENDING_REVIEW` to `VERIFIED` through
+`/admin/catalogue`, or correct anything that's since changed on the source pages.
 
 ## Last successful checks
 
-`pnpm db:generate`, `pnpm turbo run typecheck` (6/6), `pnpm turbo run test build` (7/7, 86 tests). No live
-seed run or manual DB-backed click-through this session — Docker is down locally.
+`pnpm db:generate`, `pnpm format`, `pnpm turbo run typecheck` (6/6), `pnpm turbo run test build` (7/7, 86
+tests). No live seed run or manual DB-backed click-through this session — Docker is down locally.
 
 ## Relevant files for the active task
 
-- `apps/web/lib/eligibility.ts`, `packages/database/prisma/schema.prisma` (`MatchResult`,
-  `MatchRequirementResult`, `MatchingRuleVersion`)
-- `docs/matching-engine.md`, `docs/database.md`, `docs/status.md`
-- For M3 Part 2 when resumed: `apps/web/app/admin/catalogue/[kind]/[id]/page.tsx`,
-  `apps/web/app/actions/admin.ts`, `docs/data-sources.md`
+- `packages/database/prisma/seed.ts` (`PROGRAMMES`, `SCHOLARSHIP_PROVIDERS`, `SCHOLARSHIPS` and their
+  write loops in `main()`)
+- `docs/data-sources.md`, `docs/status.md`
+- For verifying/extending the pilot: `apps/web/app/admin/catalogue/page.tsx`,
+  `apps/web/app/admin/catalogue/[kind]/[id]/page.tsx`
