@@ -628,6 +628,26 @@ async function applyCatalogueVerification(
         publicPath: `/scholarships/${record.scholarship.slug}`,
       };
     }
+    case "ScholarshipFundingComponent": {
+      const record = await db.scholarshipFundingComponent.findUnique({
+        where: { id: entityId },
+        select: {
+          sourceUrl: true,
+          scholarshipId: true,
+          scholarship: { select: { slug: true } },
+        },
+      });
+      if (!record) return null;
+      await db.scholarshipFundingComponent.update({
+        where: { id: entityId },
+        data: { verificationStatus: status, lastCheckedAt: checkedAt },
+      });
+      return {
+        sourceUrl: record.sourceUrl,
+        adminPath: `/admin/catalogue/scholarship/${record.scholarshipId}`,
+        publicPath: `/scholarships/${record.scholarship.slug}`,
+      };
+    }
     default:
       return null;
   }
@@ -894,6 +914,7 @@ export async function createScholarshipFundingComponentAction(
     currencyCode: readString(formData, "currencyCode").toUpperCase() || undefined,
     description: readString(formData, "description") || undefined,
     isSpecified: formData.get("isSpecified") === "on",
+    sourceUrl: readString(formData, "sourceUrl") || undefined,
   });
   if (!parsed.success) return invalid(parsed.error.issues);
 
@@ -925,6 +946,9 @@ export async function createScholarshipFundingComponentAction(
       currencyCode: parsed.data.currencyCode || null,
       description: parsed.data.description || null,
       isSpecified: parsed.data.isSpecified,
+      sourceUrl: parsed.data.sourceUrl || null,
+      verificationStatus: "PENDING_REVIEW",
+      lastCheckedAt: parsed.data.sourceUrl ? new Date() : null,
     },
     select: { id: true },
   });

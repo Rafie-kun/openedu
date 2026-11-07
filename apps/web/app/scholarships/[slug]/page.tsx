@@ -35,7 +35,7 @@ async function loadScholarship(slug: string) {
         where: { verificationStatus: { not: "ARCHIVED" } },
         orderBy: { createdAt: "asc" },
       },
-      fundingComponents: true,
+      fundingComponents: { where: { verificationStatus: { not: "ARCHIVED" } } },
       deadlines: {
         where: { verificationStatus: { not: "ARCHIVED" } },
         orderBy: { closesAt: "asc" },

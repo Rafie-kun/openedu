@@ -174,16 +174,15 @@ export const candidatePromotionSchema = z.object({
 
 export const adminVerificationSchema = z.object({
   entityType: z.enum([
-    "University",
     "Programme",
     "Scholarship",
-    "VisaCategory",
     "AdmissionRequirement",
     "LanguageRequirement",
     "ProgrammeDeadline",
     "TuitionFee",
     "ScholarshipEligibilityRule",
     "ScholarshipDeadline",
+    "ScholarshipFundingComponent",
   ]),
   entityId: z.string().min(1),
   status: z.enum([
@@ -317,6 +316,7 @@ export const scholarshipFundingComponentSchema = z.object({
   currencyCode: z.string().trim().toUpperCase().pipe(isoCurrency).optional().or(z.literal("")),
   description: z.string().trim().max(300).optional().or(z.literal("")),
   isSpecified: z.coerce.boolean().default(false),
+  sourceUrl: z.url("Use a full https:// address").optional().or(z.literal("")),
 });
 
 export const scholarshipDeadlineSchema = z.object({

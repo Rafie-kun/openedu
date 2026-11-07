@@ -500,6 +500,14 @@ export function ScholarshipFundingForm({
             <Textarea id={`${uid}-description`} name="description" rows={2} maxLength={300} />
           </Field>
 
+          <Field
+            label="Source URL"
+            htmlFor={`${uid}-sourceUrl`}
+            error={state.fieldErrors?.sourceUrl}
+          >
+            <Input id={`${uid}-sourceUrl`} name="sourceUrl" type="url" placeholder="https://" />
+          </Field>
+
           <Checkbox
             id={`${uid}-isSpecified`}
             name="isSpecified"

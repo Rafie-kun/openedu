@@ -61,6 +61,9 @@ foundation, diploma and transfer routes including `progressionGuaranteed` (nulla
 
 Funding is recorded per component (`TUITION`, `STIPEND`, `ACCOMMODATION`, and so on) with a
 `CoverageType` and `isSpecified`, so "fully funded" never has to be stored as a single boolean.
+`ScholarshipFundingComponent` carries its own `sourceUrl`, `verificationStatus` and `lastCheckedAt`
+(migration `20261107000000_scholarship_funding_evidence`) — each funding figure is independently
+sourced and verifiable, the same as every other child record, not inherited from the parent scholarship.
 
 ### Matching (3)
 

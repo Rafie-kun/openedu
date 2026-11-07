@@ -520,7 +520,25 @@ async function ScholarshipRecord({ id }: { id: string }) {
                     {component.description ? (
                       <p className="mt-1 text-sm text-ink-soft">{component.description}</p>
                     ) : null}
+                    {component.sourceUrl ? (
+                      <a
+                        href={component.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="quiet-link mt-1 block text-xs"
+                      >
+                        {component.sourceUrl}
+                      </a>
+                    ) : null}
                   </div>
+                  <StatusBadge status={component.verificationStatus} />
+                </div>
+                <div className="mt-3">
+                  <CatalogueVerificationButtons
+                    entityType="ScholarshipFundingComponent"
+                    entityId={component.id}
+                    status={component.verificationStatus}
+                  />
                 </div>
               </Card>
             ))}

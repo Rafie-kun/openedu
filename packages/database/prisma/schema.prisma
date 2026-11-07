@@ -962,6 +962,10 @@ model ScholarshipFundingComponent {
   currencyCode  String?
   description   String?
   isSpecified   Boolean         @default(false)
+  sourceUrl     String?
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  lastCheckedAt DateTime?
+  createdAt     DateTime        @default(now())
 
   scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
 

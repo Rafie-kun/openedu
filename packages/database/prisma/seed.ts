@@ -1063,6 +1063,7 @@ const SCHOLARSHIPS: Array<{
     component: "TUITION" | "STIPEND" | "ACCOMMODATION" | "OTHER";
     coverage: "PARTIAL" | "UNSPECIFIED";
     description: string;
+    sourceUrl: string;
   }>;
   deadlines: Array<{
     label: string;
@@ -1106,6 +1107,8 @@ const SCHOLARSHIPS: Array<{
         coverage: "PARTIAL",
         description:
           "Funds are allocated to the student's account solely to pay course Assessment Fees (up to 10 Assessment Fees per award); not a tuition-wide or living-cost award.",
+        sourceUrl:
+          "https://www.uopeople.edu/tuition-free/scholarships/terms-conditions-uopeoples-scholarships/",
       },
     ],
     deadlines: [],
@@ -1151,18 +1154,21 @@ const SCHOLARSHIPS: Array<{
         coverage: "PARTIAL",
         description:
           "Tuition for the Romanian-language preparatory year and for the actual studies, up to the duration of the study cycle; registration/application fees waived.",
+        sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
       },
       {
         component: "STIPEND",
         coverage: "UNSPECIFIED",
         description:
           "A monthly scholarship during the preparatory year and during bachelor's/master's/doctoral studies; monetary amount not stated on the cited page.",
+        sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
       },
       {
         component: "ACCOMMODATION",
         coverage: "UNSPECIFIED",
         description:
           "Accommodation in student dormitories, subject to available places and the allocated subsidy.",
+        sourceUrl: "https://scholarships.studyinromania.gov.ro/scholarship-about",
       },
     ],
     deadlines: [
@@ -1543,12 +1549,19 @@ async function main() {
         where: {
           scholarshipId_component: { scholarshipId: record.id, component: component.component },
         },
-        update: { coverage: component.coverage, description: component.description },
+        update: {
+          coverage: component.coverage,
+          description: component.description,
+          sourceUrl: component.sourceUrl,
+        },
         create: {
           scholarshipId: record.id,
           component: component.component,
           coverage: component.coverage,
           description: component.description,
+          sourceUrl: component.sourceUrl,
+          verificationStatus: "PENDING_REVIEW",
+          lastCheckedAt: now,
           isSpecified: true,
         },
       });
