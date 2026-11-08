@@ -14,6 +14,17 @@ and wrote an actual `MatchResult` row. Everything reported as "typecheck/build-v
 sessions (the pilot seed, the persistence code, the funding-evidence migration) is now confirmed to
 actually work against a live database, not just compile. No seed/migration bugs found.
 
+## Somnia migration — Stage 0 complete (2026-11-08)
+
+Cloned `rafie-kun.scolarship-app` at `c6ab2311...` read-only to a temp directory (not added to this repo),
+computed real statistics on its two catalogue JSON files, and read its schema/sync code directly. Full
+findings in `docs/somnia-migration-audit.md`. Headline results: 253 university records but only 61 unique
+identities (9 duplicate groups, largest being 30 near-identical "University of Oxford" rows with randomised
+ranking/GPA/tuition); 100 scholarship records but only 7 distinct names, every numeric/eligibility field
+confirmed templated-and-randomised (e.g. DAAD recorded as "Oceania"/GBP). Nothing was imported — Stage 0 is
+audit only, per the task's own staging. Next stage (dry-run import pipeline for the 61 unique identity
+leads) has not been started; needs explicit go-ahead given how large the full request is.
+
 ## Current milestone
 
 M0–M2 of the catalogue-expansion plan, scoped down to what's actually doable in one session rather than the
