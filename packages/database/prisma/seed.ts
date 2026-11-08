@@ -662,6 +662,19 @@ const DATA_SOURCES: Array<{
     knownLimitations:
       "Reference rates, not the rate a bank or payment provider will give you. Not every currency is covered.",
   },
+  {
+    code: "SOMNIA_LEGACY",
+    name: "Somnia legacy catalogue",
+    organisation: "Rafie-kun (same owner as this project)",
+    category: "UNIVERSITY_DIRECTORY",
+    url: "https://github.com/Rafie-kun/rafie-kun.scolarship-app",
+    accessMethod: "BULK_DOWNLOAD",
+    licenceSummary:
+      "MIT-licensed personal repository, same owner. Only name/country/city/website are treated as discovery leads; every other field was confirmed synthetic. See docs/somnia-migration-audit.md.",
+    termsUrl: "https://github.com/Rafie-kun/rafie-kun.scolarship-app/blob/main/LICENSE",
+    knownLimitations:
+      "253 records collapse to 61 unique institution identities. Ranking, acceptance rate, GPA, tuition, majors, scholarships and application URLs are confirmed randomly generated, not real, and are never extracted by this adapter.",
+  },
 ];
 
 const UNIVERSITIES: Array<{

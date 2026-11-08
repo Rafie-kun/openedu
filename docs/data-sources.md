@@ -56,15 +56,16 @@ No adapter may write to `User`, `StudentProfile` or any table hanging off a prof
 
 ## Seeded today
 
-Four rows in `packages/database/prisma/seed.ts`. All are created with `permissionStatus: "PENDING"` and
+Five rows in `packages/database/prisma/seed.ts`. All are created with `permissionStatus: "PENDING"` and
 `isActive: false`, meaning none is approved for collection.
 
-| Code          | Name                            | Category               | Access   | Recorded licence note                                                            | Recorded limitation                                                                                     |
-| ------------- | ------------------------------- | ---------------------- | -------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `ROR`         | Research Organization Registry  | `RESEARCH_IDENTITY`    | `API`    | "Registry data is released under CC0."                                           | Identifies research organisations; inclusion is not evidence of accreditation or degree-awarding status |
-| `OPENALEX`    | OpenAlex                        | `RESEARCH_IDENTITY`    | `API`    | "Metadata is CC0; API use is subject to the project's terms."                    | Institution records include research bodies that do not teach degrees                                   |
-| `WHED`        | World Higher Education Database | `UNIVERSITY_DIRECTORY` | `MANUAL` | "Access conditions and licensing must be confirmed before any bulk use."         | Not an open bulk dataset. Do not scrape without written permission                                      |
-| `FRANKFURTER` | Frankfurter exchange rates      | `CURRENCY`             | `API`    | "Open-source service publishing reference rates from the European Central Bank." | Reference rates, not what a bank or payment provider gives you; not every currency is covered           |
+| Code            | Name                            | Category               | Access          | Recorded licence note                                                            | Recorded limitation                                                                                                                                               |
+| --------------- | ------------------------------- | ---------------------- | --------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ROR`           | Research Organization Registry  | `RESEARCH_IDENTITY`    | `API`           | "Registry data is released under CC0."                                           | Identifies research organisations; inclusion is not evidence of accreditation or degree-awarding status                                                           |
+| `OPENALEX`      | OpenAlex                        | `RESEARCH_IDENTITY`    | `API`           | "Metadata is CC0; API use is subject to the project's terms."                    | Institution records include research bodies that do not teach degrees                                                                                             |
+| `WHED`          | World Higher Education Database | `UNIVERSITY_DIRECTORY` | `MANUAL`        | "Access conditions and licensing must be confirmed before any bulk use."         | Not an open bulk dataset. Do not scrape without written permission                                                                                                |
+| `FRANKFURTER`   | Frankfurter exchange rates      | `CURRENCY`             | `API`           | "Open-source service publishing reference rates from the European Central Bank." | Reference rates, not what a bank or payment provider gives you; not every currency is covered                                                                     |
+| `SOMNIA_LEGACY` | Somnia legacy catalogue         | `UNIVERSITY_DIRECTORY` | `BULK_DOWNLOAD` | "MIT-licensed personal repository, same owner."                                  | 253 records collapse to 61 unique identities; every field except name/country/city/website is confirmed randomly generated — see `docs/somnia-migration-audit.md` |
 
 Notes on reading that table:
 

@@ -42,8 +42,10 @@ Working today:
 - qualification reference data for several international systems, plus a small set of real institutions
 - all 198 ISO 3166-1 countries seeded as reference rows (code, name, region only — no education-system or
   visa claim attached to any of them)
-- a Python ingestion worker with ROR and OpenAlex adapters, change detection, and an admin review queue
-  and source registry
+- a Python ingestion worker with ROR, OpenAlex and a legacy-catalogue adapter (`SOMNIA_LEGACY`, read-only
+  against a sibling repository under the same owner), change detection, and an admin review queue and
+  source registry. The legacy adapter ran for real: 61 unique institution-identity leads, name/country/
+  city/website only, every numeric field quarantined as confirmed-synthetic (`docs/somnia-migration-audit.md`)
 - admin editors for programmes, scholarships, and their sourced child records (admission requirements,
   language conditions, tuition fees, deadlines, scholarship eligibility rules, funding components) at
   `/admin/catalogue`, each starting unverified and checked individually against its own source; archiving

@@ -3,6 +3,20 @@
 A single concise working-state snapshot, meant to be read first and updated at the end of every milestone.
 For the full phase-by-phase picture see `docs/status.md`; for the backlog order see `docs/roadmap.md`.
 
+## Somnia migration — Stage 1 complete (2026-11-08)
+
+Built `workers/data-ingestion/src/openedu_ingest/sources/somnia.py`, a real `SourceAdapter` reusing the
+existing ROR/OpenAlex ingestion pipeline. Ran it for real: dry-run against the live legacy GitHub file
+(61/61, 0 rejected, matches the audit exactly), then twice against the real local Postgres container —
+first run created 61 `SourceRecord` + `ReviewQueueItem` rows, second run confirmed idempotent (61
+unchanged, 0 created). Cross-checked the 61 against OpenEdu's existing 16 universities: 9 already match by
+name (MIT, Toronto, Oxford, NUS, Tokyo, Melbourne, Amsterdam, Dhaka, ETH Zurich), 52 are new leads. 6 new
+Python tests. Full writeup in `docs/somnia-migration-audit.md`. Nothing was promoted to the public
+`University` table — the 61 candidates sit in `/admin/review`, unreviewed. Also fixed the Somnia
+Stage 0→1 git-attribution request: confirmed (again) no Claude/Anthropic trailers anywhere in history, git
+config, `AGENTS.md`, `.opencode/`, or `CONTRIBUTING.md` — nothing needed changing, verified with a local
+unpushed test commit that was reset before pushing.
+
 ## 2026-11-08 verification note
 
 Docker/Postgres came up this session (previously unreachable for several sessions). Ran, against the real

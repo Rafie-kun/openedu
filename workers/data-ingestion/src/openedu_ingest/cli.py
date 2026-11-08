@@ -9,6 +9,7 @@ from .http import Fetcher
 from .jobs.run_source import run_source
 from .sources.openalex import OpenAlexAdapter
 from .sources.ror import RorAdapter
+from .sources.somnia import SomniaLegacyAdapter
 from .store import InMemoryStore, PostgresStore
 
 
@@ -18,7 +19,9 @@ def build_adapter(source: str, queries: list[str], settings):
         return RorAdapter(queries)
     if code == "OPENALEX":
         return OpenAlexAdapter(queries, mailto=settings.contact_email)
-    raise SystemExit(f"unknown source {source!r}, known sources: ROR, OPENALEX")
+    if code == "SOMNIA_LEGACY":
+        return SomniaLegacyAdapter(queries)
+    raise SystemExit(f"unknown source {source!r}, known sources: ROR, OPENALEX, SOMNIA_LEGACY")
 
 
 def main(argv: list[str] | None = None) -> int:

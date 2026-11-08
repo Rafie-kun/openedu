@@ -174,9 +174,44 @@ a deletion.
 - The 61 unique university identities and 7 scholarship names have not yet been independently verified
   against their own official pages — this audit stops at "these are leads," not "these are confirmed."
 
+## Stage 1 — pipeline built and run (2026-11-08)
+
+`workers/data-ingestion/src/openedu_ingest/sources/somnia.py` implements the `SourceAdapter` protocol
+already used by the ROR and OpenAlex adapters, so it reuses the existing `run_source`/`PostgresStore`
+pipeline rather than a new one. It fetches the real live `universities.json` from the legacy repo's `main`
+branch, groups the 253 rows into unique `(name, country)` identities, and extracts only name, country, city
+and website per identity — every other field (`ranking`, `acceptanceRate`, `averageGpa`, `tuitionMin`,
+`tuitionMax`, `popularMajors`, `offeredScholarships`, `applicationUrl`, `hasOnCampusHousing`) is read only to
+detect disagreement between duplicate rows (recorded as `legacyConflictingCities`/`legacyConflictingWebsites`
+in the payload) and never extracted as fact. It never writes to the `University` table directly — only to
+`SourceRecord` and `ReviewQueueItem`, through the same code path ROR/OpenAlex already use.
+
+Run against the real live file and the real local Postgres container:
+
+| Check                                                                            | Result                                                                                                                   |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Dry run against the live GitHub file                                             | 61 seen, 61 created, 0 rejected — matches the audit exactly                                                              |
+| First real run (`PostgresStore`)                                                 | 61 `SourceRecord` rows created, 61 `ReviewQueueItem` rows opened                                                         |
+| Second real run (idempotency)                                                    | 61 seen, 0 created, 61 unchanged, 0 rejected — confirmed no duplicates                                                   |
+| Cross-checked against OpenEdu's existing 16 universities (exact normalised name) | 9 already present (MIT, Toronto, Oxford, NUS, Tokyo, Melbourne, Amsterdam, Dhaka, ETH Zurich); 52 are new identity leads |
+
+6 Python tests added (`tests/test_somnia_adapter.py`): grouping/dedup, quarantined-field exclusion, stable
+external IDs, unmapped-country handling (kept as free text, never guessed), and conflict recording.
+
+A `DataSource` row (`SOMNIA_LEGACY`) was added to `packages/database/prisma/seed.ts`, starting
+`permissionStatus: PENDING`, `isActive: false` — the same default every other source gets. Running this
+adapter again requires an admin to explicitly approve the source first, consistent with the project's
+permission gate.
+
+**What this is not**: none of the 61 candidates have been reviewed, verified, or promoted into the public
+`University` catalogue. They sit in `/admin/review` exactly like a ROR or OpenAlex candidate would, as
+`UNIVERSITY_CANDIDATE` review items, each only carrying name/country/city/website and a note of which
+legacy IDs and conflicting values it collapsed. The 9 overlaps with existing universities are not yet
+merged or cross-referenced — the existing `University` rows and these new candidates currently have no
+link between them. Building a duplicate-review UI or a cross-source identity link is out of this stage's
+scope.
+
 ## Next step
 
-Per the task's own staging (Stage 0 → Stage 1), the next step — building the actual dry-run import pipeline
-for the 61 unique university-identity leads, with duplicate detection against OpenEdu's existing 16
-universities and a review-queue landing rather than direct promotion — has not been started. This audit is
-the complete deliverable for Stage 0.
+Stage 2 (OpenEdu admin editing completion) or reviewing/promoting these 61 candidates through
+`/admin/review` are both open next steps — see `docs/implementation-state.md`.
