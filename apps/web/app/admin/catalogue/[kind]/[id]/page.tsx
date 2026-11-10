@@ -25,6 +25,16 @@ import {
   createScholarshipEligibilityRuleAction,
   createScholarshipFundingComponentAction,
   createTuitionFeeAction,
+  updateAdmissionRequirementAction,
+  updateLanguageRequirementAction,
+  updateProgrammeAction,
+  updateProgrammeDeadlineAction,
+  updateScholarshipAction,
+  updateScholarshipDeadlineAction,
+  updateScholarshipEligibilityRuleAction,
+  updateScholarshipFundingComponentAction,
+  updateScholarshipProviderAction,
+  updateTuitionFeeAction,
 } from "@/app/actions/admin";
 import {
   AdmissionRequirementForm,
@@ -35,6 +45,18 @@ import {
   ScholarshipFundingForm,
   TuitionFeeForm,
 } from "@/components/catalogue-child-forms";
+import {
+  AdmissionRequirementEditForm,
+  LanguageRequirementEditForm,
+  ProgrammeDeadlineEditForm,
+  ProgrammeEditForm,
+  ScholarshipDeadlineEditForm,
+  ScholarshipEditForm,
+  ScholarshipEligibilityRuleEditForm,
+  ScholarshipFundingComponentEditForm,
+  ScholarshipProviderEditForm,
+  TuitionFeeEditForm,
+} from "@/components/catalogue-edit-forms";
 import { CatalogueVerificationButtons } from "@/components/catalogue-verification";
 import { toVerificationStatus } from "@/lib/display";
 import { requireAdmin } from "@/lib/session";
@@ -78,7 +100,7 @@ export default async function CatalogueRecordPage({
 }
 
 async function ProgrammeRecord({ id }: { id: string }) {
-  const [programme, qualificationTypes, subjects, gradeScales] = await Promise.all([
+  const [programme, qualificationTypes, subjects, gradeScales, universities] = await Promise.all([
     db.programme.findUnique({
       where: { id },
       include: {
@@ -95,6 +117,7 @@ async function ProgrammeRecord({ id }: { id: string }) {
     db.qualificationType.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     db.subject.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     db.gradeScale.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    db.university.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
 
   if (!programme) notFound();
@@ -134,6 +157,18 @@ async function ProgrammeRecord({ id }: { id: string }) {
             status={programme.verificationStatus}
           />
         </div>
+        <details className="mt-3">
+          <summary className="cursor-pointer text-xs font-medium text-ink-soft hover:text-ink">
+            Edit programme
+          </summary>
+          <div className="mt-3 max-w-xl">
+            <ProgrammeEditForm
+              action={updateProgrammeAction}
+              programme={programme}
+              universities={universities}
+            />
+          </div>
+        </details>
       </div>
 
       <Callout tone="warning" title="Rows start unverified">
@@ -184,12 +219,26 @@ async function ProgrammeRecord({ id }: { id: string }) {
                     lastCheckedAt={rule.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="AdmissionRequirement"
                     entityId={rule.id}
                     status={rule.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <AdmissionRequirementEditForm
+                        action={updateAdmissionRequirementAction}
+                        requirement={rule}
+                        qualificationTypes={qualificationTypes}
+                        subjects={subjects}
+                        gradeScales={gradeScales}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -240,12 +289,23 @@ async function ProgrammeRecord({ id }: { id: string }) {
                     lastCheckedAt={rule.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="LanguageRequirement"
                     entityId={rule.id}
                     status={rule.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <LanguageRequirementEditForm
+                        action={updateLanguageRequirementAction}
+                        requirement={rule}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -293,12 +353,20 @@ async function ProgrammeRecord({ id }: { id: string }) {
                     lastCheckedAt={fee.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="TuitionFee"
                     entityId={fee.id}
                     status={fee.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <TuitionFeeEditForm action={updateTuitionFeeAction} fee={fee} />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -348,12 +416,23 @@ async function ProgrammeRecord({ id }: { id: string }) {
                     lastCheckedAt={deadline.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="ProgrammeDeadline"
                     entityId={deadline.id}
                     status={deadline.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <ProgrammeDeadlineEditForm
+                        action={updateProgrammeDeadlineAction}
+                        deadline={deadline}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -374,16 +453,20 @@ async function ProgrammeRecord({ id }: { id: string }) {
 }
 
 async function ScholarshipRecord({ id }: { id: string }) {
-  const scholarship = await db.scholarship.findUnique({
-    where: { id },
-    include: {
-      provider: true,
-      hostCountry: true,
-      eligibilityRules: { orderBy: { createdAt: "asc" } },
-      fundingComponents: { orderBy: { component: "asc" } },
-      deadlines: { orderBy: { closesAt: "asc" } },
-    },
-  });
+  const [scholarship, providers, countries] = await Promise.all([
+    db.scholarship.findUnique({
+      where: { id },
+      include: {
+        provider: true,
+        hostCountry: true,
+        eligibilityRules: { orderBy: { createdAt: "asc" } },
+        fundingComponents: { orderBy: { component: "asc" } },
+        deadlines: { orderBy: { closesAt: "asc" } },
+      },
+    }),
+    db.scholarshipProvider.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    db.country.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+  ]);
 
   if (!scholarship) notFound();
 
@@ -422,6 +505,31 @@ async function ScholarshipRecord({ id }: { id: string }) {
             status={scholarship.verificationStatus}
           />
         </div>
+        <details className="mt-3">
+          <summary className="cursor-pointer text-xs font-medium text-ink-soft hover:text-ink">
+            Edit scholarship
+          </summary>
+          <div className="mt-3 max-w-xl">
+            <ScholarshipEditForm
+              action={updateScholarshipAction}
+              scholarship={scholarship}
+              providers={providers}
+              countries={countries}
+            />
+          </div>
+        </details>
+        <details className="mt-3">
+          <summary className="cursor-pointer text-xs font-medium text-ink-soft hover:text-ink">
+            Edit provider ({scholarship.provider.name})
+          </summary>
+          <div className="mt-3 max-w-xl">
+            <ScholarshipProviderEditForm
+              action={updateScholarshipProviderAction}
+              provider={scholarship.provider}
+              countries={countries}
+            />
+          </div>
+        </details>
       </div>
 
       <Callout tone="warning" title="Rows start unverified">
@@ -466,12 +574,23 @@ async function ScholarshipRecord({ id }: { id: string }) {
                     lastCheckedAt={rule.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="ScholarshipEligibilityRule"
                     entityId={rule.id}
                     status={rule.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <ScholarshipEligibilityRuleEditForm
+                        action={updateScholarshipEligibilityRuleAction}
+                        rule={rule}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -533,12 +652,23 @@ async function ScholarshipRecord({ id }: { id: string }) {
                   </div>
                   <StatusBadge status={component.verificationStatus} />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="ScholarshipFundingComponent"
                     entityId={component.id}
                     status={component.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <ScholarshipFundingComponentEditForm
+                        action={updateScholarshipFundingComponentAction}
+                        component={component}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}
@@ -588,12 +718,23 @@ async function ScholarshipRecord({ id }: { id: string }) {
                     lastCheckedAt={deadline.lastCheckedAt}
                   />
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <CatalogueVerificationButtons
                     entityType="ScholarshipDeadline"
                     entityId={deadline.id}
                     status={deadline.verificationStatus}
                   />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <ScholarshipDeadlineEditForm
+                        action={updateScholarshipDeadlineAction}
+                        deadline={deadline}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}

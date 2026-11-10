@@ -5,19 +5,21 @@ import { Button, Callout, Checkbox, Field, Input, Select, Textarea } from "@open
 import { FUNDING_COMPONENT_LABELS, REQUIREMENT_KIND_LABELS } from "@openedu/shared";
 import { EMPTY_FORM_STATE, type FormState } from "@/lib/forms";
 
-type StateAction = (state: FormState, formData: FormData) => Promise<FormState>;
-type Option = { id: string; name: string };
+export type StateAction = (state: FormState, formData: FormData) => Promise<FormState>;
+export type Option = { id: string; name: string };
 
-const REQUIREMENT_KINDS = Object.entries(REQUIREMENT_KIND_LABELS) as Array<[string, string]>;
-const FUNDING_COMPONENTS = Object.entries(FUNDING_COMPONENT_LABELS) as Array<[string, string]>;
-const COVERAGE = [
+export const REQUIREMENT_KINDS = Object.entries(REQUIREMENT_KIND_LABELS) as Array<[string, string]>;
+export const FUNDING_COMPONENTS = Object.entries(FUNDING_COMPONENT_LABELS) as Array<
+  [string, string]
+>;
+export const COVERAGE = [
   ["FULL", "Full"],
   ["PARTIAL", "Partial"],
   ["FIXED_AMOUNT", "Fixed amount"],
   ["UNSPECIFIED", "Not specified"],
 ] as const;
 
-function ChildForm({
+export function ChildForm({
   action,
   submitLabel,
   children,
@@ -39,7 +41,7 @@ function ChildForm({
   );
 }
 
-function SourceField({ id, error }: { id: string; error: string | undefined }) {
+export function SourceField({ id, error }: { id: string; error: string | undefined }) {
   return (
     <Field
       label="Source you checked"

@@ -9,7 +9,12 @@ import {
 } from "@openedu/shared";
 import type { DegreeLevelValue, VerificationStatusValue } from "@openedu/shared";
 import { Badge, Callout, Card, EmptyState, SectionHeading, Window } from "@openedu/ui";
-import { createProgrammeAction, createScholarshipAction } from "@/app/actions/admin";
+import {
+  createProgrammeAction,
+  createScholarshipAction,
+  updateUniversityAction,
+} from "@/app/actions/admin";
+import { UniversityEditForm } from "@/components/catalogue-edit-forms";
 import { ProgrammeForm, ScholarshipForm } from "@/components/catalogue-forms";
 import { CatalogueVerificationButtons } from "@/components/catalogue-verification";
 import { requireAdmin } from "@/lib/session";
@@ -25,10 +30,26 @@ function StatusBadge({ status }: { status: string }) {
 export default async function AdminCataloguePage() {
   await requireAdmin();
 
-  const [universities, countries, programmes, scholarships] = await Promise.all([
+  const [universities, universityRecords, countries, programmes, scholarships] = await Promise.all([
     db.university.findMany({
       orderBy: { name: "asc" },
       select: { id: true, name: true },
+    }),
+    db.university.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        officialName: true,
+        countryId: true,
+        country: { select: { name: true } },
+        city: true,
+        websiteUrl: true,
+        type: true,
+        sourceUrl: true,
+        lastCheckedAt: true,
+        verificationStatus: true,
+      },
     }),
     db.country.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     db.programme.findMany({
@@ -211,6 +232,75 @@ export default async function AdminCataloguePage() {
                     entityId={scholarship.id}
                     status={scholarship.verificationStatus}
                   />
+                </div>
+              </Card>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section aria-labelledby="universities-heading" className="mt-10">
+        <h2 id="universities-heading" className="font-display text-2xl text-ink">
+          Universities
+        </h2>
+        {universityRecords.length === 0 ? (
+          <EmptyState title="No institutions yet" />
+        ) : (
+          <ul className="mt-3 space-y-3">
+            {universityRecords.map((university) => (
+              <Card as="li" key={university.id}>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <Link
+                      href={`/universities/${university.id}`}
+                      className="text-sm font-medium text-ink hover:underline"
+                    >
+                      {university.name}
+                    </Link>
+                    <p className="text-xs text-ink-soft">
+                      {university.city} · {university.country.name} ·{" "}
+                      {university.type.toLowerCase()}
+                    </p>
+                    <p className="mt-1 text-xs text-ink-soft">
+                      source{" "}
+                      {university.sourceUrl ? (
+                        <a
+                          href={university.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="quiet-link"
+                        >
+                          {university.sourceUrl}
+                        </a>
+                      ) : (
+                        "not recorded"
+                      )}
+                      {" · "}
+                      {university.lastCheckedAt
+                        ? `checked ${formatDate(university.lastCheckedAt)}`
+                        : "never checked"}
+                    </p>
+                  </div>
+                  <StatusBadge status={university.verificationStatus} />
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <CatalogueVerificationButtons
+                    entityType="University"
+                    entityId={university.id}
+                    status={university.verificationStatus}
+                  />
+                  <details>
+                    <summary className="cursor-pointer text-xs text-ink-soft hover:text-ink">
+                      Edit
+                    </summary>
+                    <div className="mt-3 max-w-xl">
+                      <UniversityEditForm
+                        action={updateUniversityAction}
+                        university={university}
+                        countries={countries}
+                      />
+                    </div>
+                  </details>
                 </div>
               </Card>
             ))}

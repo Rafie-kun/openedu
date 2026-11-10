@@ -46,10 +46,11 @@ Working today:
   against a sibling repository under the same owner), change detection, and an admin review queue and
   source registry. The legacy adapter ran for real: 61 unique institution-identity leads, name/country/
   city/website only, every numeric field quarantined as confirmed-synthetic (`docs/somnia-migration-audit.md`)
-- admin editors for programmes, scholarships, and their sourced child records (admission requirements,
-  language conditions, tuition fees, deadlines, scholarship eligibility rules, funding components) at
-  `/admin/catalogue`, each starting unverified and checked individually against its own source; archiving
-  one removes it from public pages and from matching immediately
+- admin editors for universities, programmes, scholarships, providers, and all seven child record types
+  (admission requirements, language conditions, tuition fees, deadlines, scholarship eligibility rules,
+  funding components, scholarship deadlines) at `/admin/catalogue`, each starting unverified and checked
+  individually against its own source; editing a verified record's field resets it to pending review and
+  logs the change, and archiving removes a record from public pages and from matching immediately
 - every eligibility check is persisted: a `MatchResult` row plus a `MatchRequirementResult` per requirement,
   written alongside the live evaluation shown to the student, with the engine version and completeness
   recorded

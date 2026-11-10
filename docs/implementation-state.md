@@ -3,6 +3,31 @@
 A single concise working-state snapshot, meant to be read first and updated at the end of every milestone.
 For the full phase-by-phase picture see `docs/status.md`; for the backlog order see `docs/roadmap.md`.
 
+## M2 — admin editing complete (2026-11-10)
+
+Added edit actions for all 11 catalogue record types: University, Programme, Scholarship,
+ScholarshipProvider, and all 7 child types (AdmissionRequirement, LanguageRequirement, TuitionFee,
+ProgrammeDeadline, ScholarshipEligibilityRule, ScholarshipFundingComponent, ScholarshipDeadline). Each
+action: `requireAdmin()`s, validates with a new `*EditSchema` (reusing the create schema's field
+validators), diffs old vs. new values, writes a `ChangeLog` row per changed field, resets
+`verificationStatus` from `VERIFIED` back to `PENDING_REVIEW` and clears `lastCheckedAt` when any field
+actually changed (a no-op edit returns "No changes." and touches nothing), refuses to edit an `ARCHIVED`
+record, and audits the change. UI: inline `<details>`/`<summary>` edit forms next to every existing
+Card/verification-button block in `/admin/catalogue` and `/admin/catalogue/[kind]/[id]`, including a new
+"Universities" section on the catalogue index (previously had no list or edit path at all).
+
+Verified for real against the live Postgres container (not just typechecked): simulated a prior
+`VERIFIED` programme, edited its title through the same diff/update/ChangeLog logic the action uses,
+confirmed `verificationStatus` reset to `PENDING_REVIEW`, `lastCheckedAt` cleared, exactly one `ChangeLog`
+row written with correct old/new values, a second identical edit produces zero new changes, then restored
+the pilot data to its original state. 6 new Vitest tests for the edit schemas (43/43 passing in
+`@openedu/validation`). Full suite: 13/13 TS tasks.
+
+Scope note: did not build a delete action anywhere (archive remains the only removal path, which matches
+the rest of the catalogue's design) and did not add Playwright/browser click-through — verified at the
+Prisma/DB logic level directly instead, since `requireAdmin()` needs a real request context a plain script
+doesn't have.
+
 ## Somnia migration — Stage 1 complete (2026-11-08)
 
 Built `workers/data-ingestion/src/openedu_ingest/sources/somnia.py`, a real `SourceAdapter` reusing the

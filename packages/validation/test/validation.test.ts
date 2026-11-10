@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  admissionRequirementEditSchema,
   admissionRequirementSchema,
   applicationDocumentSchema,
   applicationTaskSchema,
@@ -7,12 +8,16 @@ import {
   languageRequirementSchema,
   languageTestSchema,
   loginSchema,
+  programmeEditSchema,
   profileSchema,
   programmeCreateSchema,
   programmeDeadlineSchema,
   qualificationSchema,
   registerSchema,
   scholarshipCreateSchema,
+  scholarshipEditSchema,
+  scholarshipFundingComponentEditSchema,
+  universityEditSchema,
   scholarshipDeadlineSchema,
   scholarshipEligibilityRuleSchema,
   scholarshipFundingComponentSchema,
@@ -349,5 +354,80 @@ describe("scholarshipDeadlineSchema", () => {
         sourceUrl: "https://example.org/dates",
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("edit schemas", () => {
+  it("accepts a valid university edit", () => {
+    expect(
+      universityEditSchema.safeParse({
+        id: "u1",
+        name: "University of Lodz",
+        countryId: "c1",
+        city: "Lodz",
+        websiteUrl: "https://www.uni.lodz.pl/en",
+        type: "PUBLIC",
+      }).success,
+    ).toBe(true);
+  });
+
+  it("requires a country for a university edit", () => {
+    expect(
+      universityEditSchema.safeParse({
+        id: "u1",
+        name: "University of Lodz",
+        countryId: "",
+        city: "Lodz",
+        websiteUrl: "https://www.uni.lodz.pl/en",
+        type: "PUBLIC",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("accepts a valid programme edit", () => {
+    expect(
+      programmeEditSchema.safeParse({
+        id: "p1",
+        universityId: "u1",
+        title: "Business Management",
+        degreeLevel: "UNDERGRADUATE",
+        officialUrl: "https://example.org/programme",
+        sourceUrl: "https://example.org/programme",
+      }).success,
+    ).toBe(true);
+  });
+
+  it("requires an existing provider id for a scholarship edit, not a provider name", () => {
+    const parsed = scholarshipEditSchema.safeParse({
+      id: "s1",
+      name: "Example Scholarship",
+      providerId: "prov1",
+      officialUrl: "https://example.org/scholarship",
+      sourceUrl: "https://example.org/scholarship",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.providerId).toBe("prov1");
+  });
+
+  it("drops the programmeId field from an admission requirement edit", () => {
+    const parsed = admissionRequirementEditSchema.safeParse({
+      id: "r1",
+      programmeId: "should-be-ignored",
+      kind: "GRADE",
+      label: "Minimum grade",
+      sourceUrl: "https://example.org/requirements",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect("programmeId" in parsed.data).toBe(false);
+  });
+
+  it("does not allow changing which component a funding row represents", () => {
+    const parsed = scholarshipFundingComponentEditSchema.safeParse({
+      id: "f1",
+      component: "STIPEND",
+      coverage: "PARTIAL",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect("component" in parsed.data).toBe(false);
   });
 });

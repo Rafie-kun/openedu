@@ -207,6 +207,10 @@ export const programmeCreateSchema = z.object({
   tuitionSummary: z.string().trim().max(300).optional(),
 });
 
+export const programmeEditSchema = programmeCreateSchema.extend({
+  id: z.string().min(1),
+});
+
 export const scholarshipCreateSchema = z.object({
   name: z.string().trim().min(2).max(300),
   providerName: z.string().trim().min(2).max(300),
@@ -215,6 +219,37 @@ export const scholarshipCreateSchema = z.object({
   officialUrl: z.url("Use the full https:// address"),
   sourceUrl: z.url("Use the full https:// address"),
   description: z.string().trim().max(1000).optional(),
+});
+
+export const scholarshipEditSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(2).max(300),
+  providerId: z.string().min(1, "Pick a provider"),
+  hostCountryId: z.string().min(1).optional().or(z.literal("")),
+  degreeLevels: z.array(z.enum(degreeLevels)).max(7).default([]),
+  officialUrl: z.url("Use the full https:// address"),
+  sourceUrl: z.url("Use the full https:// address"),
+  description: z.string().trim().max(1000).optional(),
+});
+
+export const scholarshipProviderEditSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(2).max(300),
+  type: z.enum(["GOVERNMENT", "UNIVERSITY", "PRIVATE", "FOUNDATION", "CHARITY", "OTHER"]),
+  countryId: z.string().min(1).optional().or(z.literal("")),
+  websiteUrl: z.url("Use the full https:// address").optional().or(z.literal("")),
+  sourceUrl: z.url("Use the full https:// address").optional().or(z.literal("")),
+});
+
+export const universityEditSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(2).max(300),
+  officialName: z.string().trim().max(400).optional().or(z.literal("")),
+  countryId: z.string().min(1, "Pick a country"),
+  city: z.string().trim().min(1).max(120),
+  websiteUrl: z.url("Use the full https:// address"),
+  type: z.enum(["PUBLIC", "PRIVATE", "OTHER"]),
+  sourceUrl: z.url("Use the full https:// address").optional().or(z.literal("")),
 });
 
 export const requirementKinds = [
@@ -269,6 +304,10 @@ export const admissionRequirementSchema = z.object({
   sourceUrl: z.url("Use the full https:// address"),
 });
 
+export const admissionRequirementEditSchema = admissionRequirementSchema
+  .omit({ programmeId: true })
+  .extend({ id: z.string().min(1) });
+
 export const languageRequirementSchema = z.object({
   programmeId: z.string().min(1),
   testCode: z.string().trim().min(2).max(20).toUpperCase(),
@@ -277,6 +316,10 @@ export const languageRequirementSchema = z.object({
   isMandatory: z.coerce.boolean().default(true),
   sourceUrl: z.url("Use the full https:// address"),
 });
+
+export const languageRequirementEditSchema = languageRequirementSchema
+  .omit({ programmeId: true })
+  .extend({ id: z.string().min(1) });
 
 export const programmeDeadlineSchema = z.object({
   programmeId: z.string().min(1),
@@ -288,6 +331,10 @@ export const programmeDeadlineSchema = z.object({
   sourceUrl: z.url("Use the full https:// address"),
 });
 
+export const programmeDeadlineEditSchema = programmeDeadlineSchema
+  .omit({ programmeId: true })
+  .extend({ id: z.string().min(1) });
+
 export const tuitionFeeSchema = z.object({
   programmeId: z.string().min(1),
   amount: z.coerce.number().min(0).max(10_000_000).optional(),
@@ -298,6 +345,10 @@ export const tuitionFeeSchema = z.object({
   sourceUrl: z.url("Use the full https:// address"),
 });
 
+export const tuitionFeeEditSchema = tuitionFeeSchema
+  .omit({ programmeId: true })
+  .extend({ id: z.string().min(1) });
+
 export const scholarshipEligibilityRuleSchema = z.object({
   scholarshipId: z.string().min(1),
   kind: z.enum(requirementKinds),
@@ -307,6 +358,10 @@ export const scholarshipEligibilityRuleSchema = z.object({
   isMandatory: z.coerce.boolean().default(true),
   sourceUrl: z.url("Use the full https:// address"),
 });
+
+export const scholarshipEligibilityRuleEditSchema = scholarshipEligibilityRuleSchema
+  .omit({ scholarshipId: true })
+  .extend({ id: z.string().min(1) });
 
 export const scholarshipFundingComponentSchema = z.object({
   scholarshipId: z.string().min(1),
@@ -319,6 +374,10 @@ export const scholarshipFundingComponentSchema = z.object({
   sourceUrl: z.url("Use a full https:// address").optional().or(z.literal("")),
 });
 
+export const scholarshipFundingComponentEditSchema = scholarshipFundingComponentSchema
+  .omit({ scholarshipId: true, component: true })
+  .extend({ id: z.string().min(1) });
+
 export const scholarshipDeadlineSchema = z.object({
   scholarshipId: z.string().min(1),
   label: z.string().trim().min(1).max(160),
@@ -327,6 +386,10 @@ export const scholarshipDeadlineSchema = z.object({
   timezone: z.string().trim().min(1).max(60).default("UTC"),
   sourceUrl: z.url("Use the full https:// address"),
 });
+
+export const scholarshipDeadlineEditSchema = scholarshipDeadlineSchema
+  .omit({ scholarshipId: true })
+  .extend({ id: z.string().min(1) });
 
 export const assistantMessageSchema = z.object({
   message: z.string().trim().min(2, "Ask a little more than that").max(2000),
