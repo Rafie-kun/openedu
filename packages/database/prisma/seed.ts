@@ -663,6 +663,19 @@ const DATA_SOURCES: Array<{
       "Reference rates, not the rate a bank or payment provider will give you. Not every currency is covered.",
   },
   {
+    code: "ROR_BULK",
+    name: "Research Organization Registry (bulk dump)",
+    organisation: "ROR",
+    category: "RESEARCH_IDENTITY",
+    url: "https://ror.org/",
+    accessMethod: "BULK_DOWNLOAD",
+    licenceSummary:
+      "Registry data is released under CC0 1.0 via Zenodo; location data from GeoNames is CC-BY 4.0.",
+    termsUrl: "https://ror.readme.io/docs/data-dump",
+    knownLimitations:
+      "A separate source code from the query-based ROR adapter: this one downloads the full Zenodo release instead of searching by name. Still identifies research organisations, not accredited universities - every candidate needs independent identity verification.",
+  },
+  {
     code: "SOMNIA_LEGACY",
     name: "Somnia legacy catalogue",
     organisation: "Rafie-kun (same owner as this project)",

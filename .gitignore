@@ -44,3 +44,6 @@ packages/database/src/generated/
 *.sqlite3
 /tmp/
 .firecrawl/
+
+# downloaded source datasets, never committed
+workers/data-ingestion/artifacts/
