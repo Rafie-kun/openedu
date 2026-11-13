@@ -5,6 +5,7 @@ from datetime import datetime
 from ..change_detection import content_hash, diff_payload
 from ..http import Fetcher, SourceError
 from ..models import RunCounts, RunSummary
+from ..normalizers import domain_of
 from ..sources.base import SourceAdapter
 from ..store import Store, utcnow
 from ..validators import Severity, has_errors, validate_candidate
@@ -60,10 +61,23 @@ def run_source(
                     seen_at=started_at,
                 )
                 counts.created += 1
+                duplicates = store.find_possible_duplicates(
+                    domain_of(candidate.website_url),
+                    candidate.name,
+                    candidate.country_code,
+                    adapter.code,
+                    candidate.external_id,
+                )
+                base_reason = (
+                    "new candidate, confirm it belongs in the catalogue"
+                    if not duplicates
+                    else "new candidate, possible duplicate of "
+                    + "; ".join(match.describe() for match in duplicates)
+                )
                 store.queue_review(
                     record.id,
-                    _reason("new candidate, confirm it belongs in the catalogue", warnings),
-                    priority=0,
+                    _reason(base_reason, warnings),
+                    priority=1 if duplicates else 0,
                     created_at=started_at,
                 )
             elif stored.content_hash == digest:

@@ -40,6 +40,15 @@ def normalise_website(value: str | None) -> str | None:
     return urlunsplit((parts.scheme, host, path, parts.query, ""))
 
 
+def domain_of(url: str | None) -> str | None:
+    """Lowercased hostname with any leading 'www.' stripped, for duplicate matching."""
+    canonical = normalise_website(url)
+    if not canonical:
+        return None
+    host = urlsplit(canonical).netloc.lower()
+    return host.removeprefix("www.") or None
+
+
 def parse_year(value: object) -> int | None:
     if isinstance(value, int):
         return value if 1000 <= value <= 2200 else None

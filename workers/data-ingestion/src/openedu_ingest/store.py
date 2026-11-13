@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Protocol
@@ -25,6 +26,19 @@ def clean_dsn(dsn: str) -> str:
 class StoredReview:
     record_id: str
     reason: str
+
+
+@dataclass(frozen=True)
+class DuplicateMatch:
+    kind: str  # "university" or "candidate"
+    id: str
+    name: str
+    source_code: str | None  # None for a university, the owning source's code for a candidate
+
+    def describe(self) -> str:
+        if self.kind == "university":
+            return f"university '{self.name}' ({self.id})"
+        return f"{self.source_code} candidate '{self.name}' ({self.id})"
 
 
 class Store(Protocol):
@@ -71,6 +85,15 @@ class Store(Protocol):
         error_summary: str | None,
     ) -> None: ...
 
+    def find_possible_duplicates(
+        self,
+        domain: str | None,
+        name: str,
+        country_code: str | None,
+        exclude_source_code: str,
+        exclude_external_id: str,
+    ) -> list[DuplicateMatch]: ...
+
 
 @dataclass
 class InMemoryStore:
@@ -80,7 +103,9 @@ class InMemoryStore:
     changes: list[FieldChange] = field(default_factory=list)
     reviews: list[StoredReview] = field(default_factory=list)
     runs: list[dict] = field(default_factory=list)
+    universities: list[dict] = field(default_factory=list)
     _next_id: int = 0
+    _record_sources: dict[str, str] = field(default_factory=dict)
 
     def _new_id(self, prefix: str) -> str:
         self._next_id += 1
@@ -110,6 +135,7 @@ class InMemoryStore:
             payload=payload,
         )
         self.records[(source_code, external_id)] = record
+        self._record_sources[record.id] = source_code
         return record
 
     def update_record(
@@ -167,6 +193,39 @@ class InMemoryStore:
                     }
                 )
 
+    def find_possible_duplicates(
+        self,
+        domain: str | None,
+        name: str,
+        country_code: str | None,
+        exclude_source_code: str,
+        exclude_external_id: str,
+    ) -> list[DuplicateMatch]:
+        from .normalizers import domain_of
+
+        matches: list[DuplicateMatch] = []
+        for university in self.universities:
+            if domain and domain_of(university.get("websiteUrl")) == domain:
+                matches.append(DuplicateMatch("university", university["id"], university["name"], None))
+
+        for (source_code, external_id), record in self.records.items():
+            if source_code == exclude_source_code and external_id == exclude_external_id:
+                continue
+            payload = record.payload
+            same_domain = domain and domain_of(payload.get("website")) == domain
+            same_identity = (
+                country_code
+                and payload.get("countryCode") == country_code
+                and str(payload.get("displayName", "")).strip().lower() == name.strip().lower()
+            )
+            if same_domain or same_identity:
+                matches.append(
+                    DuplicateMatch(
+                        "candidate", record.id, str(payload.get("displayName", "")), source_code
+                    )
+                )
+        return matches
+
 
 class PostgresStore:
     """Writes runs, source records, changes and review items. It does not touch catalogue tables."""
@@ -176,12 +235,34 @@ class PostgresStore:
 
         self._psycopg = psycopg
         self._dsn = clean_dsn(dsn)
+        self._connection = None
 
-    def _connect(self):
-        return self._psycopg.connect(self._dsn)
+    def _conn(self):
+        """Reuses one connection for the store's lifetime instead of reconnecting per call -
+        a bulk import can make tens of thousands of calls, and opening a fresh TCP/TLS
+        connection for every one of them is both slow and a good way to exhaust Postgres's
+        connection limit."""
+        if self._connection is None or self._connection.closed:
+            self._connection = self._psycopg.connect(self._dsn)
+        return self._connection
+
+    def close(self) -> None:
+        if self._connection is not None and not self._connection.closed:
+            self._connection.close()
+
+    @contextmanager
+    def _cursor(self):
+        connection = self._conn()
+        try:
+            with connection.cursor() as cursor:
+                yield cursor
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
 
     def begin_run(self, source_code: str, started_at: datetime) -> str:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute('SELECT id FROM "DataSource" WHERE code = %s', (source_code,))
             row = cursor.fetchone()
             if row is None:
@@ -202,7 +283,7 @@ class PostgresStore:
         return run_id
 
     def find_record(self, source_code: str, external_id: str) -> StoredRecord | None:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 """
                 SELECT r.id, r.version, r."contentHash", r.payload
@@ -226,7 +307,7 @@ class PostgresStore:
         content_hash: str,
         seen_at: datetime,
     ) -> StoredRecord:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 """
                 INSERT INTO "SourceRecord"
@@ -257,7 +338,7 @@ class PostgresStore:
         content_hash: str,
         seen_at: datetime,
     ) -> int:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 """
                 UPDATE "SourceRecord"
@@ -273,7 +354,7 @@ class PostgresStore:
         return row[0]
 
     def touch_record(self, record_id: str, seen_at: datetime) -> None:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 'UPDATE "SourceRecord" SET "lastSeenAt" = %s WHERE id = %s',
                 (seen_at, record_id),
@@ -288,7 +369,7 @@ class PostgresStore:
     ) -> None:
         if not changes:
             return
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             for change in changes:
                 cursor.execute(
                     """
@@ -309,7 +390,7 @@ class PostgresStore:
                 )
 
     def queue_review(self, record_id: str, reason: str, priority: int, created_at: datetime) -> None:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 """
                 INSERT INTO "ReviewQueueItem" (id, "entityType", "entityId", reason, priority, status, "createdAt")
@@ -331,7 +412,7 @@ class PostgresStore:
         finished_at: datetime,
         error_summary: str | None,
     ) -> None:
-        with self._connect() as connection, connection.cursor() as cursor:
+        with self._cursor() as cursor:
             cursor.execute(
                 """
                 UPDATE "IngestionRun"
@@ -358,6 +439,47 @@ class PostgresStore:
                     """,
                     (finished_at, run_id),
                 )
+
+    def find_possible_duplicates(
+        self,
+        domain: str | None,
+        name: str,
+        country_code: str | None,
+        exclude_source_code: str,
+        exclude_external_id: str,
+    ) -> list[DuplicateMatch]:
+        with self._cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT 'university' AS kind, id, name, NULL AS source_code
+                FROM "University"
+                WHERE %(domain)s IS NOT NULL
+                  AND lower("websiteUrl") LIKE '%%' || lower(%(domain)s) || '%%'
+                UNION ALL
+                SELECT 'candidate' AS kind, r.id, r.payload->>'displayName' AS name, d.code AS source_code
+                FROM "SourceRecord" r
+                JOIN "DataSource" d ON d.id = r."dataSourceId"
+                WHERE NOT (d.code = %(exclude_source)s AND r."externalId" = %(exclude_external_id)s)
+                  AND (
+                    (%(domain)s IS NOT NULL AND lower(r.payload->>'website') LIKE '%%' || lower(%(domain)s) || '%%')
+                    OR (
+                      %(country_code)s IS NOT NULL
+                      AND r.payload->>'countryCode' = %(country_code)s
+                      AND lower(r.payload->>'displayName') = lower(%(name)s)
+                    )
+                  )
+                LIMIT 10
+                """,
+                {
+                    "domain": domain,
+                    "name": name,
+                    "country_code": country_code,
+                    "exclude_source": exclude_source_code,
+                    "exclude_external_id": exclude_external_id,
+                },
+            )
+            rows = cursor.fetchall()
+        return [DuplicateMatch(kind=row[0], id=row[1], name=row[2] or "", source_code=row[3]) for row in rows]
 
 
 def utcnow() -> datetime:
