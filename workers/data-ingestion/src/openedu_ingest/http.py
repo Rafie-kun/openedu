@@ -1,17 +1,58 @@
 from __future__ import annotations
 
+import ipaddress
 import json
+import socket
 import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 from typing import Callable
+from urllib.parse import urlparse
 
 Transport = Callable[[str, dict[str, str], float], tuple[int, bytes]]
 
 
 class SourceError(RuntimeError):
     """A source could not be read. Callers record it and move on to the next query."""
+
+
+def _is_safe_url(url: str) -> bool:
+    """Validate that a URL is safe to fetch (not pointing to internal/private networks).
+    Prevents Server-Side Request Forgery (SSRF) attacks against metadata endpoints,
+    private cloud instances, internal services, and localhost.
+    """
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    hostname = parsed.hostname
+    if not hostname:
+        return False
+
+    if hostname.lower() in ("localhost", "::1"):
+        return False
+
+    try:
+        ip = ipaddress.ip_address(hostname)
+        if ip.is_loopback or ip.is_private or ip.is_link_local or ip.is_reserved:
+            return False
+    except ValueError:
+        try:
+            info = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
+            for family, socktype, proto, canonname, sockaddr in info:
+                ip_str = sockaddr[0]
+                ip = ipaddress.ip_address(ip_str)
+                if ip.is_loopback or ip.is_private or ip.is_link_local or ip.is_reserved:
+                    return False
+        except Exception:
+            pass
+
+    return True
 
 
 def _urllib_transport(url: str, headers: dict[str, str], timeout: float) -> tuple[int, bytes]:
@@ -44,6 +85,9 @@ class Fetcher:
             raise SourceError(f"{url} returned something that is not JSON: {exc}") from exc
 
     def get_bytes(self, url: str) -> bytes:
+        if not _is_safe_url(url):
+            raise SourceError(f"URL is not allowed (internal/private network): {url}")
+
         transport = self.transport or _urllib_transport
         headers = {
             "User-Agent": self.user_agent,
