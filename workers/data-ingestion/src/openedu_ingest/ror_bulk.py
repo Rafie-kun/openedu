@@ -13,7 +13,7 @@ from .change_detection import content_hash
 from .http import Fetcher
 from .models import InstitutionCandidate, RunCounts
 from .normalizers import domain_of, normalise_country_code, normalise_name, normalise_website
-from .store import Store
+from .store import Store, utcnow
 
 CONCEPT_RECORD_URL = "https://zenodo.org/api/records/6347574"
 
@@ -305,51 +305,60 @@ def promote_candidates(
 
     Shares the same create/unchanged/update semantics as jobs.run_source, adapted for a precomputed
     candidate list instead of a live per-query fetch. Never writes to a catalogue table directly.
+
+    The whole import is bracketed by an IngestionRun so a bulk promotion leaves the same run-level
+    provenance as a live source run, and a crash is recorded as FAILED rather than left RUNNING.
     """
     counts = RunCounts()
-    for candidate in candidates:
-        counts.seen += 1
-        if on_progress and counts.seen % 500 == 0:
-            on_progress(counts.seen)
-        digest = content_hash(candidate.payload)
-        stored = store.find_record(source_code, candidate.external_id)
+    run_id = store.begin_run(source_code, now)
+    try:
+        for candidate in candidates:
+            counts.seen += 1
+            if on_progress and counts.seen % 500 == 0:
+                on_progress(counts.seen)
+            digest = content_hash(candidate.payload)
+            stored = store.find_record(source_code, candidate.external_id)
 
-        if stored is None:
-            record = store.insert_record(
-                source_code=source_code,
-                external_id=candidate.external_id,
-                entity_type="UNIVERSITY_CANDIDATE",
-                payload=candidate.payload,
-                content_hash=digest,
-                seen_at=now,
-            )
-            counts.created += 1
-            duplicates = store.find_possible_duplicates(
-                domain_of(candidate.website_url),
-                candidate.name,
-                candidate.country_code,
-                source_code,
-                candidate.external_id,
-            )
-            classification = candidate.payload.get("classification", "unknown")
-            if duplicates:
-                reason = (
-                    f"new {classification} candidate from the ROR bulk dump, possible duplicate of "
-                    + "; ".join(match.describe() for match in duplicates)
+            if stored is None:
+                record = store.insert_record(
+                    source_code=source_code,
+                    external_id=candidate.external_id,
+                    entity_type="UNIVERSITY_CANDIDATE",
+                    payload=candidate.payload,
+                    content_hash=digest,
+                    seen_at=now,
                 )
+                counts.created += 1
+                duplicates = store.find_possible_duplicates(
+                    domain_of(candidate.website_url),
+                    candidate.name,
+                    candidate.country_code,
+                    source_code,
+                    candidate.external_id,
+                )
+                classification = candidate.payload.get("classification", "unknown")
+                if duplicates:
+                    reason = (
+                        f"new {classification} candidate from the ROR bulk dump, possible duplicate of "
+                        + "; ".join(match.describe() for match in duplicates)
+                    )
+                else:
+                    reason = f"new {classification} candidate from the ROR bulk dump, confirm it belongs in the catalogue"
+                store.queue_review(
+                    record.id,
+                    reason,
+                    priority=1 if duplicates else 0,
+                    created_at=now,
+                )
+            elif stored.content_hash == digest:
+                store.touch_record(stored.id, now)
+                counts.unchanged += 1
             else:
-                reason = f"new {classification} candidate from the ROR bulk dump, confirm it belongs in the catalogue"
-            store.queue_review(
-                record.id,
-                reason,
-                priority=1 if duplicates else 0,
-                created_at=now,
-            )
-        elif stored.content_hash == digest:
-            store.touch_record(stored.id, now)
-            counts.unchanged += 1
-        else:
-            store.update_record(stored.id, candidate.payload, digest, now)
-            counts.updated += 1
+                store.update_record(stored.id, candidate.payload, digest, now)
+                counts.updated += 1
+    except Exception as exc:
+        store.finish_run(run_id, "FAILED", counts, utcnow(), str(exc)[:500])
+        raise
 
+    store.finish_run(run_id, "SUCCEEDED", counts, utcnow(), None)
     return counts

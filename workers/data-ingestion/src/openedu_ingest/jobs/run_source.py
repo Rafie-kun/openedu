@@ -25,6 +25,44 @@ def run_source(
     counts = RunCounts()
     errors: list[str] = []
 
+    try:
+        _collect(adapter, store, fetcher, started_at, counts, errors)
+    except Exception as exc:
+        # An unexpected crash must not leave the run stuck at RUNNING forever; record it as
+        # FAILED with the cause so the next operator sees why the source stopped mid-import.
+        store.finish_run(run_id, "FAILED", counts, utcnow(), str(exc)[:500])
+        raise
+
+    status = _status(counts, errors)
+    finished_at = utcnow()
+    store.finish_run(
+        run_id,
+        status,
+        counts,
+        finished_at,
+        "; ".join(errors) if errors else None,
+    )
+
+    return RunSummary(
+        source_code=adapter.code,
+        run_id=run_id,
+        status=status,
+        counts=counts,
+        errors=errors,
+        started_at=started_at,
+        finished_at=finished_at,
+    )
+
+
+def _collect(
+    adapter: SourceAdapter,
+    store: Store,
+    fetcher: Fetcher,
+    started_at: datetime,
+    counts: RunCounts,
+    errors: list[str],
+) -> None:
+    """The per-query read/write loop. Separated so run_source can bracket it with run bookkeeping."""
     for query in adapter.queries():
         try:
             items = adapter.fetch(query, fetcher)
@@ -96,26 +134,6 @@ def run_source(
                         priority=1,
                         created_at=started_at,
                     )
-
-    status = _status(counts, errors)
-    finished_at = utcnow()
-    store.finish_run(
-        run_id,
-        status,
-        counts,
-        finished_at,
-        "; ".join(errors) if errors else None,
-    )
-
-    return RunSummary(
-        source_code=adapter.code,
-        run_id=run_id,
-        status=status,
-        counts=counts,
-        errors=errors,
-        started_at=started_at,
-        finished_at=finished_at,
-    )
 
 
 def _reason(base: str, warnings: list) -> str:
