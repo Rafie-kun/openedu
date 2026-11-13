@@ -83,6 +83,10 @@ export async function requireUser(nextPath = "/dashboard"): Promise<CurrentUser>
 export async function requireAdmin(): Promise<CurrentUser> {
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=${encodeURIComponent("/admin")}`);
+  // Both ADMIN and EDITOR roles have access to catalogue management functions
+  // (verification, review decisions, record editing, etc.). If you need stricter
+  // separation, create a separate requireAdminOnly() function and update the
+  // relevant action handlers and routes.
   if (user.role !== "ADMIN" && user.role !== "EDITOR") redirect("/dashboard?denied=admin");
   return user;
 }
