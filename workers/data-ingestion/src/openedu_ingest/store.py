@@ -451,21 +451,24 @@ class PostgresStore:
         with self._cursor() as cursor:
             cursor.execute(
                 """
-                SELECT 'university' AS kind, id, name, NULL AS source_code
+                SELECT 'university' AS kind, id, name, NULL::text AS source_code
                 FROM "University"
-                WHERE %(domain)s IS NOT NULL
-                  AND lower("websiteUrl") LIKE '%%' || lower(%(domain)s) || '%%'
+                WHERE %(domain)s::text IS NOT NULL
+                  AND lower("websiteUrl") LIKE '%%' || lower(%(domain)s::text) || '%%'
                 UNION ALL
                 SELECT 'candidate' AS kind, r.id, r.payload->>'displayName' AS name, d.code AS source_code
                 FROM "SourceRecord" r
                 JOIN "DataSource" d ON d.id = r."dataSourceId"
-                WHERE NOT (d.code = %(exclude_source)s AND r."externalId" = %(exclude_external_id)s)
+                WHERE NOT (d.code = %(exclude_source)s::text AND r."externalId" = %(exclude_external_id)s::text)
                   AND (
-                    (%(domain)s IS NOT NULL AND lower(r.payload->>'website') LIKE '%%' || lower(%(domain)s) || '%%')
+                    (
+                      %(domain)s::text IS NOT NULL
+                      AND lower(r.payload->>'website') LIKE '%%' || lower(%(domain)s::text) || '%%'
+                    )
                     OR (
-                      %(country_code)s IS NOT NULL
-                      AND r.payload->>'countryCode' = %(country_code)s
-                      AND lower(r.payload->>'displayName') = lower(%(name)s)
+                      %(country_code)s::text IS NOT NULL
+                      AND r.payload->>'countryCode' = %(country_code)s::text
+                      AND lower(r.payload->>'displayName') = lower(%(name)s::text)
                     )
                   )
                 LIMIT 10
